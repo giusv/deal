@@ -11,6 +11,10 @@
 (defun table (name attributes)
   (list 'table name attributes))
 
+(defun table-name (table)
+  (second table))
+(defun table-attributes (table)
+  (third table))
 (defun attribute (name type &optional constraint)
   (list 'attribute name type constraint))
 
@@ -26,31 +30,57 @@
     (eql constraint 'primary)))
 
 (defparameter *indent* 0)
-(defun table-name (table)
-  (second table))
 
-(defmacro line (stream fmt &rest args)
-  `(format ,stream (concatenate 'string 
-				(make-string *indent* :initial-element #\Space) 
-				,fmt 
-				"~%") ,@args))
+(defun attribute-name (attribute)
+  (second attribute))
+(defun attribute-type (attribute)
+  (third attribute))
+
+(defmacro line (fmt &rest args)
+  `(format t (concatenate 'string 
+			    (make-string *indent* :initial-element #\Space) 
+			    ,fmt 
+			    "~%") ,@args))
 (defmacro nest (amt &body body)
   `(let ((*indent* (+ *indent* ,amt)))
      ,@body))
 
-(defun test ()
-  (with-output-to-string (s nil)
-    (nest 4 (line s "hello"))))
+
+;; (defun primary-key->java (key)
+;;   (case (length key)
+;;     (1 (field ))))
+
+(defmacro class (name &body body)
+  `(progn
+     (line "public class ~s{" ,name)
+     (nest 4 
+       ,@body)
+     (line "}")))
+
+
+
+(defmacro setter (attribute)
+  `(let ((nm (attribute-name ,attribute))
+	 (tp (attribute-type ,attribute)))
+     (line "public void set~s(~s ~s){" nm tp nm)
+     (nest 4 
+       (line "this.~s = ~s;" nm nm))
+     (line "}")))
+
+(defmacro getter (attribute)
+  `(let ((nm (attribute-name ,attribute))
+	 (tp (attribute-type ,attribute)))
+     (line "public ~s get~s(){" tp nm)
+     (nest 4 
+       (line "return ~s;" nm))
+     (line "}")))
 
 (defun table->java (table)
-  (with-output-to-string (s nil)
-    (line s "public class ~s{" (table-name table))
-    (nest 4 
-      (line s "public void set;")
-      (nest 4 
-	(line s "test;")))
-    (line s "}")
-    s))
+  (with-output-to-string (*standard-output*) 
+    (class (table-name table)
+	   (mapcar #'(lambda (a) (getter a)) (table-attributes table))
+	   (mapcar #'(lambda (a) (setter a)) (table-attributes table)))))
+
 (defun query-sql (query)
   (case (car query) 
     (table (apply #'table-sql (cdr query)))
