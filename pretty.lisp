@@ -22,6 +22,7 @@
 (defun vcat-docs (vcat)
   (cdr vcat))
 
+
 (defun doc (&rest args)
   (apply #'nest 0 args))
 ;; (defun hcat (&rest args)
