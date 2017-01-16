@@ -1,84 +1,69 @@
-;;(load "pretty.lisp")
-(defun table (name attributes)
-  (list 'table name attributes))
+(def-typeclass primitive
+  java
+  to-list)
 
-(defun table-name (table)
-  (second table))
-(defun table-attributes (table)
-  (third table))
-(defun attribute (name type &optional constraint)
-  (list 'attribute name type constraint))
+(def-instance primitive (attribute name type)
+  (java #'(lambda (annotations) (field name type annotations))) 
+  (to-list `(attribute :name ,name :type ,type)))
+		       
+(def-instance primitive (foreign attributes reference)
+  (java nil) 
+  (to-list `(foreign :attributes ,(mapcar #'to-list attributes) :reference ,reference))))
 
-(defparameter people (table 'people (list (attribute 'id 'int 'primary)
-					  (attribute 'name 'string)
-					  (attribute 'city 'string 'foreign))))
+(def-instance primitive (primary attributes)
+  (java (case (length attributes)
+	  (1 (funcall (java (first attributes)) (list (list 'id)))))) 
+  (to-list `(primary :attributes ,attributes))) 
 
-(defun primary-key (table)
-  (destructuring-bind (table name attributes) table
-    (remove-if-not #'is-primary attributes)))
+(def-instance primitive (simple attributes)
+  (java (funcall (java (first attributes)) nil)) 
+  (to-list `(simple :attributes ,attributes))) 
 
-(defun is-primary (attribute)
-  (destructuring-bind (attribute name type constraint) attribute
-    (eql constraint 'primary)))
+(def-instance primitive (entity name primary simple foreign)
+  (java (class name
+	       (vcat-all field  simple)
+	       (vcat-all getter simple)
+	       (vcat-all setter simple)))
+  (to-list))
 
-(defparameter *indent* 0)
-
-(defun attribute-name (attribute)
-  (second attribute))
-(defun attribute-type (attribute)
-  (third attribute))
-
-;; (defmacro line (fmt &rest args)
-;;   `(format t (concatenate 'string 
-;; 			    (make-string *indent* :initial-element #\Space) 
-;; 			    ,fmt 
-;; 			    "~%") ,@args))
-;; (defmacro nest (amt &body body)
-;;   `(let ((*indent* (+ *indent* ,amt)))
-;;      ,@body))
-
-
-;; (defun primary-key->java (key)
-;;   (case (length key)
-;;     (1 (field ))))
 
 (defun class (name &rest body)
-  (doc (line "public class ~s{" name)
-       (apply #'nest 4 body)
-       (line "}")))
+  (vcat (list (text "public class ~s{" (list name))
+	      (apply #'nest 4 body)
+	      (text "}" nil))))
 
 
-(defun field (attribute)
-  (let ((nm (attribute-name attribute))
-	(tp (attribute-type attribute)))
-    (line "private ~s ~s;" tp nm)))
+(defun annotation (name &optional vals)
+  (if (null vals)
+      (text "@~a" (list name))
+      (if (atom vals)
+	  (text "~a(~a)" (list name vals))
+	  (text "more" nil))))
+
+(defmacro destructuring-lambda (arg pattern &body body)
+  `(lambda (,arg)
+    (destructuring-bind ,pattern ,arg ,@body)))
+
+
+(defun field (name type annotations)
+  (vcat (append (mapcar #'(lambda (annotation)
+			    (destructuring-bind (name &optional vals) annotation
+				(annotation name vals))) 
+			annotations) 
+		(list (text "private ~s ~s;" (list type name))))))
 
 (defun setter (attribute)
-  (let ((nm (attribute-name attribute))
-	(tp (attribute-type attribute)))
-    (vcat (line "public void set~s(~s ~s){" nm tp nm)
-	  (nest 4 (line "this.~s = ~s;" nm nm))
-	  (line "}"))))
+  (let ((nm (slot-value 'name attribute))
+	(tp (slot-value 'type  attribute)))
+    (vcat (list (text "public void set~s(~s ~s){" (list nm tp nm))
+		(nest 4 (text "this.~s = ~s;" (list nm nm)))
+		(text "}" nil)))))
 
 (defun getter (attribute)
-  (let ((nm (attribute-name attribute))
-	(tp (attribute-type attribute)))
-    (vcat (line "public ~s get~s(){" tp nm)
-	  (nest 4 (line "return ~s;" nm))
-	  (line "}"))))
+  (let ((nm (slot-value 'name attribute))
+	(tp (slot-value 'type  attribute)))
+    (vcat (list (text "public ~s get~s(){" (list tp nm))
+		(nest 4 (text "return ~s;" (list nm)))
+		(text "}" nil)))))
 (defmacro vcat-all (fn lst)
   `(apply #'vcat (mapcar #',fn ,lst)))
-(defun table->java (table)
-  (class (table-name table)
-	 (vcat-all field (table-attributes table))
-	 (vcat-all getter (table-attributes table))
-	 (vcat-all setter (table-attributes table))))
-
-;; (defun table2java (table)
-;;   (multiple-value-bind (primary auxiliary) (primary2java (primary-key table))
-;;     (values (class (table-name table)
-;; 		   primary
-;; 		   (plain2java (plain-attributes table))
-;; 		   (mapcar #'foreign2java (foreign-keys table)))
-;; 	    auxiliary)))
-
