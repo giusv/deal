@@ -7,33 +7,10 @@
     :accessor ,name
     ))
 
-;; (defsum doc
-;;   (empty)
-;;   (text template args)
-;;   (nest amount doc)
-;;   (vcat docs))
-
-;; (defalgebra doc pretty
-;;   ((empty)
-;;    #'(lambda (indent) nil))
-;;   ((text template args)
-;;    #'(lambda (indent) (apply #'format nil 
-;; 			   (concatenate 'string 
-;; 					(make-string indent :initial-element #\Space) 
-;; 					template 
-;; 					"~%")
-;; 			   args)))
-;;   ((nest amount doc)
-;;    #'(lambda (indent) (funcall (pretty doc) (+ indent amount))))
-;;   ((vcat docs) 
-;;    #'(lambda (indent) (apply #'concatenate 'string 
-;; 			   (mapcar #'(lambda (doc) 
-;; 				       (funcall (pretty doc) indent)) docs)))))
-
 (def-typeclass doc
   pretty)
 (def-instance doc (empty)
-  (pretty #'(lambda (indent) 
+  (pretty #'(lambda (*) 
 	      nil)))
 (def-instance doc (text template args)
   (pretty #'(lambda (indent) 
@@ -65,85 +42,14 @@
   `(progn 
      (defclass ,instance (,class)
        ,(mapcar #'make-slot slots))
+     (defun ,instance ,slots
+       (make-instance ',instance ,@mapcar #'(lambda (slot))))
      ,@(mapcar #'(lambda (method) 
 		   (destructuring-bind (name func) method
 		     `(defmethod ,name ((,class ,instance))
 			(funcall #'(lambda (,@slots) ,func)
 				 ,@(mapcar #'(lambda (slot) 
 					       `(,slot ,class)) slots))))) methods)))
-
-
-;; (defmacro defsum (name &body args)
-;;   `(progn 
-;;      (defclass ,name () ())
-;;      ,@(mapcar #'(lambda (arg) 
-;; 		   `(defclass ,(car arg) (,name) (,@(mapcar #'make-slot (cdr arg))))) 
-;; 	       args)))
-
-;; (defun make-slot2 (slot)
-;;   `(,(intern (symbol-name slot) "KEYWORD")))
-
-;; (defmacro defsum2 (name &body args)
-;;   `(progn 
-;;      ,@(mapcar #'(lambda (arg)
-;; 		   (destructuring-bind (name &rest slots) arg
-;; 		     `(defun ,name ,slots
-;; 			`(,name ,(mapcar #'make-slot2 slots))))) 
-;; 	       args)))
-
-
-;; (defsum doc
-;;   (empty)
-;;   (text format args)
-;;   (nest amount doc)
-;;   (vcat docs))
- 
-;; (defclass doc () ())
-;; (defclass empty (doc) ())
-;; (defclass nest (doc) (amount doc))
-;; (defclass vcat (doc) (docs))
-
-;; (defalgebra doc pretty 
-;;   ((empty (lambda () (format nil "")))
-;;    (text  (lambda (format args) ()))
-	 
-;;    ))
-
-;; (defsum tree 
-;;   (leaf val)
-;;   (bin left right))
-
-;; (defalgebra tree min-alg
-;;   (leaf (lambda (val) val))
-;;   (bin  (lambda (left right) (min (min-alg left) (min-alg right)))))
-
-;; (defgeneric min-alg (tree))
-;; (defmethod min-alg ((tree leaf))
-;;   (val tree))
-;; (defmethod min-alg ((tree bin))
-;;   (min (min-alg (left tree)) (min-alg (right tree))))
-
-;; (defgeneric min-alg2 (tree))
-;; (defmethod min-alg2 ((tree leaf))
-;;   (funcall #'(lambda (val) val) (val tree)))
-;; (defmethod min-alg2 ((tree bin))
-;;   (funcall #'(lambda (left right) (min (min-alg2 left) (min-alg2 right))) (left tree) (right tree)))
-
-;; (defmacro defalgebra (sum name &body args)
-;;  `(progn 
-;;      (defgeneric ,name (,sum))
-;;      ,@(mapcar #'(lambda (arg)
-;; 		   (let ((elem (caar arg))
-;; 			 (accessors (cdar arg))
-;; 			 (func (second arg)))
-;; 		    ;;destructuring-bind ((elem &rest accessors) func) 
-;; 		    ;;   arg
-;; 		     `(defmethod ,name ((,sum ,elem))
-;; 			(funcall #'(lambda (,@accessors) ,func)
-;; 				 ,@(mapcar #'(lambda (accessor) 
-;; 					       `(,accessor ,sum)) accessors))))) args)))
-
-
 
 (defparameter *doc* (make-instance 'vcat
 				   :docs (list (make-instance 'text :template  "hello" :args nil)
@@ -159,19 +65,6 @@
   (rep-alg #'(lambda (m) (make-instance 'bin :left (funcall (rep-alg left) m) :right (funcall (rep-alg right) m))))
   (min-alg (min (min-alg left) (min-alg right))))
 
-;; (defalgebra tree rep-alg
-;;   ((leaf val) 
-;;    #'(lambda (m) (make-instance 'leaf :val m)))
-;;   ((bin left right) 
-;;    #'(lambda (m) (make-instance 'bin :left (funcall (rep-alg left) m) :right (funcall (rep-alg right) m)))))
-
-;; (defalgebra tree min-alg3
-;;   ((leaf val)
-;;    val)
-;;   ((bin left right)
-;;    (min (min-alg3 left) (min-alg3 right))))
-
-;;(rep-alg tree (min-alg tree))
 
 (defparameter *tree* (make-instance 'bin 
 				    :left (make-instance 'bin 
