@@ -30,3 +30,21 @@
 					       `(,slot ,class)) slots))))) methods)))
 
 
+(def-typeclass doc2
+  to-list
+  java)
+
+(def-instance doc2 
+    (nest 
+     (amount number required) 
+     (doc doc2 required)))
+(def-instance doc2
+    (vcat
+     (docs (list doc2) rest)))
+(def-instance doc2
+    (text
+     (template string required)
+     (args (list (or number string)) rest)))
+
+(defun foo (first &rest rest &key a b c)
+  (list first rest a b c))
