@@ -5,20 +5,22 @@
   (pretty #'(lambda (*) 
 	      nil))
   (to-list `(empty)))
-(def-instance doc (text template args)
+(def-instance doc (text (template string required) 
+			(args nil rest))
   (pretty #'(lambda (indent) 
 	      (apply #'format nil 
 		     (concatenate 'string 
 				  (make-string indent :initial-element #\Space) 
-						 template 
-						 "~%")
+				  template 
+				  "~%")
 		     args)))
   (to-list `(text (:template ,template :args ,args))))
-(def-instance doc (nest amount doc)
+(def-instance doc (nest (amount number required) 
+			(doc doc required))
   (pretty #'(lambda (indent) 
 	      (funcall (pretty doc) (+ indent amount))))
   (to-list `(nest :amount ,amount :doc ,(to-list doc))))
-(def-instance doc (vcat docs)
+(def-instance doc (vcat (docs (list doc) rest))
   (pretty #'(lambda (indent) 
 	      (apply #'concatenate 'string 
 		     (mapcar #'(lambda (doc) 
@@ -27,6 +29,6 @@
 
 
 
-(defparameter *doc* (vcat (list (text "hello" nil)
-				(nest 4 (text "hello ~a" (list 3))))))
+(defparameter *doc* (vcat (text "hello")
+			  (nest 4 (text "hello ~a" 3))))
 

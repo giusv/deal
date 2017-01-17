@@ -1,69 +1,107 @@
 (def-typeclass primitive
   java
   to-list)
-
-(def-instance primitive (attribute name type)
-  (java #'(lambda (annotations) (field name type annotations))) 
-  (to-list `(attribute :name ,name :type ,type)))
-		       
-(def-instance primitive (foreign attributes reference)
-  (java nil) 
-  (to-list `(foreign :attributes ,(mapcar #'to-list attributes) :reference ,reference))))
-
-(def-instance primitive (primary attributes)
-  (java (case (length attributes)
-	  (1 (funcall (java (first attributes)) (list (list 'id)))))) 
-  (to-list `(primary :attributes ,attributes))) 
-
-(def-instance primitive (simple attributes)
-  (java (funcall (java (first attributes)) nil)) 
-  (to-list `(simple :attributes ,attributes))) 
-
-(def-instance primitive (entity name primary simple foreign)
-  (java (class name
-	       (vcat-all field  simple)
-	       (vcat-all getter simple)
-	       (vcat-all setter simple)))
-  (to-list))
-
-
 (defun class (name &rest body)
-  (vcat (list (text "public class ~s{" (list name))
-	      (apply #'nest 4 body)
-	      (text "}" nil))))
+  (vcat (text "public class ~s{" name)
+	(if body 
+	    (vcat body)
+	    (vcat))
+	(text "}")))
 
 
 (defun annotation (name &optional vals)
   (if (null vals)
-      (text "@~a" (list name))
+      (text "@~a" name)
       (if (atom vals)
-	  (text "~a(~a)" (list name vals))
-	  (text "more" nil))))
+	  (text "~a(~a)" name vals)
+	  (text "more"))))
 
-(defmacro destructuring-lambda (arg pattern &body body)
-  `(lambda (,arg)
-    (destructuring-bind ,pattern ,arg ,@body)))
+;; (defmacro destructuring-lambda (arg pattern &body body)
+;;   `(lambda (,arg)
+;;     (destructuring-bind ,pattern ,arg ,@body)))
 
-
+a
 (defun field (name type annotations)
-  (vcat (append (mapcar #'(lambda (annotation)
-			    (destructuring-bind (name &optional vals) annotation
-				(annotation name vals))) 
-			annotations) 
-		(list (text "private ~s ~s;" (list type name))))))
+  (apply #'vcat 
+	 (append (mapcar #'(lambda (annotation)
+			     (destructuring-bind (name &optional vals) annotation
+			       (annotation name vals))) 
+			 annotations) 
+		 (list (text "private ~s ~s;" type name)))))
 
 (defun setter (attribute)
   (let ((nm (slot-value 'name attribute))
 	(tp (slot-value 'type  attribute)))
-    (vcat (list (text "public void set~s(~s ~s){" (list nm tp nm))
-		(nest 4 (text "this.~s = ~s;" (list nm nm)))
-		(text "}" nil)))))
+    (vcat (text "public void set~s(~s ~s){" nm tp nm)
+	  (nest 4 (text "this.~s = ~s;" nm nm))
+	  (text "}"))))
 
 (defun getter (attribute)
   (let ((nm (slot-value 'name attribute))
 	(tp (slot-value 'type  attribute)))
-    (vcat (list (text "public ~s get~s(){" (list tp nm))
-		(nest 4 (text "return ~s;" (list nm)))
-		(text "}" nil)))))
+    (vcat (text "public ~s get~s(){" tp nm)
+	  (nest 4 (text "return ~s;" nm))
+	  (text "}"))))
 (defmacro vcat-all (fn lst)
   `(apply #'vcat (mapcar #',fn ,lst)))
+
+(def-instance primitive (attribute 
+			 (name string required) 
+			 (type string required))
+  (java #'(lambda (annotations) (field name type annotations))) 
+  (to-list `(attribute :name ,name :type ,type)))
+
+(def-instance primitive (foreign-key
+			 (reference nil required)
+			 (attributes (list attribute) rest))
+  (java (apply #'vcat (mapcar 
+		       #'(lambda (attribute) (funcall (java attribute) (list (list reference))))
+		       attributes))) 
+  (to-list `(foreign-key :attributes ,(mapcar #'to-list attributes) :reference ,reference)))
+
+(def-instance primitive (primary-key
+			 (attributes (list attribute) rest))
+  (java (case (length attributes)
+	  (1 (funcall (java (first attributes)) (list (list 'id)))))) 
+  (to-list `(primary-key :attributes ,attributes))) 
+
+;; (def-instance primitive (simple-attrs
+;; 			 (attributes nil required))
+;;   (java (funcall (java (first attributes)) nil)) 
+;;   (to-list `(simple :attributes ,attributes)))
+
+
+(def-instance primitive (entity 
+			 (name string required)
+			 (primary primary-key required) 
+			 (simple (list attribute) required)
+			 (foreigns (list foreign-key) rest))
+  (java (apply #'class 
+	       name
+	       (append (list (java primary))
+		       ;(mapcar #'(lambda (attribute) (funcall (java attribute) nil)) simple)
+		       ;(mapcar #'java foreigns)
+		       )))
+  (to-list `(entity :name ,name 
+		    :primary ,(to-list primary)
+		    :simple ,(mapcar #'to-list simple)
+		    :foreigns ,(mapcar #'to-list foreigns))))
+
+(defun pretty-java (entity)
+  (funcall (pretty (java entity)) 0))
+
+(defparameter *people* (entity 'people 
+			       (primary-key 
+				(attribute 'id 'string))
+			       (list (attribute 'name 'string)
+				     (attribute 'city 'string))
+			       (foreign-key
+				'cities
+				(attribute 'city-id1 'string)
+				(attribute 'city-id2 'string))))
+
+(defparameter *test* 
+  (pretty (vcat (text "s") 
+		(nest 4 (vcat (field 'a 'b (list (list 'id)))))
+		(text "a"))))
+(defparameter *test2* (pretty (class 'name)))
