@@ -3,9 +3,7 @@
   to-list)
 (defun class (name &rest body)
   (vcat (text "public class ~s{" name)
-	(if body 
-	    (vcat body)
-	    (vcat))
+	(nest 4 (vcat body))
 	(text "}")))
 
 
@@ -20,7 +18,6 @@
 ;;   `(lambda (,arg)
 ;;     (destructuring-bind ,pattern ,arg ,@body)))
 
-a
 (defun field (name type annotations)
   (apply #'vcat 
 	 (append (mapcar #'(lambda (annotation)
@@ -74,17 +71,15 @@ a
 (def-instance primitive (entity 
 			 (name string required)
 			 (primary primary-key required) 
-			 (simple (list attribute) required)
+			 (fields (list attribute) required)
 			 (foreigns (list foreign-key) rest))
-  (java (apply #'class 
-	       name
-	       (append (list (java primary))
-		       ;(mapcar #'(lambda (attribute) (funcall (java attribute) nil)) simple)
-		       ;(mapcar #'java foreigns)
-		       )))
+  (java (class name
+	       (java primary)
+	       (mapcar #'(lambda (attribute) (funcall (java attribute) nil)) fields)
+	       (mapcar #'java foreigns)))
   (to-list `(entity :name ,name 
 		    :primary ,(to-list primary)
-		    :simple ,(mapcar #'to-list simple)
+		    :fields ,(mapcar #'to-list fields)
 		    :foreigns ,(mapcar #'to-list foreigns))))
 
 (defun pretty-java (entity)
@@ -98,7 +93,10 @@ a
 			       (foreign-key
 				'cities
 				(attribute 'city-id1 'string)
-				(attribute 'city-id2 'string))))
+				(attribute 'city-id2 'string))
+			       (foreign-key
+				'cars
+				(attribute 'car-id1 'string))))
 
 (defparameter *test* 
   (pretty (vcat (text "s") 
