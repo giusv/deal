@@ -67,6 +67,14 @@
 			     (funcall #'(lambda (,@slot-names) ,func)
 				      ,@(mapcar #'(lambda (slot) 
 						    `(,slot ,class)) slot-names))))) methods))))
+
+(defmacro def-cool (class instance slots &body methods)
+  (destruc body))
+(defun destruc (pat)
+  (if (null pat)
+      nil
+      (let (cond ((#'list pat) (car pat))
+	     (eq (car pat) '&rest)))))
 ;; (def-typeclass doc2
 ;;   to-list
 ;;   java)

@@ -2,14 +2,14 @@
   java
   to-list)
 (defun class (name &rest body)
-  (vcat (text "public class ~s{" name)
+  (vcat (text "public class ~a{" name)
 	(nest 4 (vcat body))
 	(text "}")))
 
 
 (defun annotation (name &optional vals)
   (if (null vals)
-      (text "@~a" name)
+      (text "@~a" (upper name))
       (if (atom vals)
 	  (text "~a(~a)" name vals)
 	  (text "more"))))
@@ -19,25 +19,24 @@
 ;;     (destructuring-bind ,pattern ,arg ,@body)))
 
 (defun field (name type annotations)
-  (apply #'vcat 
-	 (append (mapcar #'(lambda (annotation)
-			     (destructuring-bind (name &optional vals) annotation
-			       (annotation name vals))) 
-			 annotations) 
-		 (list (text "private ~s ~s;" type name)))))
+  (vcat (mapcar #'(lambda (annotation)
+		    (destructuring-bind (name &optional vals) annotation
+		      (annotation name vals))) 
+		annotations) 
+	(list (text "private ~a ~a;" (upper type) (lower name)))))
 
 (defun setter (attribute)
   (let ((nm (slot-value 'name attribute))
 	(tp (slot-value 'type  attribute)))
-    (vcat (text "public void set~s(~s ~s){" nm tp nm)
-	  (nest 4 (text "this.~s = ~s;" nm nm))
+    (vcat (text "public void set~a(~a ~a){" nm tp nm)
+	  (nest 4 (text "this.~a = ~a;" nm nm))
 	  (text "}"))))
 
 (defun getter (attribute)
   (let ((nm (slot-value 'name attribute))
 	(tp (slot-value 'type  attribute)))
-    (vcat (text "public ~s get~s(){" tp nm)
-	  (nest 4 (text "return ~s;" nm))
+    (vcat (text "public ~a get~a(){" tp nm)
+	  (nest 4 (text "return ~a" nm))
 	  (text "}"))))
 (defmacro vcat-all (fn lst)
   `(apply #'vcat (mapcar #',fn ,lst)))
@@ -59,7 +58,9 @@
 (def-instance primitive (primary-key
 			 (attributes (list attribute) rest))
   (java (case (length attributes)
-	  (1 (funcall (java (first attributes)) (list (list 'id)))))) 
+	      (0 (error "Empty primary key"))
+	      (1 (funcall (java (first attributes)) (list (list 'id))))
+	      (otherwise (error "Multiple primary keys not supported")))) 
   (to-list `(primary-key :attributes ,attributes))) 
 
 ;; (def-instance primitive (simple-attrs
@@ -67,13 +68,18 @@
 ;;   (java (funcall (java (first attributes)) nil)) 
 ;;   (to-list `(simple :attributes ,attributes)))
 
+;; (def-instance2 primitive entity 
+;;   ((name string)
+;;    (primary primary-key)
+;;    (fields (list attribute))
+;;    &rest (foreigns (list foreign-key))))
 
 (def-instance primitive (entity 
 			 (name string required)
 			 (primary primary-key required) 
 			 (fields (list attribute) required)
 			 (foreigns (list foreign-key) rest))
-  (java (class name
+  (java (class (upper name)
 	       (java primary)
 	       (mapcar #'(lambda (attribute) (funcall (java attribute) nil)) fields)
 	       (mapcar #'java foreigns)))
@@ -84,6 +90,7 @@
 
 (defun pretty-java (entity)
   (funcall (pretty (java entity)) 0))
+
 
 (defparameter *people* (entity 'people 
 			       (primary-key 

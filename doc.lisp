@@ -1,6 +1,25 @@
 (def-typeclass doc
   pretty
   to-list)
+(defun lower (sym)
+  (let ((words (mapcar #'string-capitalize (split-str (symbol-name sym)))))
+    (format nil "~(~a~)~{~a~}" (car words) (cdr words))))
+(defun upper (sym)
+  (let ((words (mapcar #'string-capitalize (split-str (symbol-name sym)))))
+    (format nil "~{~a~}" words)))
+
+
+(defun split-str (string &optional (separator "-"))
+  (split-str-1 string separator))
+
+(defun split-str-1 (string &optional (separator "-") (r nil))
+  (let ((n (position separator string
+		     :from-end t
+		     :test #'(lambda (x y)
+			       (find y x :test #'string=)))))
+    (if n
+	(split-str-1 (subseq string 0 n) separator (cons (subseq string (1+ n)) r))
+      (cons string r))))
 
 (defun flatten (ls)
   (labels ((mklist (x) (if (listp x) x (list x))))
