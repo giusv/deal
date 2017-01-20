@@ -1,6 +1,4 @@
-(def-typeclass doc
-  pretty
-  to-list)
+
 (defun lower (sym)
   (let ((words (mapcar #'string-capitalize (split-str (symbol-name sym)))))
     (format nil "~(~a~)~{~a~}" (car words) (cdr words))))
@@ -25,10 +23,15 @@
   (labels ((mklist (x) (if (listp x) x (list x))))
     (mapcan #'(lambda (x) (if (atom x) (mklist x) (flatten x))) ls)))
 
+(def-typeclass doc
+  pretty
+  to-list)
+
 (def-instance doc (empty)
   (pretty #'(lambda (*) 
 	      nil))
   (to-list `(empty)))
+
 (def-instance doc (text (template string required) 
 			(args nil rest))
   (pretty #'(lambda (indent) 
@@ -38,6 +41,7 @@
 				  template)
 		     args)))
   (to-list `(text (:template ,template :args ,args))))
+
 (def-instance doc (nest (amount number required) 
 			(doc doc required))
   (pretty #'(lambda (indent) 
@@ -58,3 +62,4 @@
 
 (defun test-rest (&rest args)
   (princ args))
+

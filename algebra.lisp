@@ -67,14 +67,42 @@
 			     (funcall #'(lambda (,@slot-names) ,func)
 				      ,@(mapcar #'(lambda (slot) 
 						    `(,slot ,class)) slot-names))))) methods))))
+(defmacro def-instance2 (class (instance &body slots) &body methods)
+  `(progn 
+     (defclass ,instance (,class)
+       ,(mapcar #'make-slot2 slots))
+     (defun ,instance ,(make-arg-list slots)
+       (make-instance ',instance 
+       		      ,@(make-assignments slots)))
+     ,@(let ((slot-names (mapcar #'first slots)))
+	    (mapcar #'(lambda (method) 
+			(destructuring-bind (name func (args)) method
+			  `(defmethod ,name ((,class ,instance))
+			     (funcall #'(lambda (,@slot-names) ,func)
+				      ,@(mapcar #'(lambda (slot) 
+						    `(,slot ,class)) slot-names))))) methods))))
+
+
 
 (defmacro def-cool (class instance slots &body methods)
   (destruc body))
 (defun destruc (pat)
-  (if (null pat)
-      nil
-      (let (cond ((#'list pat) (car pat))
-	     (eq (car pat) '&rest)))))
+  (format t "~a~%" pat)
+  (format t "~a~%" (listp pat))
+  (format t  "~a~%" (car (cdr pat)))
+  (cond ((null pat) nil)
+	((listp (car pat)) (apply #'list (caar pat) (destruc (cdr pat))))
+	((eq (car pat) '&rest) (funcall #'list '&rest (caadr pat)))
+	((eq (car pat) '&optional )))
+
+  ;; (if (null pat)
+  ;;     nil
+  ;;     (let (( (cond ((listp (car pat)) (caar pat))
+  ;; 			((eq (car pat) '&rest) (caadr pat))
+  ;; 			(t nil))))
+  ;; 	(if elem
+  ;; 	    (apply #'list elem (destruc (cdr pat))))))
+  )
 ;; (def-typeclass doc2
 ;;   to-list
 ;;   java)
