@@ -1,9 +1,10 @@
-(def-typeclass primitive
-  java
-  to-list)
+;; (def-typeclass primitive
+;;   java
+;;   to-list)
+
 (defun class (name &rest body)
   (vcat (text "public class ~a{" name)
-	(nest 4 (vcat body))
+	(nest 4 (apply #'vcat body))
 	(text "}")))
 
 
@@ -14,16 +15,13 @@
 	  (text "~a(~a)" name vals)
 	  (text "more"))))
 
-;; (defmacro destructuring-lambda (arg pattern &body body)
-;;   `(lambda (,arg)
-;;     (destructuring-bind ,pattern ,arg ,@body)))
-
 (defun field (name type annotations)
-  (vcat (mapcar #'(lambda (annotation)
-		    (destructuring-bind (name &optional vals) annotation
-		      (annotation name vals))) 
-		annotations) 
-	(list (text "private ~a ~a;" (upper type) (lower name)))))
+  (apply #'vcat 
+	 (mapcar #'(lambda (annotation)
+		     (destructuring-bind (name &optional vals) annotation
+		       (annotation name vals))) 
+		 annotations)
+	 (list (text "private ~a ~a;" (upper type) (lower name)))))
 
 (defun setter (attribute)
   (let ((nm (slot-value 'name attribute))
@@ -41,55 +39,33 @@
 (defmacro vcat-all (fn lst)
   `(apply #'vcat (mapcar #',fn ,lst)))
 
-(def-instance primitive (attribute 
-			 (name string required) 
-			 (type string required))
-  (java #'(lambda (annotations) (field name type annotations))) 
-  (to-list `(attribute :name ,name :type ,type)))
+(defprod primitive (attribute (name type))
+  (java (annotations) (field name type annotations)) 
+  (to-list () `(attribute :name ,name :type ,type)))
 
-(def-instance primitive (foreign-key
-			 (reference nil required)
-			 (attributes (list attribute) rest))
-  (java (apply #'vcat (mapcar 
-		       #'(lambda (attribute) (funcall (java attribute) (list (list reference))))
-		       attributes))) 
-  (to-list `(foreign-key :attributes ,(mapcar #'to-list attributes) :reference ,reference)))
+(defprod primitive (foreign-key (reference &rest attributes))
+  (java () (apply #'vcat (synth-all java attributes (list (list reference))))) 
+  (to-list () `(foreign-key :attributes ,(synth-all to-list attributes) :reference ,reference)))
 
-(def-instance primitive (primary-key
-			 (attributes (list attribute) rest))
-  (java (case (length attributes)
-	      (0 (error "Empty primary key"))
-	      (1 (funcall (java (first attributes)) (list (list 'id))))
-	      (otherwise (error "Multiple primary keys not supported")))) 
-  (to-list `(primary-key :attributes ,attributes))) 
+(defprod primitive (primary-key (&rest attributes))
+  (java () (case (length attributes)
+	     (0 (error "Empty primary key"))
+	     (1 (synth java (first attributes) (list (list 'id))))
+	     (otherwise (error "Multiple primary keys not supported")))) 
+  (to-list () `(primary-key :attributes ,(synth-all to-list attributes))))
 
-;; (def-instance primitive (simple-attrs
-;; 			 (attributes nil required))
-;;   (java (funcall (java (first attributes)) nil)) 
-;;   (to-list `(simple :attributes ,attributes)))
-
-;; (def-instance2 primitive entity 
-;;   ((name string)
-;;    (primary primary-key)
-;;    (fields (list attribute))
-;;    &rest (foreigns (list foreign-key))))
-
-(def-instance primitive (entity 
-			 (name string required)
-			 (primary primary-key required) 
-			 (fields (list attribute) required)
-			 (foreigns (list foreign-key) rest))
-  (java (class (upper name)
-	       (java primary)
-	       (mapcar #'(lambda (attribute) (funcall (java attribute) nil)) fields)
-	       (mapcar #'java foreigns)))
-  (to-list `(entity :name ,name 
-		    :primary ,(to-list primary)
-		    :fields ,(mapcar #'to-list fields)
-		    :foreigns ,(mapcar #'to-list foreigns))))
+(defprod primitive (entity (name primary fields &rest foreigns))
+  (java () (class (upper name) 
+		  (synth java primary)
+		  (synth-all java fields nil)
+		  (synth-all java foreigns)))
+  (to-list () `(entity :name ,name 
+		       :primary ,(synth to-list primary)
+		       :fields ,(synth-all to-list fields)
+		       :foreigns ,(synth-all to-list foreigns))))
 
 (defun pretty-java (entity)
-  (funcall (pretty (java entity)) 0))
+  (synth pretty (synth java entity) 0))
 
 
 (defparameter *people* (entity 'people 
@@ -105,8 +81,3 @@
 				'cars
 				(attribute 'car-id1 'string))))
 
-(defparameter *test* 
-  (pretty (vcat (text "s") 
-		(nest 4 (vcat (field 'a 'b (list (list 'id)))))
-		(text "a"))))
-(defparameter *test2* (pretty (class 'name)))

@@ -19,47 +19,50 @@
 	(split-str-1 (subseq string 0 n) separator (cons (subseq string (1+ n)) r))
       (cons string r))))
 
-(defun flatten (ls)
+(defun flatten (ls &key (test #'atom))
   (labels ((mklist (x) (if (listp x) x (list x))))
-    (mapcan #'(lambda (x) (if (atom x) (mklist x) (flatten x))) ls)))
+    (mapcan #'(lambda (x) (if (funcall test x) (mklist x) (flatten x :test test))) ls)))
 
-(def-typeclass doc
-  pretty
-  to-list)
+(defun flat (ls &optional (test #'atom))
+  (if (or (null ls)
+	  (funcall test ls))
+      ls
+      (if (funcall test (car ls))
+	  (cons (car ls) (flat (cdr ls) test))
+	  (concatenate 'list (flat (car ls) test) (flat (cdr ls) test)))))
 
-(def-instance doc (empty)
-  (pretty #'(lambda (*) 
-	      nil))
-  (to-list `(empty)))
+(defprod doc (empty)
+  (pretty (indent) (format nil "")))
+(defprod doc (nest (amount doc))
+  (pretty (indent) (synth pretty doc (+ indent amount))))
 
-(def-instance doc (text (template string required) 
-			(args nil rest))
-  (pretty #'(lambda (indent) 
-	      (apply #'format nil 
-		     (concatenate 'string 
-				  (make-string indent :initial-element #\Space) 
-				  template)
-		     args)))
-  (to-list `(text (:template ,template :args ,args))))
+(defprod doc (text (template &rest args))
+  (pretty (indent) (apply #'format nil 
+			  (concatenate 'string 
+				       (make-string indent :initial-element #\Space) 
+				       template)
+			  args)))
 
-(def-instance doc (nest (amount number required) 
-			(doc doc required))
-  (pretty #'(lambda (indent) 
-	      (funcall (pretty doc) (+ indent amount))))
-  (to-list `(nest :amount ,amount :doc ,(to-list doc))))
-
-(def-instance doc (vcat (docs (list doc) rest))
-  (pretty #'(lambda (indent)
-	      (format nil "~{~a~^~%~}" 
-		      (mapcar #'(lambda (doc) (funcall (pretty doc) indent)) 
-			      (flatten docs)))))
-  (to-list `(vcat :docs ,(mapcar #'to-list docs))))
-
-
+(defprod doc (vcat (&rest docs))
+  (pretty (indent) (format nil "~{~a~^~%~}" 
+			   (synth-all pretty (flatten docs :test #'hash-table-p) indent))))
+(defun dotted (x)
+  (and (consp x)
+       (atom (car x))
+       (and (atom (cdr x))
+	    (not (null (cdr x))))))
+(defun assoc-list (x)
+  (every #'dotted x))
 
 (defparameter *doc* (vcat (text "hello")
 			  (nest 4 (text "hello ~a" 3))))
+(defparameter *doc* (text "~a~%" 1))
+(defparameter *doc* (vcat (text "hello")
+			  (nest 4 (text "hello ~a" 3))))
 
-(defun test-rest (&rest args)
-  (princ args))
+
+
+
+
+
 

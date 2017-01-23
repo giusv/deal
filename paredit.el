@@ -388,8 +388,8 @@ Paredit behaves badly if parentheses are unbalanced, so exercise
                  "|((foo) bar)"))
    ("C-M-u"     paredit-backward-up)
    ("C-M-d"     paredit-forward-down)
-   ("C-M-p"     paredit-backward-down)  ; Built-in, these are FORWARD-
-   ("C-M-n"     paredit-forward-up)     ; & BACKWARD-LIST, which have
+   ;;("C-M-p"     paredit-backward-down)  ; Built-in, these are FORWARD-
+   ;;("C-M-n"     paredit-forward-up)     ; & BACKWARD-LIST, which have
                                         ; no need given C-M-f & C-M-b.
 
    "Depth-Changing Commands"
