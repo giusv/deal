@@ -1,4 +1,4 @@
-(defprod tree (fork l r)
+ (defprod tree (fork l r)
   (synthesize (minimum (min (minimum l) (minimum r))))
   (inherit ((replacement l) (replacement))
 	   ((replacement r) (replacement))))
@@ -131,7 +131,10 @@
 		    (class name 
 			   ...)))))))
 (defmacro synth (func name &rest args)
-  `(funcall (assoc ',func ,name) ,name ,@args))
+  `(funcall (cdr (assoc ',func ,name)) ,@args))
+
+(defun synth2 (func name &rest args)
+  (funcall (cdr (assoc func ,name)) ,@args))
 
 (defprod primitive 
     (entity primary simple foreigns)
@@ -153,16 +156,14 @@
 	    )))
 
 (defmacro defprod (base (name &rest slots) &rest attrs)
-  (let ((attr-name #'(lambda (attr) 
-		       (car attr)))
-	(attr-func #'(lambda (attr) 
-		       `#'(lambda ,(apply #'list base (second attr))
-			   ,(third attr)))))
+  (labels ((attr-name (attr) 
+	     (car attr))
+	   (attr-func (attr)  
+	     `#'(lambda ,(apply #'list (second attr))
+		  ,(third attr))))
     `(defun ,name (,@slots)
        (pairlis ',(append slots (mapcar #'attr-name attrs)) 
-		,(append slots (mapcar  #'attr-func attrs)))
-       ;; ,(mapcar #'make-slot slots)
-       )))
+		(list ,@slots ,@(mapcar #'attr-func attrs))))))
 
 (defun make-slot (name)
   `(name . ,name))
@@ -172,6 +173,31 @@
 
 (defun attr-func (attr)
   #'(lambda () third attr))
-(defprod doc 
-    (nest amount doc)
+
+(defun flatten (ls)
+  (labels ((mklist (x) (if (listp x) x (list x))))
+    (mapcan #'(lambda (x) (if (atom x) (mklist x) (flatten x))) ls)))
+
+(defprod doc (nest amount doc)
   (pretty (indent) (synth pretty doc (+ indent amount))))
+
+(defprod doc (text template args)
+  (pretty (indent) (apply #'format nil 
+			  (concatenate 'string 
+				       (make-string indent :initial-element #\Space) 
+				       template)
+			  args)))
+
+(defprod doc (vcat docs)
+  (pretty (indent) (format nil "~{~a~^~%~}" 
+			   (mapcar #'(lambda (doc) (synth pretty doc indent)) 
+				   docs))))
+
+(defparameter *doc* (text "~a~%" (list 1)))
+(defparameter *doc* (vcat (list (text "hello ~a" (list 4))
+				(nest 4 (text "hello ~a" (list 3))))))
+
+(defparameter *doc* (nest 4 (text "hello ~a" (list 3))))
+
+(defparameter *closure* (cdr (assoc 'pretty *doc*)))
+
