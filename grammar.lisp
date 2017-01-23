@@ -63,7 +63,7 @@
 		    args)))
 
 (defprod doc (nest amount doc)
-  (pretty (indent (+ amount indent)) (pretty doc)))
+  ((pretty (indent)) (pretty doc (+ amount indent))))
 
 (defprod doc (vcat doc1 doc2)
   (pretty (indent ) (format nil "~a~%~a}" (pretty doc1) (pretty doc2)))
@@ -100,7 +100,78 @@
 
 
 (defun nest (amount doc)
-  (list 'amount amount
-	'doc doc
-	))
-(defun text (template args))
+  `((amount . ,amount)
+    (doc . ,doc)
+    ;; (pretty . (#'lambda (doc indent)
+    ;; 		(macrolet ((pretty (doc) `(funcall (assoc 'pretty ,doc) doc ,(+ indent amount)))))))
+    (pretty . ,#'(lambda (doc indent)
+		  (labels ((pretty (doc1 indent) 
+			     (funcall (assoc 'pretty doc) doc1 indent)))
+		    (pretty doc (+ indent amount)))))))
+
+(defun primary (attributes)
+  `((attributes . ,attributes)
+    (java . ,#'(lambda (primary)
+		 (let ((attributes (assoc 'attributes primary)))
+		   (apply #'vcat (mapcar #'field attributes)))))
+    (imports . .(lambda (primary)
+		 (let ((attributes (assoc 'attributes primary)))
+		   (apply #'vcat (mapcar #'import attributes)))))))
+
+(defun entity (name primary simple foreigns)
+  `((name . ,name)
+    (primary . ,primary)
+    (simple . ,simple)
+    (foreigns . ,foreigns)
+    (java . ,#'(lambda (entity)
+		 (let ((name (assoc 'name entity))
+		       (primary (assoc 'primary entity)))
+		   (compilation-unit
+		    (synth (imports primary indent))
+		    (class name 
+			   ...)))))))
+(defmacro synth (func name &rest args)
+  `(funcall (assoc ',func ,name) ,name ,@args))
+
+(defprod primitive 
+    (entity primary simple foreigns)
+  )
+
+
+
+(defun nest (amount doc)
+  `((amount . ,amount)
+    (doc . ,doc)
+    ;; (pretty . (#'lambda (doc indent)
+    ;; 		(macrolet ((pretty (doc) `(funcall (assoc 'pretty ,doc) doc ,(+ indent amount)))))))
+    ;; (pretty . ,#'(lambda (doc indent)
+    ;; 		  (labels ((pretty (doc1 indent) 
+    ;; 			     (funcall (assoc 'pretty doc) doc1 indent)))
+    ;; 		    (pretty doc (+ indent amount)))))
+    (pretty . ,#'(lambda (doc indent)
+		   (synth (pretty doc (+ indent amount))))
+	    )))
+
+(defmacro defprod (base (name &rest slots) &rest attrs)
+  (let ((attr-name #'(lambda (attr) 
+		       (car attr)))
+	(attr-func #'(lambda (attr) 
+		       `#'(lambda ,(apply #'list base (second attr))
+			   ,(third attr)))))
+    `(defun ,name (,@slots)
+       (pairlis ',(append slots (mapcar #'attr-name attrs)) 
+		,(append slots (mapcar  #'attr-func attrs)))
+       ;; ,(mapcar #'make-slot slots)
+       )))
+
+(defun make-slot (name)
+  `(name . ,name))
+
+(defun attr-name (attr)
+  (first attr))
+
+(defun attr-func (attr)
+  #'(lambda () third attr))
+(defprod doc 
+    (nest amount doc)
+  (pretty (indent) (synth pretty doc (+ indent amount))))
