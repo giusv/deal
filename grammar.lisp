@@ -155,15 +155,15 @@
 		   (synth (pretty doc (+ indent amount))))
 	    )))
 
-(defmacro defprod (base (name &rest slots) &rest attrs)
+(defmacro defprod (base (name slots) &rest attrs)
   (labels ((attr-name (attr) 
 	     (car attr))
 	   (attr-func (attr)  
 	     `#'(lambda ,(apply #'list (second attr))
 		  ,(third attr))))
     `(defun ,name (,@slots)
-       (pairlis ',(append slots (mapcar #'attr-name attrs)) 
-		(list ,@slots ,@(mapcar #'attr-func attrs))))))
+       (pairlis ',(append #|slots|# (mapcar #'attr-name attrs)) 
+		(list #|,@slots|# ,@(mapcar #'attr-func attrs))))))
 
 (defun make-slot (name)
   `(name . ,name))
@@ -178,24 +178,35 @@
   (labels ((mklist (x) (if (listp x) x (list x))))
     (mapcan #'(lambda (x) (if (atom x) (mklist x) (flatten x))) ls)))
 
-(defprod doc (nest amount doc)
+(defprod doc (nest (amount doc))
   (pretty (indent) (synth pretty doc (+ indent amount))))
 
-(defprod doc (text template args)
+(defprod doc (text (template &rest args))
   (pretty (indent) (apply #'format nil 
 			  (concatenate 'string 
 				       (make-string indent :initial-element #\Space) 
 				       template)
 			  args)))
 
-(defprod doc (vcat docs)
+(defprod doc (vcat (&rest docs))
   (pretty (indent) (format nil "~{~a~^~%~}" 
 			   (mapcar #'(lambda (doc) (synth pretty doc indent)) 
 				   docs))))
 
-(defparameter *doc* (text "~a~%" (list 1)))
-(defparameter *doc* (vcat (list (text "hello ~a" (list 4))
-				(nest 4 (text "hello ~a" (list 3))))))
+(defprod tree (tip (i))
+  (minimum () i)
+  (tree (rep) (tip rep))
+  (to-list () `(tip ,i)))
+(defprod tree (fork (l r))
+  (minimum () (min (synth minimum l) (synth minimum r)))
+  (tree (rep) (fork (synth tree l rep) (synth tree r rep)))
+  (to-list () `(fork ,(synth to-list l) ,(synth to-list r))))
+
+(defparameter *tree* (fork (tip 1) (fork (tip 2) (tip 3))))
+
+(defparameter *doc* (text "~a~%" 1))
+(defparameter *doc* (vcat (text "hello")
+			  (nest 4 (text "hello ~a" 3))))
 
 (defparameter *doc* (nest 4 (text "hello ~a" (list 3))))
 
