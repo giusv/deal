@@ -31,19 +31,19 @@
 	  (cons (car ls) (flat (cdr ls) test))
 	  (concatenate 'list (flat (car ls) test) (flat (cdr ls) test)))))
 
-(defprod doc (empty)
+(defprod doc (empty ())
   (pretty (indent) (format nil "")))
-(defprod doc (nest (amount doc))
+(defprod doc (nest ((amount integer) (doc doc)))
   (pretty (indent) (synth pretty doc (+ indent amount))))
 
-(defprod doc (text (template &rest args))
+(defprod doc (text ((template string) &rest (args (list doc))))
   (pretty (indent) (apply #'format nil 
 			  (concatenate 'string 
 				       (make-string indent :initial-element #\Space) 
 				       template)
 			  args)))
 
-(defprod doc (vcat (&rest docs))
+(defprod doc (vcat (&rest (docs (list doc))))
   (pretty (indent) (format nil "~{~a~^~%~}" 
 			   (synth-all pretty (flatten docs :test #'hash-table-p) indent))))
 (defun dotted (x)
