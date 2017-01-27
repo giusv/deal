@@ -11,4 +11,6 @@
 (defprod element (vert (&rest (elements (list element))))
   (to-list () `(vert (:elements ,(synth-all to-list elements)))))
 
-(defprod element (alt (&rest (elements (list (pair string element))))))
+(defprod element (alt (&rest (elements (plist element))))
+  (to-list () `(alt (:elements ,(synth-all to-list elements)))))
+

@@ -1,13 +1,6 @@
 ;; (defmacro synth (func arg &rest args)
 ;;   `(funcall (cdr (assoc ',func ,arg)) ,@args))
 
-(defmacro synth (func arg &rest args)
-  `(funcall (gethash ',func ,arg) ,@args))
-
-(defmacro synth-all (func lst &rest args)
-  `(mapcar #'(lambda (arg) (synth ,func arg ,@args))
-	   ,lst))
-
 (defun arg-list (sym args &optional (pref nil) (func #'car))
   (let ((l (mapcar func (gethash sym args))))
     (if (null l)
@@ -23,6 +16,17 @@
 	 (rest (arg-list 'rest args '&rest))
 	 (key (arg-list 'key args '&key #'caadr)))
     (append req opt rest key)))
+
+(defmacro synth (func arg &rest args)
+  `(funcall (gethash ',func ,arg) ,@args))
+
+(defmacro synth-all (func lst &rest args)
+  `(mapcar #'(lambda (arg) (synth ,func arg ,@args))
+	   ,lst))
+
+
+
+
 
 (defmacro defprod (base (name lambda-list) &rest attrs)
   (declare (ignorable base))

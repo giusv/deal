@@ -32,14 +32,15 @@
   #'(lambda (s) (cond ((null s) ())
 		      (t (list (tuple (car s) (cdr s)))))))
 
-(defmacro do-with (binds form)
-  (do-with-fn binds form))
+
 (defun do-with-fn (binds form)
   (if (null binds)
       form
       (case (length (car binds))
 	(1 `(bind ,(caar binds) #'(lambda (*) ,(do-with-fn (cdr binds) form))))
 	(2 `(bind ,(cadar binds) #'(lambda (,(caar binds)) ,(do-with-fn (cdr binds) form)))))))
+(defmacro do-with (binds form)
+  (do-with-fn binds form))
 
 (defun sat (p)
   (do-with ((s (item)))
