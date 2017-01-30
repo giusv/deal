@@ -3,7 +3,7 @@
   (to-list () `(button (:id ,id :expr ,expr :transition ,(synth to-list transition)))))
 
 (defprod element (input ((id string)
-			 (expr expression)))
+			 &optional (expr expression)))
   (to-list () `(input (:id ,id :expr ,expr))))
 (defprod element (horz (&rest (elements (list element))))
   (to-list () `(horz (:elements ,(synth-all to-list elements)))))
@@ -14,3 +14,5 @@
 (defprod element (alt (&rest (elements (plist element))))
   (to-list () `(alt (:elements ,(synth-all to-list elements)))))
 
+(alt :home (button 'ok (const "ok"))
+     :login (input 'userid))

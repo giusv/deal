@@ -1,29 +1,32 @@
-(defprod expression (const ((exp (or string number))))
+(defprod exp (const ((exp (or string number))))
   (to-list () `(const (:exp ,exp))))
 
-(defprod expression (attr ((exp string)))
+(defprod exp (attr ((exp string)))
   (to-list () `(attr (:exp ,exp))))
 
-(defprod expression (cat (&rest (exps expression)))
+(defprod exp (cat (&rest (exps exp)))
   (to-list () `(cat (:exps ,(synth-all to-list exps)))))
 
-(defprod boolean-expression (<true> ())
+(defprod bexp (<true> ())
   (to-list () `(<true>)))
-(defprod boolean-expression (<false> ())
+(defprod bexp (<false> ())
   (to-list () `(<false>)))
-(defprod boolean-expression (<and> (&rest (exps boolean-expression)))
+(defprod bexp (<and> (&rest (exps bexp)))
   (to-list () `(<and> (:exps ,(synth-all to-list exps)))))
-(defprod boolean-expression (<or> (&rest (exps boolean-expression)))
+(defprod bexp (<or> (&rest (exps bexp)))
   (to-list () `(<or> (:exps ,(synth-all to-list exps)))))
-(defprod boolean-expression (<not> ((exp boolean-expression)))
+(defprod bexp (<not> ((exp bexp)))
     (to-list () `(<not> (:exp ,(synth to-list exp)))))
-(defprod boolean-expression (<equal> ((exp1 expression) (exp2 expression)))
+(defprod bexp (<equal> ((exp1 exp) (exp2 exp)))
     (to-list () `(<equal> (:exp1 ,(synth to-list exp1) ,(synth to-list exp2)))))
-(defprod boolean-expression (<less-than> ((exp1 expression) (exp2 expression)))
+(defprod bexp (<less-than> ((exp1 exp) (exp2 exp)))
     (to-list () `(<less-than> (:exp1 ,(synth to-list exp1) ,(synth to-list exp2)))))
-(defprod boolean-expression (<greater-than> ((exp1 expression) (exp2 expression)))
+(defprod bexp (<greater-than> ((exp1 exp) (exp2 exp)))
     (to-list () `(<greater-than> (:exp1 ,(synth to-list exp1) ,(synth to-list exp2)))))
-;; (defprods expression 
+
+
+
+;; (defprods exp
 ;;     (const (or string number))
 ;;   )
 
