@@ -46,6 +46,10 @@
 (defprod doc (vcat (&rest (docs (list doc))))
   (pretty (indent) (format nil "~{~a~^~%~}" 
 			   (synth-all pretty (flatten docs :test #'hash-table-p) indent))))
+
+(defprod doc (hcat (&rest (docs (list doc))))
+  (pretty (indent) (format nil "~{~a~^ ~}" 
+			   (synth-all pretty (flatten docs :test #'hash-table-p) 0))))
 (defun dotted (x)
   (and (consp x)
        (atom (car x))

@@ -1,4 +1,4 @@
-;; (defmacro synth (func arg &rest args)
+;; (demacro synth (func arg &rest args)
 ;;   `(funcall (cdr (assoc ',func ,arg)) ,@args))
 
 (defun arg-list (sym args &optional (pref nil) (func #'car))
@@ -27,6 +27,10 @@
 
 (defmacro synth-plist (func plst &rest args)
   `(apply #'append (mapcar #'(lambda (pair) (list (car pair) (synth ,func (cadr pair) ,@args)))
+			   (group ,plst 2))))
+
+(defmacro synth-plist2 (func plst &rest args)
+  `(apply #'append (mapcar #'(lambda (pair) (list (synth ,func (cadr pair) ,@args)))
 			   (group ,plst 2))))
 
 

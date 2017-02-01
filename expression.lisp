@@ -1,11 +1,20 @@
 (defprod exp (const ((exp (or string number))))
-  (to-list () `(const (:exp ,exp))))
+  (to-list () `(const (:exp ,exp)))
+  (to-req () (text "stringa costante: ~a" exp)))
 
 (defprod exp (attr ((exp string)))
-  (to-list () `(attr (:exp ,exp))))
+  (to-list () `(attr (:exp ,exp)))
+  (to-req () (text "attributo: ~a" exp)))
+
+(defprod exp (path-parameter ((name string)))
+  (to-list () `(path-parameter (:name ,name)))
+  (to-req () (text "parametro path: ~a" name)))
 
 (defprod exp (cat (&rest (exps exp)))
-  (to-list () `(cat (:exps ,(synth-all to-list exps)))))
+  (to-list () `(cat (:exps ,(synth-all to-list exps))))
+  (to-req () (apply #'vcat 
+		    (text "concatenazione delle espressioni:")
+		    (synth-all to-req exps))))
 
 (defprod bexp (<true> ())
   (to-list () `(<true>)))
