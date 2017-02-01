@@ -25,8 +25,9 @@
   `(mapcar #'(lambda (arg) (synth ,func arg ,@args))
 	   ,lst))
 
-
-
+(defmacro synth-plist (func plst &rest args)
+  `(apply #'append (mapcar #'(lambda (pair) (list (car pair) (synth ,func (cadr pair) ,@args)))
+			   (group ,plst 2))))
 
 
 (defmacro defprod (base (name lambda-list) &rest attrs)
