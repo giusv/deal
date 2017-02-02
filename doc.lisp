@@ -1,4 +1,3 @@
-
 (defun lower (sym)
   (let ((words (mapcar #'string-capitalize (split-str (symbol-name sym)))))
     (format nil "~(~a~)~{~a~}" (car words) (cdr words))))
@@ -32,32 +31,33 @@
 	  (concatenate 'list (flat (car ls) test) (flat (cdr ls) test)))))
 
 (defprod doc (empty ())
-  (pretty (indent) (format nil ""))
+  (pretty (indent) ())
   (extent () 0))
 (defprod doc (nest ((amount integer) (doc doc)))
   (pretty (indent) (synth pretty doc (+ indent amount)))
   (extent () (+ amount (synth extent doc))))
 
 (defprod doc (text ((template string) &rest (args (list doc))))
-  (pretty (indent) (apply #'format nil 
-			  (concatenate 'string 
-				       (make-string indent :initial-element #\Space) 
-				       template)
-			  args))
-  (extent () (length (apply #'format nil template args))))
+  (pretty (indent) (format t "~v,0t~?" indent template args))
+  (extent () (length (apply #'format t template args))))
 
 (defprod doc (vcat (&rest (docs (list doc))))
-  (pretty (indent) (format nil "~{~a~^~%~}" 
-			   (synth-all pretty (flatten docs :test #'hash-table-p) indent)))
+  (pretty (indent) (let ((fdocs (flatten docs :test #'hash-table-p)))
+		     (if (null fdocs)
+			 ()
+			 (format t "~a~%~a" 
+				 (synth pretty (car fdocs) indent)
+				 (synth pretty (apply #'vcat (cdr fdocs)) indent)))))
   (extent () (let ((fdocs (flatten docs :test #'hash-table-p)))
 		     (synth extent (car (last fdocs))))))
 
 (defprod doc (hcat (&rest (docs (list doc))))
   (pretty (indent) (let ((fdocs (flatten docs :test #'hash-table-p)))
+		     (print (length fdocs)) 
 		     (if (null fdocs)
-			 (format nil "")
-			 (format nil "~{~a~^ ~}" 
-				 ()))))
+			 ()
+			 (progn (synth pretty (car fdocs) indent)
+				(synth pretty (apply #'hcat (cdr fdocs)) (+ indent (synth extent (car fdocs))))))))
   (extent () (let ((fdocs (flatten docs :test #'hash-table-p)))
 	       (reduce #'+ (synth-all extent fdocs)))))
 (defun dotted (x)
@@ -68,15 +68,21 @@
 (defun assoc-list (x)
   (every #'dotted x))
 
-(defparameter *doc* (vcat (text "hello")
-			  (nest 4 (text "hello ~a" 3))))
-(defparameter *doc* (text "~a~%" 1))
-(defparameter *doc* (vcat (text "hello")
-			  (nest 4 (text "hello ~a" 3))))
+(defparameter *doc* (hcat (text "first")
+			  (text "second")))
+;; (defparameter *doc* (text "~a~%" 1))
+;; (defparameter *doc* (hcat (text "hello")
+;; 			  (text "hello ~a" 3)))
 
 
 
 
-
+;; (format nil "~a~v,0t~a"
+;; 	(synth pretty (text "first") 0)
+;; 	5
+;; 	(format nil "~a~v,0t~a"
+;; 		(synth pretty (text "second") 0)
+;; 		5
+;; 		""))
 
 
