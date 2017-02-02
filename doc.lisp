@@ -32,24 +32,34 @@
 	  (concatenate 'list (flat (car ls) test) (flat (cdr ls) test)))))
 
 (defprod doc (empty ())
-  (pretty (indent) (format nil "")))
+  (pretty (indent) (format nil ""))
+  (extent () 0))
 (defprod doc (nest ((amount integer) (doc doc)))
-  (pretty (indent) (synth pretty doc (+ indent amount))))
+  (pretty (indent) (synth pretty doc (+ indent amount)))
+  (extent () (+ amount (synth extent doc))))
 
 (defprod doc (text ((template string) &rest (args (list doc))))
   (pretty (indent) (apply #'format nil 
 			  (concatenate 'string 
 				       (make-string indent :initial-element #\Space) 
 				       template)
-			  args)))
+			  args))
+  (extent () (length (apply #'format nil template args))))
 
 (defprod doc (vcat (&rest (docs (list doc))))
   (pretty (indent) (format nil "~{~a~^~%~}" 
-			   (synth-all pretty (flatten docs :test #'hash-table-p) indent))))
+			   (synth-all pretty (flatten docs :test #'hash-table-p) indent)))
+  (extent () (let ((fdocs (flatten docs :test #'hash-table-p)))
+		     (synth extent (car (last fdocs))))))
 
 (defprod doc (hcat (&rest (docs (list doc))))
-  (pretty (indent) (format nil "~{~a~^ ~}" 
-			   (synth-all pretty (flatten docs :test #'hash-table-p) 0))))
+  (pretty (indent) (let ((fdocs (flatten docs :test #'hash-table-p)))
+		     (if (null fdocs)
+			 (format nil "")
+			 (format nil "~{~a~^ ~}" 
+				 ()))))
+  (extent () (let ((fdocs (flatten docs :test #'hash-table-p)))
+	       (reduce #'+ (synth-all extent fdocs)))))
 (defun dotted (x)
   (and (consp x)
        (atom (car x))
