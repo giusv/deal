@@ -30,14 +30,17 @@
 
 (defprod element (alt (&rest (elements (plist element))))
   (to-list () `(alt (:elements ,(synth-plist to-list elements)))) 
-  (to-req () (funcall #'vcat 
-		    (text "Scelta tra le seguenti viste:")
-		    (nest 4 (apply #'vcat (synth-plist2 to-req elements))))))
+  (to-req () (let ((alts (synth-plist to-req elements)))
+	       (funcall #'vcat 
+			(text "Scelta tra le seguenti viste:")
+			(nest 4 (apply #'vcat (mapcar #'(lambda (pair)
+							  (hcat (text "~a" (first pair)) (text ":") (second pair)))
+						      (group alts 2))))))))
 
 
 (synth to-list (vert (button 'ok (const "ok")) (input 'userid)))
 
-(defprod transition (transition ((target url)
+(defprod transition (transition ((target url) 
 				 &optional (action process)))
   (to-list () `(transition (:target ,target :action ,(synth to-list action)))))
 ;; (alt :home home
@@ -46,7 +49,9 @@
 (defprod element (abst ((parameters (list parameter))
 		       (element element)))
   (to-list () `(abst (:parameters ,(synth-all to-list parameters) :element ,(synth to-list element))))
-  (to-req () (synth to-req element)))
+  (to-req () (vcat (text "Elemento parametrico con parametri:")
+		   (nest 4 (apply #'vcat (synth-all to-req parameters)))
+		   (synth to-req element))))
 
 ;; (defparameter *gui* (alt :login (vert (input 'userid)
 ;; 				      (input 'passwd)

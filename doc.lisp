@@ -31,31 +31,40 @@
 	  (concatenate 'list (flat (car ls) test) (flat (cdr ls) test)))))
 
 (defprod doc (empty ())
-  (pretty (indent) ())
+  (output (indent) ())
+  (to-string (indent) ())
   (extent () 0))
 (defprod doc (nest ((amount integer) (doc doc)))
-  (pretty (indent) (synth pretty doc (+ indent amount)))
+  (output (indent) (synth output doc (+ indent amount)))
+  (to-string (indent) (with-output-to-string (*standard-output*)
+			(synth output (nest amount doc) indent)))
   (extent () (+ amount (synth extent doc))))
 
 (defprod doc (text ((template string) &rest (args (list doc))))
-  (pretty (indent) (format t "~v,0t~?" indent template args))
+  (output (indent) (format t "~v,0t~?" indent template args))
+  (to-string (indent) (with-output-to-string (*standard-output*)
+		      (synth output (text template args) indent)))
   (extent () (length (apply #'format nil template args))))
 
 (defprod doc (vcat (&rest (docs (list doc))))
-  (pretty (indent) (let ((fdocs (flatten docs :test #'hash-table-p)))
-		     (if (not (null fdocs)) 
-			 (progn (synth pretty (car fdocs) indent)
-				(format t "~%")
-				(synth pretty (apply #'vcat (cdr fdocs)) indent)))))
+  (output (indent) (let ((fdocs (flatten docs :test #'hash-table-p)))
+		     (unless (null fdocs) 
+		       (progn (synth output (car fdocs) indent)
+			      (unless (null (cdr fdocs)) 
+				(progn (format t "~%"))
+				(synth output (apply #'vcat (cdr fdocs)) indent))))))
+  (to-string (indent) (with-output-to-string (*standard-output*)
+			(synth output (apply #'vcat docs) indent)))
   (extent () (let ((fdocs (flatten docs :test #'hash-table-p)))
 		     (synth extent (car (last fdocs))))))
 
 (defprod doc (hcat (&rest (docs (list doc))))
-  (pretty (indent) (let ((fdocs (flatten docs :test #'hash-table-p)))
-		     (if (not (null fdocs)) 
-		     	 (progn (synth pretty (car fdocs) indent)
-		     		(synth pretty (apply #'hcat (cdr fdocs)) (+ indent (synth extent (car fdocs))))))
-		     ))
+  (output (indent) (let ((fdocs (flatten docs :test #'hash-table-p)))
+		     (unless (null fdocs) 
+		     	 (progn (synth output (car fdocs) indent)
+		     		(synth output (apply #'hcat (cdr fdocs)) (+ indent (synth extent (car fdocs))))))))
+  (to-string (indent) (with-output-to-string (*standard-output*)
+			(synth output (apply #'hcat docs) indent)))
   (extent () (let ((fdocs (flatten docs :test #'hash-table-p)))
 	       (reduce #'+ (synth-all extent fdocs)))))
 (defun dotted (x)
@@ -66,23 +75,15 @@
 (defun assoc-list (x)
   (every #'dotted x))
 
-(defparameter *doc* (hcat (text "main(")
-			  (vcat (text "arg1")
-				(text "arg2"))
-			  (text ")")))
+(defparameter *doc* (vcat (hcat (text "public static main(")
+				(vcat (text "String[] argv,")
+				      (text "int a"))
+				(text ") {"))
+			  (nest 4 (text "print();"))
+			  (text "}")))
 ;; (defparameter *doc* (text "~a~%" 1))
 ;; (defparameter *doc* (hcat (text "hello")
 ;; 			  (text "hello ~a" 3)))
 
-
-
-
-;; (format nil "~a~v,0t~a"
-;; 	(synth pretty (text "first") 0)
-;; 	5
-;; 	(format nil "~a~v,0t~a"
-;; 		(synth pretty (text "second") 0)
-;; 		5
-;; 		""))
 
 

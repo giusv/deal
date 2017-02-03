@@ -8,3 +8,6 @@
       (let ((rest (nthcdr n source)))
 	(cons (if (consp rest) (subseq source 0 n) source)
 	      (group rest n)))))
+
+;; (defmacro unless (condition &rest body)
+;;   `(if (not ,condition) (progn ,@body)))
