@@ -8,7 +8,8 @@
 
 (defprod exp (path-parameter ((name string)))
   (to-list () `(path-parameter (:name ,name)))
-  (to-req () (text "parametro path: ~a" name)))
+  (to-req () (text "parametro path: ~a" name))
+  (to-url () (dynamic-chunk name)))
 
 (defprod exp (cat (&rest (exps exp)))
   (to-list () `(cat (:exps ,(synth-all to-list exps))))

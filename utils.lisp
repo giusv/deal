@@ -8,6 +8,15 @@
       (let ((rest (nthcdr n source)))
 	(cons (if (consp rest) (subseq source 0 n) source)
 	      (group rest n)))))
+(setf *print-readably* t)
+
+;; (setf *print-pretty* t)
+;; (set-pprint-dispatch 'hash-table
+;; 		     (lambda (str ht)
+;; 		       (format str "{~{~{~S => ~S~}~^, ~}}"
+;; 			       (loop for key being the hash-keys of ht
+;; 				  for value being the hash-values of ht
+;; 				  collect (list key value)))))
 
 ;; (defmacro unless (condition &rest body)
 ;;   `(if (not ,condition) (progn ,@body)))

@@ -75,6 +75,14 @@
 (defun assoc-list (x)
   (every #'dotted x))
 
+(defun parens (doc)
+  (hcat (text "(") doc (text ")")))
+(defun punctuate (p &rest docs)
+  (cond ((null docs) nil)
+	((eq 1 (length docs)) (car docs))
+	(t (hcat (car docs) p (apply #'punctuate p (cdr docs))))))
+
+
 (defparameter *doc* (vcat (hcat (text "public static main(")
 				(vcat (text "String[] argv,")
 				      (text "int a"))
