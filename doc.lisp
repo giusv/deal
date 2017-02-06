@@ -75,12 +75,29 @@
 (defun assoc-list (x)
   (every #'dotted x))
 
+(defun wrap (doc start end)
+  (hcat (text start) doc (text end)))
+
 (defun parens (doc)
-  (hcat (text "(") doc (text ")")))
-(defun punctuate (p &rest docs)
+  (wrap doc "(" ")"))
+
+(defun brackets (doc)
+  (wrap doc "[" "]"))
+
+(defun braces (doc)
+  (wrap doc "{" "}"))
+
+(defun double-quotes (doc)
+  (wrap doc "\"" "\""))
+(defun comma ()
+  (text ","))
+
+(defun punctuate (p &optional (newline nil newline-supplied-p) &rest docs)
   (cond ((null docs) nil)
 	((eq 1 (length docs)) (car docs))
-	(t (hcat (car docs) p (apply #'punctuate p (cdr docs))))))
+	(t (if newline
+	       (vcat (hcat (car docs) p) (apply #'punctuate p newline (cdr docs)))
+	       (hcat (car docs) p (apply #'punctuate p (cdr docs)))))))
 
 
 

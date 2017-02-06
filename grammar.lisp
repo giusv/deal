@@ -33,6 +33,9 @@
   `(apply #'append (mapcar #'(lambda (pair) (list (synth ,func (cadr pair) ,@args)))
 			   (group ,plst 2))))
 
+(defmacro synth-plist3 (key-func value-func plst &rest args)
+  `(apply #'append (mapcar #'(lambda (pair) (list (funcall ,key-func (car pair)) (synth ,value-func (cadr pair) ,@args)))
+			   (group ,plst 2))))
 
 (defmacro defprod (base (name lambda-list) &rest attrs)
   (declare (ignorable base))
