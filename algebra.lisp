@@ -1,9 +1,4 @@
 
-(defmacro mac-1 (expr)
-  `(pprint (macroexpand-1 ',expr)))
-
-(defmacro mac (expr)
-  `(pprint (macroexpand ',expr)))
 
 ;; (defun make-slot (name)
 ;;   `(,name 

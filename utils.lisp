@@ -8,7 +8,17 @@
       (let ((rest (nthcdr n source)))
 	(cons (if (consp rest) (subseq source 0 n) source)
 	      (group rest n)))))
-(setf *print-readably* t)
+
+(defmacro mac-1 (expr)
+  `(pprint (macroexpand-1 ',expr)))
+
+(defmacro mac (expr)
+  `(pprint (macroexpand ',expr)))
+
+
+
+
+;; (setf *print-readably* t)
 
 ;; (setf *print-pretty* t)
 ;; (set-pprint-dispatch 'hash-table
