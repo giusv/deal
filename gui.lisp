@@ -45,6 +45,8 @@
 						(vcat (synth to-url (first pair)) (second pair)))
 					    (group alts 2))))))))
 
+
+
 (defprod element (alt (&rest (elements (list named-element))))
   (to-list () `(alt (:elements ,(synth-all to-list elements)))) 
   (to-req (path)
@@ -85,6 +87,19 @@
 				 &optional (action process)))
   (to-list () `(transition (:target ,target :action ,(synth to-list action)))))
 
+(defprod element (table ((id string)
+			 (query query)
+			 (render function)))
+  (to-list () `(table (:id ,id :query ,(synth to-list query) :render ,render)))
+  (to-req (path)
+	  (let* ((sch (synth schema query)) 
+		(fields (pairlis sch (synth-all to-req (apply render sch) path))))
+	    (apply #'vcat 
+		   (text "Tabella con i seguenti campi:") 
+		   (mapcar #'(lambda (pair)
+			       (nest 4 (hcat (text "~a: " (car pair)) (cdr pair))))
+			   fields)))))
+
 (defmacro dynamic2 (name queries element)
   `(dynamic ',name ,queries 
 	    (let ((,name (path-parameter ',name)))
@@ -104,13 +119,17 @@
 	     (static :profile nil 
 		     (label (const "profile"))))))
 
+(defun render-fields (id name)
+  (list (label (attr id))
+	(label (attr name))))
 (defparameter *gui* (alt (static :login nil  
 				 (vert (input 'userid)
 				       (input 'passwd)
 				       (horz (button 'ok (const "ok")) 
 					     (button 'cancel (const "cancel")))))
 			 (static :home nil 
-				 (label (const "welcome")))
+				 (vert (label (const "welcome"))
+				       (table 'table *query* #'render-fields)))
 			 (static :users nil 
 				 (alt (static nil nil 
 					      (label (const "user list")))
@@ -119,4 +138,7 @@
 
 
 (synth output (synth to-req *gui* (void)) 0)
+
+
+
 

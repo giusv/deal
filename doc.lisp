@@ -75,24 +75,22 @@
 (defun assoc-list (x)
   (every #'dotted x))
 
-(defun wrap (doc start end)
-  (hcat start doc end))
-
-(defun parens (doc)
-  (wrap doc (text "(") (text ")")))
-
-(defun brackets (doc &key newline (padding 0) (indent 0))
+(defun wrap (doc start end &key newline (padding 0))
   (if newline 
-      (vcat (text "[") (nest indent doc) (text "]"))
-      (hcat (text "[") (padding padding) doc (padding padding) (text "]"))))
+      (vcat start doc end)
+      (hcat start (padding padding) doc (padding padding) end)))
+(defmacro defwrapper (name start end)
+  `(defun ,name (doc &key newline (padding 0))
+     (wrap doc (text ,start) (text ,end) :newline newline :padding padding)))
+
+(defwrapper parens "(" ")")
+(defwrapper brackets "[" "]")
+(defwrapper braces "{" "}")
+(defwrapper double-quotes "\"" "\"")
 
 (defun padding (p)
-  (text "~a" (make-string p :initial-value #\Space)))
-(defun braces (doc)
-  (wrap doc (text "{") (text "}")))
+  (text "~a" (make-string p :initial-element #\Space)))
 
-(defun double-quotes (doc)
-  (wrap doc (text "\"") (text "\"")))
 (defun comma ()
   (text ","))
 

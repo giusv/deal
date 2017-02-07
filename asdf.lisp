@@ -6,5 +6,8 @@
 (load "d:/giusv/lisp/extent/expression.lisp")
 (load "d:/giusv/lisp/extent/doc.lisp")
 (load "d:/giusv/lisp/extent/url.lisp")
+(load "d:/giusv/lisp/extent/json.lisp")
+(load "d:/giusv/lisp/extent/entity.lisp")
+(load "d:/giusv/lisp/extent/query.lisp")
 (load "d:/giusv/lisp/extent/gui.lisp")
 

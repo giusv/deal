@@ -42,18 +42,21 @@
 (defprod primitive (attribute ((name string) 
 			       (type string)))
   (java (annotations) (field name type annotations)) 
-  (to-list () `(attribute :name ,name :type ,type)))
+  (to-list () `(attribute :name ,name :type ,type))
+  (name () name))
 
 (defprod primitive (foreign-key ((reference string) &rest (attributes (list attribute))))
   (java () (apply #'vcat (synth-all java attributes (list (list reference))))) 
-  (to-list () `(foreign-key :attributes ,(synth-all to-list attributes) :reference ,reference)))
+  (to-list () `(foreign-key :attributes ,(synth-all to-list attributes) :reference ,reference))
+  (attributes () (synth-all name attributes)))
 
 (defprod primitive (primary-key (&rest (attributes (list attribute))))
   (java () (case (length attributes)
 	     (0 (error "Empty primary key"))
 	     (1 (synth java (first attributes) (list (list 'id))))
 	     (otherwise (error "Multiple primary keys not supported")))) 
-  (to-list () `(primary-key :attributes ,(synth-all to-list attributes))))
+  (to-list () `(primary-key :attributes ,(synth-all to-list attributes)))
+  (attributes () (synth-all name attributes)))
 
 (defprod primitive (entity ((name string) 
 			    (primary primary-key)
@@ -66,7 +69,8 @@
   (to-list () `(entity :name ,name 
 		       :primary ,(synth to-list primary)
 		       :fields ,(synth-all to-list fields)
-		       :foreigns ,(synth-all to-list foreigns))))
+		       :foreigns ,(synth-all to-list foreigns)))
+  (attributes () (apply #'append (synth attributes primary) (synth-all name fields) (synth-all attributes foreigns))))
 
 (defun pretty-java (entity)
   (synth pretty (synth java entity) 0))
@@ -85,3 +89,4 @@
 				'cars
 				(attribute 'car-id1 'string))))
 
+(synth attributes *people*)

@@ -21,11 +21,12 @@
 (defprod json (jobject (&rest (values (plist json))))
   (to-list () `(jobject (:values ,(synth-plist to-list values))))
   (to-string () (braces 
-		 (apply #'punctuate (comma) t 
-			(synth-plist-merge 
-			 #'(lambda (pair) (hcat (text "\"~a\": " (first pair))
-						(synth to-string (second pair)))) 
-			 values)))))
+		 (nest 4 (apply #'punctuate (comma) t 
+				(synth-plist-merge 
+				 #'(lambda (pair) (hcat (text "\"~a\": " (first pair))
+							(synth to-string (second pair)))) 
+				 values)))
+		 :newline t)))
 
 ;; (defprod json (jobject2 (&rest (values (plist json))))
 ;;   (to-list () `(alt (:elements ,(synth-plist to-list elements)))))

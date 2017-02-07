@@ -55,20 +55,20 @@
 
 
 
-(defprod tree (tip ((i integer)))
-  (minimum () i)
-  (tree (rep) (tip rep))
-  (to-list () `(tip ,i)))
+;; (defprod tree (tip ((i integer)))
+;;   (minimum () i)
+;;   (tree (rep) (tip rep))
+;;   (to-list () `(tip ,i)))
 
 
-(defprod tree (fork ((l tree) (r tree)))
-  (minimum () (min (synth minimum l) (synth minimum r)))
-  (tree (rep) (fork (synth tree l rep) (synth tree r rep)))
-  (to-list () `(fork ,(synth to-list l) ,(synth to-list r))))
+;; (defprod tree (fork ((l tree) (r tree)))
+;;   (minimum () (min (synth minimum l) (synth minimum r)))
+;;   (tree (rep) (fork (synth tree l rep) (synth tree r rep)))
+;;   (to-list () `(fork ,(synth to-list l) ,(synth to-list r))))
 
 
 
-(defparameter *tree* (fork (tip 1) (fork (tip 2) (tip 3))))
+;; (defparameter *tree* (fork (tip 1) (fork (tip 2) (tip 3))))
 
 
 ;; (defprod term (factor term-prime)
