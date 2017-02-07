@@ -6,6 +6,11 @@
   (to-list () `(attr (:exp ,exp)))
   (to-req () (text "attributo: ~a" exp)))
 
+(defprod exp (value ((elem element)))
+  (to-list () `(value (:elem ,elem)))
+  (to-req () (text "valore dell'elemento: ~a" (synth id elem)))
+  (to-url () (dynamic-chunk (synth id elem))))
+
 (defprod exp (path-parameter ((name string)))
   (to-list () `(path-parameter (:name ,name)))
   (to-req () (text "parametro path: ~a" name))

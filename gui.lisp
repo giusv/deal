@@ -1,15 +1,21 @@
 (defprod element (button ((id string) (expr expression)
-			  &optional (transition transition)))
-  (to-list () `(button (:id ,id :expr ,(synth to-list expr) :transition ,(synth to-list transition))))
-  (to-req (path) (funcall #'hcat (text "Il bottone ~a è etichettato con la seguente espressione:" id) 
-		      (synth to-req expr))))
+			  &key (click (click process)) (hover (hover process))))
+  (to-list () `(button (:id ,id :expr ,(synth to-list expr) 
+			    :click ,(synth to-list click)
+			    :hover ,(synth to-list hover))))
+  (to-req (path) (vcat (hcat (text "Pulsante identificato come ~a e etichettato con la seguente espressione:" id) 
+			     (synth to-req expr))
+		       (nest 4 (hcat (text "Sottoposto a click, ") (synth to-req click)))
+		       (synth to-req hover)))
+  (id () id))
 
 
 (defprod element (input ((id string)
 			 &optional (expr expression)))
   (to-list () `(input (:id ,id :expr ,(synth to-list expr))))
   (to-req (path) (funcall #'hcat (text "Il campo di input ~a è inizializzato con" id) 
-		      (synth to-req expr))))
+		      (synth to-req expr)))
+  (id () id))
 
 (defprod element (label ((expr expression)))
   (to-list () `(label :expr ,(synth to-list expr)))
@@ -27,25 +33,6 @@
   (to-req (path) (funcall #'vcat 
 		    (text "Concatenazione verticale dei seguenti elementi:")
 		    (nest 4 (apply #'vcat (synth-all to-req elements path))))))
-
-(defmacro synth-alts (func plst path &rest args)
-  `(apply #'append (mapcar #'(lambda (pair) 
-			       (list (chain (static-chunk (car pair)) ,path)
-				     (synth ,func (cadr pair) (chain (static-chunk (car pair)) ,path) ,@args)))
-			   (group ,plst 2))))
-
-(defprod element (alt-old (&rest (elements (plist named-element))))
-  (to-list () `(alt (:elements ,(synth-plist to-list elements)))) 
-  (to-req (path)
-	  (let ((alts (synth-alts to-req elements path))) 
-	    (funcall #'vcat 
-		     (text "Scelta tra le seguenti viste:")
-		     (nest 4 (apply #'vcat 
-				    (mapcar #'(lambda (pair)
-						(vcat (synth to-url (first pair)) (second pair)))
-					    (group alts 2))))))))
-
-
 
 (defprod element (alt (&rest (elements (list named-element))))
   (to-list () `(alt (:elements ,(synth-all to-list elements)))) 
@@ -83,10 +70,6 @@
 		   (nest 4 (apply #'vcat (synth-all to-req parameters)))
 		   (synth to-req element path))))
 
-(defprod transition (transition ((target url) 
-				 &optional (action process)))
-  (to-list () `(transition (:target ,target :action ,(synth to-list action)))))
-
 (defprod element (table ((id string)
 			 (query query)
 			 (render function)))
@@ -122,22 +105,25 @@
 (defun render-fields (id name)
   (list (label (attr id))
 	(label (attr name))))
-(defparameter *gui* (alt (static :login nil  
-				 (vert (input 'userid)
-				       (input 'passwd)
-				       (horz (button 'ok (const "ok")) 
-					     (button 'cancel (const "cancel")))))
-			 (static :home nil 
-				 (vert (label (const "welcome"))
-				       (table 'table *query* #'render-fields)))
-			 (static :users nil 
-				 (alt (static nil nil 
-					      (label (const "user list")))
-				      (dynamic2 user nil
-					       (post-list user))))))
+(defparameter *gui* 
+  (alt (static :login nil  
+	       (let* ((userid (input 'userid))
+		      (passwd (input 'passwd))
+		      (ok (button 'ok (const "ok") :click (target (url `(users / { ,(value userid) } / posts / { post })))))
+		      (cancel (button 'cancel (const "cancel"))))
+		 (vert userid passwd (horz ok cancel))))
+       (static :home nil 
+	       (vert (label (const "welcome"))
+		     (table 'table *query* #'render-fields)))
+       (static :users nil 
+	       (alt (static nil nil 
+			    (label (const "user list")))
+		    (dynamic2 user nil
+			      (post-list user))))))
 
 
 (synth output (synth to-req *gui* (void)) 0)
+
 
 
 

@@ -99,7 +99,7 @@
 	((eq 1 (length docs)) (car docs))
 	(t (if newline
 	       (vcat (hcat (car docs) p) (apply #'punctuate p newline (cdr docs)))
-	       (hcat (car docs) p (apply #'punctuate p  newline (cdr docs)))))))
+	       (hcat (car docs) p (apply #'punctuate p newline (cdr docs)))))))
 
 
 
