@@ -16,11 +16,16 @@
 
 (defprod json (jarray (&rest (values (list json))))
   (to-list () `(jarray (:values ,values)))
-  (to-string () (brackets (punctuate (comma) t (synth-all to-string values)))))
+  (to-string () (brackets (apply #'punctuate (comma) t (synth-all to-string values)) :padding 1 :newline nil)))
 
 (defprod json (jobject (&rest (values (plist json))))
   (to-list () `(jobject (:values ,(synth-plist to-list values))))
-  (to-string () (braces (punctuate (comma) t (synth-plist3 #'(lambda (sym) (text "\"~a\":" sym)) to-string values)))))
+  (to-string () (braces 
+		 (apply #'punctuate (comma) t 
+			(synth-plist-merge 
+			 #'(lambda (pair) (hcat (text "\"~a\": " (first pair))
+						(synth to-string (second pair)))) 
+			 values)))))
 
 ;; (defprod json (jobject2 (&rest (values (plist json))))
 ;;   (to-list () `(alt (:elements ,(synth-plist to-list elements)))))

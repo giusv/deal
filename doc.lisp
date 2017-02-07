@@ -76,28 +76,32 @@
   (every #'dotted x))
 
 (defun wrap (doc start end)
-  (hcat (text start) doc (text end)))
+  (hcat start doc end))
 
 (defun parens (doc)
-  (wrap doc "(" ")"))
+  (wrap doc (text "(") (text ")")))
 
-(defun brackets (doc)
-  (wrap doc "[" "]"))
+(defun brackets (doc &key newline (padding 0) (indent 0))
+  (if newline 
+      (vcat (text "[") (nest indent doc) (text "]"))
+      (hcat (text "[") (padding padding) doc (padding padding) (text "]"))))
 
+(defun padding (p)
+  (text "~a" (make-string p :initial-value #\Space)))
 (defun braces (doc)
-  (wrap doc "{" "}"))
+  (wrap doc (text "{") (text "}")))
 
 (defun double-quotes (doc)
-  (wrap doc "\"" "\""))
+  (wrap doc (text "\"") (text "\"")))
 (defun comma ()
   (text ","))
 
-(defun punctuate (p &optional (newline nil newline-supplied-p) &rest docs)
+(defun punctuate (p newline &rest docs)
   (cond ((null docs) nil)
 	((eq 1 (length docs)) (car docs))
 	(t (if newline
 	       (vcat (hcat (car docs) p) (apply #'punctuate p newline (cdr docs)))
-	       (hcat (car docs) p (apply #'punctuate p (cdr docs)))))))
+	       (hcat (car docs) p (apply #'punctuate p  newline (cdr docs)))))))
 
 
 
