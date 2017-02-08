@@ -9,5 +9,6 @@
 (load "d:/giusv/lisp/extent/json.lisp")
 (load "d:/giusv/lisp/extent/entity.lisp")
 (load "d:/giusv/lisp/extent/query.lisp")
+(load "d:/giusv/lisp/extent/process.lisp")
 (load "d:/giusv/lisp/extent/gui.lisp")
 

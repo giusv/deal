@@ -109,7 +109,9 @@
   (alt (static :login nil  
 	       (let* ((userid (input 'userid))
 		      (passwd (input 'passwd))
-		      (ok (button 'ok (const "ok") :click (target (url `(users / { ,(value userid) } / posts / { post })))))
+		      (ok (button 'ok (const "ok") :click (target ;; (url `(users / { ,(value userid) } / posts / { post }))
+							   (url `(users / { user } / posts / { post }))
+								  )))
 		      (cancel (button 'cancel (const "cancel"))))
 		 (vert userid passwd (horz ok cancel))))
        (static :home nil 

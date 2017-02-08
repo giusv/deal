@@ -1,6 +1,5 @@
 ;;http://cswr.github.io/JsonSchema/spec/grammar/
-(defprod jdoc (jdoc (&optional (id jid) (defs jdefs)
-			       &rest (jsch (plist jres))))
+(defprod jsdoc (jsdoc ((id jid) (defs jdefs) (sch jsch)))
   (to-json () (apply #'jobject 
 		     :id id
 		     :definitions (apply #'jobject defs)

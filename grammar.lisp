@@ -9,6 +9,14 @@
 	    l
 	    (cons pref l)))))
 
+(defun arg-names (lambda-list)
+  (let* ((args (parse (destruc) lambda-list))
+	 (req (arg-list 'req args))
+	 (opt (arg-list 'opt args))
+	 (rest (arg-list 'rest args))
+	 (key (arg-list 'key args #'caadr)))
+    (append req opt rest key)))
+
 (defun untype (lambda-list)
   (let* ((args (parse (destruc) lambda-list))
 	 (req (arg-list 'req args))
@@ -52,8 +60,25 @@
        (pairhash ',(append #|slots|# (mapcar #'attr-name attrs)) 
 		(list #|,@slots|# ,@(mapcar #'attr-func attrs))))))
 
+(defmacro defprod2 (base (name lambda-list) &rest attrs)
+  (declare (ignorable base))
+  (labels ((attr-name (attr) 
+	     (car attr))
+	   (attr-func (attr)  
+	     `#'(lambda (,@(second attr))
+		  (declare (ignorable ,@(second attr))) 
+		  ,(third attr)))
+	   (access-func (arg)
+	     `#'(lambda ())))
+    `(defun ,name (,@(untype lambda-list))
+       (pairhash ',(append (arg-names lambda-list) 
+			   (mapcar #'attr-name attrs)) 
+		 (append (mapcar #'access-func (arg-names lambda-list)) 
+			 (mapcar #'attr-func attrs))))))
 
-
+(defmacro defprod3 (base (name lambda-list) &rest attrs)
+  (let ((accessors))
+    `(defprod ,base (,name ,lambda-list) (append accessors attrs))))
 
 ;; (defprod tree (tip ((i integer)))
 ;;   (minimum () i)
