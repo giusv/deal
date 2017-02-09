@@ -42,8 +42,7 @@
 (defprod primitive (attribute ((name string) 
 			       (type string)))
   (java (annotations) (field name type annotations)) 
-  (to-list () `(attribute :name ,name :type ,type))
-  (name () name))
+  (to-list () `(attribute :name ,name :type ,type)))
 
 (defprod primitive (foreign-key ((reference string) &rest (attributes (list attribute))))
   (java () (apply #'vcat (synth-all java attributes (list (list reference))))) 

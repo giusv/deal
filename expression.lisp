@@ -1,6 +1,7 @@
 (defprod exp (const ((exp (or string number))))
   (to-list () `(const (:exp ,exp)))
-  (to-req () (text "stringa costante: ~a" exp)))
+  (to-req () (text "stringa costante: ~a" exp))
+  (to-chunk () exp))
 
 (defprod exp (attr ((exp string)))
   (to-list () `(attr (:exp ,exp)))
@@ -9,7 +10,7 @@
 (defprod exp (value ((elem element)))
   (to-list () `(value (:elem ,elem)))
   (to-req () (text "valore dell'elemento: ~a" (synth id elem)))
-  (to-url () (dynamic-chunk (synth id elem))))
+  (to-chunk () (text "val(~a)" (lower (synth id elem)))))
 
 (defprod exp (path-parameter ((name string)))
   (to-list () `(path-parameter (:name ,name)))

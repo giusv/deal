@@ -6,16 +6,14 @@
   (to-req (path) (vcat (hcat (text "Pulsante identificato come ~a e etichettato con la seguente espressione:" id) 
 			     (synth to-req expr))
 		       (nest 4 (hcat (text "Sottoposto a click, ") (synth to-req click)))
-		       (synth to-req hover)))
-  (id () id))
+		       (synth to-req hover))))
 
 
 (defprod element (input ((id string)
 			 &optional (expr expression)))
   (to-list () `(input (:id ,id :expr ,(synth to-list expr))))
   (to-req (path) (funcall #'hcat (text "Il campo di input ~a è inizializzato con" id) 
-		      (synth to-req expr)))
-  (id () id))
+		      (synth to-req expr))))
 
 (defprod element (label ((expr expression)))
   (to-list () `(label :expr ,(synth to-list expr)))
@@ -109,8 +107,8 @@
   (alt (static :login nil  
 	       (let* ((userid (input 'userid))
 		      (passwd (input 'passwd))
-		      (ok (button 'ok (const "ok") :click (target ;; (url `(users / { ,(value userid) } / posts / { post }))
-							   (url `(users / { user } / posts / { post }))
+		      (ok (button 'ok (const "ok") :click (target (url `(users / { ,(value userid) } / posts))
+							   ;; (url `(users / { user } / posts / { post }))
 								  )))
 		      (cancel (button 'cancel (const "cancel"))))
 		 (vert userid passwd (horz ok cancel))))
