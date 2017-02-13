@@ -7,16 +7,6 @@
 		       (text "e costituito da:") 
 		       (synth to-req element path))))
 
-(defparameter *address*
-  (jsobject (jsprop 'city t (jsstring))
-	   (jsprop 'state t (jsstring))))
-(defparameter *addresses* (jsarray *address*))
-(defparameter *user* 
-  (jsobject (jsprop 'name t (jsstring))
-	   (jsprop 'addresses t *addresses*)
-	   (jsprop 'numbers t (jsarray (jsnumber)))))
-
-
 (defparameter *form*
   (let* ((user *user*)
 	 (name (input 'name nil :binding (prop 'name)))
