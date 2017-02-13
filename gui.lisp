@@ -8,16 +8,17 @@
 		       (nest 4 (hcat (text "Sottoposto a click, ") (synth to-req click)))
 		       (synth to-req hover))))
 
-
 (defprod element (input ((id string)
-			 &optional (expr expression)))
-  (to-list () `(input (:id ,id :expr ,(synth to-list expr))))
-  (to-req (path) (funcall #'hcat (text "Il campo di input ~a è inizializzato con" id) 
-		      (synth to-req expr))))
+			 &optional (expr expression)
+			 &key (binding (binding filter))))
+  (to-list () `(input (:id ,id :expr ,(synth to-list expr) :binding ,(synth to-list binding))))
+  (to-req (path) (vcat (text "Campo di input ~a con le seguenti caratteristiche" id) 
+		       (nest 4 (vcat (if expr (hcat (text "inizializzato con ") (synth to-req expr)))
+				     (if binding (hcat (text "legato all'elemento ") (synth to-req binding))))))))
 
 (defprod element (label ((expr expression)))
   (to-list () `(label :expr ,(synth to-list expr)))
-  (to-req (path) (funcall #'hcat (text "L'etichetta viene inizializzata con la seguente espressione:") 
+  (to-req (path) (funcall #'hcat (text "Etichetta inizializzata con la seguente espressione:") 
 		      (synth to-req expr))))
 
 (defprod element (horz (&rest (elements (list element))))
@@ -123,6 +124,7 @@
 
 
 (synth output (synth to-req *gui* (void)) 0)
+
 
 
 

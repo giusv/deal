@@ -16,10 +16,7 @@
   `(pprint (macroexpand ',expr)))
 
 
-(let* ((a 1))
-  (labels ((f (x y) (+ x y)))
-    (let* ((b 2))
-      (f a b))))
+
 
 ;; (defmacro define)
 

@@ -93,7 +93,8 @@
 
 (defun comma ()
   (text ","))
-
+(defun forward-slash ()
+  (text "/"))
 (defun punctuate (p newline &rest docs)
   (cond ((null docs) nil)
 	((eq 1 (length docs)) (car docs))
