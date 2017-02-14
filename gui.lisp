@@ -20,7 +20,7 @@
   ;; (to-req (path) (vcat (nest 4 (vcat (if expr (hcat ))
   ;; 				     ))))
   (to-html (path) (div (list :class 'well) 
-		       (div nil (text "Campo di input identificato come ~a " id) 
+		       (div nil (text "Campo di input identificato come ~a " (lower id)) 
 			    (if (or expr binding) (text "con le seguenti caratteristiche:"))
 			    (ul (list :class 'list-group)
 				(if expr (hcat (text "inizializzato con ") (synth to-html expr)))
@@ -40,11 +40,8 @@
 			  (nest 4 (apply #'vcat (synth-all to-req elements path)))))
   (to-html (path) (div nil (text "Concatenazione orizzontale ")
 		       (if (not  elements) (text "vuota") (text "dei seguenti elementi:"))
-		       (apply #'ul (list :class 'list-group)
+		       (apply #'ul (list :class 'list-inline)
 			      (mapcar #'listify (synth-all to-html elements path))))))
-
-(defun listify (elem)
-  (li (list :class "list-group-item") elem))
 
 (defprod element (vert (&rest (elements (list element))))
   (to-list () `(vert (:elements ,(synth-all to-list elements))))
@@ -56,17 +53,18 @@
 		       (apply #'ul (list :class 'list-group)
 			      (mapcar #'listify (synth-all to-html elements path))))))
 
-(defprod element (alt (&rest (elements (list named-element))))
-  (to-list () `(alt (:elements ,(synth-all to-list elements)))) 
+(defprod element (alt ((default element) &rest (elements (list named-element))))
+  (to-list () `(alt (:default ,(synth to-list default) :elements ,(synth-all to-list elements)))) 
   (to-req (path)
 	  (funcall #'vcat 
 		   (text "Scelta tra le seguenti viste:")
-		   (nest 4 (apply #'vcat (synth-all to-req elements path)))))
+		   (nest 4 (apply #'vcat (synth-all to-req (cons default elements) path)))))
   (to-html (path)
 	   (apply #'div nil 
 		  (text "Scelta ")
-		  (if (not  elements) (text "vuota") (text "tra le seguenti viste:"))
+		  (if (not elements) (text "vuota") (text "tra le seguenti viste:"))
 		  (apply #'ul (list :class 'list-group)
+			 (synth to-html default path)
 			 (mapcar #'listify (synth-all to-brief elements path)))
 		  (synth-all to-html elements path))))
 
@@ -77,29 +75,26 @@
   (to-list () `(static (:name ,name :queries ,queries :element ,(synth to-list element))))
   (to-req (path) (let ((newpath (chain (static-chunk name) path)))
 		   (vcat (text "Elemento statico di nome ~a" 
-			       name) 
+			       (lower name)) 
 			 (hcat (text "percorso: ") (synth to-url newpath))
 			 (synth to-req element newpath))))
   (to-brief (path) (let ((newpath (chain (static-chunk name) path)))
-		     (div nil (text "Elemento statico di nome ~a " name) 
-			  (text "(percorso: )" (synth to-url newpath)))))
-  (to-req (path) (let ((newpath (chain (static-chunk name) path)))
-		   (vcat (text "Elemento statico di nome ~a" 
-			       name) 
-			 (hcat (text "percorso: ") (synth to-url newpath))
-			 (synth to-req element newpath))))
+		     (synth output newpath) 
+		     (div nil 
+			  (text "Elemento statico di nome ~a " (lower name)) 
+			  (parens (hcat (text "percorso: ") (synth to-url newpath))))))
   (to-html (path) (let ((newpath (chain (static-chunk name) path)))
-		   (div nil 
-			(h3 nil (text "Vista statica ~a " name) 
-			    (parens (hcat (text "percorso: ") (synth to-url newpath))))
-			(synth to-html element newpath)))))
+		    (div nil 
+			    (h3 nil (text "Vista statica ~a " (lower name)) 
+				(parens (hcat (text "percorso: ") (synth to-url newpath))))
+			    (synth to-html element newpath)))))
 
 (defprod named-element (dynamic ((name string) 
 				 (queries (list expression))
 				 (element element)))
   (to-list () `(dynamic(:name ,name :queries ,queries :element ,(synth to-list element))))
   (to-brief (path) (let ((newpath (chain (dynamic-chunk name) path)))
-		     (div nil (text "Elemento dinamico di nome ~a " name) 
+		     (div nil (text "Elemento dinamico di nome ~a " (lower name)) 
 			  (parens (hcat (text "percorso: ") (synth to-url newpath))))))
   (to-req (path) (let ((newpath (chain (dynamic-chunk name) path)))
 		   (vcat (text "Elemento dinamico di nome ~a" 
@@ -108,7 +103,7 @@
 			 (synth to-req element newpath))))
   (to-html (path) (let ((newpath (chain (dynamic-chunk name) path)))
 		    (div nil 
-			 (h3 nil (text "Vista dinamica ~a " name) 
+			 (h3 nil (text "Vista dinamica ~a " (lower name)) 
 			     (parens (hcat (text "percorso: ") (synth to-url newpath))))
 			 (synth to-html element newpath)))))
 
@@ -157,9 +152,9 @@
 
 (defun post-list (user)
   (vert (label user)
-	(alt (static :posts nil
-		     (alt (static nil nil 
-				  (label (const "user posts")))
+	(alt nil 
+	     (static :posts nil
+		     (alt (label (const "user posts"))
 			  (dynamic2 post nil 
 				    (post-data user post))))
 	     (static :profile nil 
@@ -169,64 +164,30 @@
   (list (label (attr id))
 	(label (attr name))))
 
+(defun *submit-user* nil 
+    (let* ((resp (http-get (void) (gensym))))
+      (condition (<equal> (synth response resp) (const "200"))
+		 (target (void))
+		 (target (void)))))
+
 (defparameter *gui* 
-  (alt (static :login nil  
+  (alt nil 
+       (static :login nil  
 	       (let* ((userid (input 'userid))
 		      (passwd (input 'passwd))
-		      (ok (button 'ok (const "ok") :click (target (url `(users / { ,(value userid) } / posts))
-							   ;; (url `(users / { user } / posts / { post }))
-								  )))
+		      (ok (button 'ok (const "ok") :click (target (url `(users / { ,(value userid) } / posts)))))
 		      (cancel (button 'cancel (const "cancel"))))
 		 (vert userid passwd (horz ok cancel))))
        (static :home nil 
 	       (vert (label (const "welcome"))
-		     (table 'table *query* #'render-fields)))
-       (static :users nil 
-	       (alt (static nil nil 
-			    (label (const "user list")))
+		     (table 'table *query* #'render-fields)
+		     (button 'go (const "go") :click (*submit-user*))))
+       (static :users nil
+	       (alt (label (const "user list"))
 		    (dynamic2 user nil
-			      (post-list user))))))
-
-;; (defparameter *gui2* 
-;;   (alt 
-;;        (static :home nil 
-;; 	       (vert (label (const "welcome"))
-;; 		     (table 'table *query* #'render-fields)))
-;;        (static :users nil 
-;; 	       (alt (static nil nil 
-;; 			    (label (const "user list")))
-;; 		    (dynamic2 user nil
-;; 			      (post-list user))))))
-
-
-;; (synth output (synth to-req *gui* (void)) 0)
-
-
-(defparameter *gui-test*
-  (alt (static :login nil 
-	       (let* ((userid (input 'userid))
-		      (passwd (input 'passwd))
-		      (ok (button 'ok (const "ok") :click (target (url `(users / { ,(value userid) } / posts))
-								  ;; (url `(users / { user } / posts / { post }))
-								  )))
-		      (cancel (button 'cancel (const "cancel"))))
-		 (vert userid passwd (horz ok cancel)) ;; (alt (static :test1 nil 
-		 ;; 		 (vert userid passwd (horz ok cancel)))
-		 ;; 	 (static :test2 nil 
-		 ;; 		 (vert userid passwd (horz ok cancel))))
-		 ;;(vert userid)
-		 ))
-       
-       (static :home nil 
-	       (vert (label (const "welcome"))
-		     (label (const "hello"))))
-       (static :home nil 
-	       (vert (label (const "welcome"))
-		     (table 'table *query* #'render-fields)))
-       (static :home nil 
-	       (vert (label (const "welcome"))
-		     (label (const "hello2"))))))
-
+			      (post-list user))))
+       (static :form nil
+	       *form*)))
 
 (write-file "d:/giusv/temp/test.html" 
 	    (synth to-string 
@@ -236,5 +197,6 @@
 					     (meta (list :charset "utf-8"))
 					     (link (list :rel "stylesheet" :href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")))
 				       (body nil (synth to-html *gui* (void))))) 0))
-;;(synth output (synth to-doc (synth to-html *gui-test* (void))) 0)
+;;(synth output (synth to-req *gui* (void)) 0)
+
 

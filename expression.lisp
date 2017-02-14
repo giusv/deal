@@ -9,6 +9,9 @@
   (to-req () (text "attributo: ~a" exp))
   (to-html () (span (list :class "label label-danger") (synth to-req (attr exp)))))
 
+(defprod exp (variable ((name string)))
+  (to-list () `(attr (:name ,name))))
+
 (defprod exp (value ((elem element)))
   (to-list () `(value (:elem ,elem)))
   (to-req () (text "valore dell'elemento: ~a" (synth id elem)))
@@ -28,26 +31,30 @@
 		    (synth-all to-req exps)))
   (to-html () (span (list :class "label label-default") (synth to-req (cat exps)))))
 
-(defprod bexp (<true> ())
-  (to-list () `(<true>)))
-(defprod bexp (<false> ())
-  (to-list () `(<false>)))
-(defprod bexp (<and> (&rest (exps bexp)))
-  (to-list () `(<and> (:exps ,(synth-all to-list exps)))))
-(defprod bexp (<or> (&rest (exps bexp)))
-  (to-list () `(<or> (:exps ,(synth-all to-list exps)))))
-(defprod bexp (<not> ((exp bexp)))
-    (to-list () `(<not> (:exp ,(synth to-list exp)))))
-(defprod bexp (<equal> ((exp1 exp) (exp2 exp)))
-    (to-list () `(<equal> (:exp1 ,(synth to-list exp1) ,(synth to-list exp2)))))
-(defprod bexp (<less-than> ((exp1 exp) (exp2 exp)))
-    (to-list () `(<less-than> (:exp1 ,(synth to-list exp1) ,(synth to-list exp2)))))
-(defprod bexp (<greater-than> ((exp1 exp) (exp2 exp)))
-    (to-list () `(<greater-than> (:exp1 ,(synth to-list exp1) ,(synth to-list exp2)))))
-
-
-
-;; (defprods exp
-;;     (const (or string number))
-;;   )
+(defmacro def-bexp (operator &optional (arity 0))
+  (let ((name (symb "<" operator ">")))
+    `(defprod bexp (,name 
+		    ,(if (eq arity 'unbounded)
+			 `(&rest (exps bexp))
+			 (loop for i from 1 to arity collect `(,(symb "EXP" i) exp))))
+       (to-req () (hcat (text "espressione booleana: ~a [" (lower ,name))
+			,@(if (eq arity 'unbounded)
+			     `((synth-all to-req exps))
+			     (loop for i from 1 to arity collect `(synth to-req ,(symb "EXP" i))))
+			(text "]")))
+       (to-list () (list ',name 
+			 ,(if (eq arity 'unbounded)
+			      `(list :exps (synth-all to-list exps))
+			      `(list ,@(apply #'append (loop for i from 1 to arity collect (list (keyw "EXP" i) `(synth to-list ,(symb "EXP" i)))))))))
+       (to-html () (span nil (synth to-req 
+				    ,(if (eq arity 'unbounded)
+					 `(funcall #',name exps)
+					 `(funcall #',name ,@(loop for i from 1 to arity collect (symb "EXP" i))))))))))
+  
+(defmacro def-bexps (&rest bexps)
+  `(progn
+     ,@(mapcar #'(lambda (bexp)
+		   `(def-bexp ,(car bexp) ,@(cdr bexp)))
+	       bexps)))
+(def-bexps (true) (false) (and unbounded) (or unbounded) (not 1) (equal 2) (less-than 2) (greater-than 2))
 

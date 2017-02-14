@@ -42,8 +42,10 @@
 		      (vcat (open-tag attributes)
 			    (nest 4 (apply #'vcat (synth-all to-doc body)))
 			    (close-tag)))))))
-(deftags html head title meta link body h1 h2 h3 div span li ul)
+(deftags html head title meta link body h1 h2 h3 div span li ul ol pre)
 
+(defun listify (elem)
+  (li (list :class "list-group-item") elem))
 ;; (synth output (synth to-doc (div nil (span nil (text "hello")))) 0)
 ;; (pprint (synth to-list (div nil (span nil (text "hello")))))
 

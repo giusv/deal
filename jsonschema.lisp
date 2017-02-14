@@ -87,8 +87,8 @@
 (defparameter *addresses* (jsarray *address*))
 (defparameter *user* 
   (jsobject (jsprop 'name t (jsstring))
-	   (jsprop 'addresses t *addresses*)
-	   (jsprop 'numbers t (jsarray (jsnumber)))))
+	    (jsprop 'addresses t *addresses*)
+	    (jsprop 'numbers t (jsarray (jsnumber)))))
 
 
 

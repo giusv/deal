@@ -3,35 +3,70 @@
   (to-req () (hcat (text "effettua una transizione verso ") (synth to-url pose)))
   (to-html () (span nil (text "effettua una transizione verso ") (synth to-url pose))))
 
+(defmacro def-http-action (name &optional (payload t))
+  (let ((full-name (symb "HTTP-" name)))
+    `(defprod action (,full-name ((url expression)
+				 ,@(if payload `((payload payload)))
+				 (response variable)))
+       (to-list () (list ',full-name (list :url (synth to-list url) 
+					   ,@(if payload (list ':payload '(synth to-list payload))) 
+					   :response response)))
+       (to-html () (div nil 
+			(text "Azione ~a verso l'URL " ',name)
+			(synth to-html url)
+			,@(if payload (list '(text "del payload seguente:")
+					    '(synth to-html payload))))))))
+
+(def-http-action get nil)
+(def-http-action post)
+(def-http-action put)
+(def-http-action delete nil)
+
+(pprint (synth to-list (http-get (void) (gensym "GET"))))
+
 (defprod command (skip ())
-  (to-list () `(skip)))
+  (to-list () `(skip))
+  (to-html () (div nil)))
 
-(defprod command (prefix ((action action)
-			  (command command)))
-  (to-list () `(prefix (:action ,(synth to-list action) :command (synth to-list command)))))
+(defprod command (concat (&rest (actions (list action))))
+  (to-list () `(concat (:actions ,(synth-all to-list actions))))
+  (to-html () (div nil 
+		   (apply #'ol 
+			  (list :class 'list-group)
+			  (mapcar #'listify (synth-all to-html actions))))))
 
-(defprod command (choice2 ((action action)
-		   (command command)))
-  (to-list () `(prefix (:action ,(synth to-list action) :command (synth to-list command)))))
+(defprod command (condition ((expr expression) 
+			     (true command)
+			     (false command)))
+  (to-list () `(condition (:expr  ,(synth to-list expr) :true ,(synth to-list true) :false ,(synth to-list false))))
+  (to-html () (div nil 
+		   (text "Check condizione ")
+		   (synth to-html expr)
+		   (apply #'ul 
+			  (list :class 'list-group)
+			  (mapcar #'listify (list (synth to-html true) (synth to-html false)))))))
 
 
-(defprod process (sync-server ((parameters (list expression))
-			       (input format)
-			       (command command)
-			       (output format)))
-  (to-list () `(sync-server :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
-			    :command ,(synth to-list command) :output ,(synth to-list output)))
-  ())
 
-(defprod process (async-server ((parameters (list expression))
-				(input format)
-				(command command)
-				(output format)))
-  (to-list () `(async-server :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
-			     :command ,(synth to-list command) :output ,(synth to-list output)))
-  ())
+;; (defprod process (sync-server ((parameters (list expression))
+;; 			       (input format)
+;; 			       (command command)
+;; 			       (output format)))
+;;   (to-list () `(sync-server :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
+;; 			    :command ,(synth to-list command) :output ,(synth to-list output)))
+;;   ())
 
-(defparameter *validation* ())
+;; (defprod process (async-server ((parameters (list expression))
+;; 				(input format)
+;; 				(command command)
+;; 				(output format)))
+;;   (to-list () `(async-server :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
+;; 			     :command ,(synth to-list command) :output ,(synth to-list output)))
+;;   ())
+
+;; (defparameter *validation* ())
+;; (defun *submit-user* (data) (let* ((post (http-post data))
+;; 				   (choice (<equal> (synth response))))))
 
 
 
