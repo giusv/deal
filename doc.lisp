@@ -92,5 +92,5 @@
 ;; (defparameter *doc* (hcat (text "hello")
 ;; 			  (text "hello ~a" 3)))
 
-
+(synth output *doc* 0)
 

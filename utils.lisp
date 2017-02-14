@@ -54,8 +54,24 @@
 	  (cons (car ls) (flat (cdr ls) test))
 	  (concatenate 'list (flat (car ls) test) (flat (cdr ls) test)))))
 
+(defun mkstr (&rest args)
+  (with-output-to-string (s)
+    (dolist (a args) (princ a s))))
+
+(defun symb (&rest args)
+  (values (intern (apply #'mkstr args))))
+(defun keyw (&rest args)
+  (values (intern (apply #'mkstr args) "KEYWORD")))
 (defun plist-p (lst)
-  )
+  (every #'ppair-p (group lst 2)))
+(defun ppair-p (pair)
+  (and (consp pair)
+       (typep (car pair) 'symbol)))
+(defun pairprop (key val)
+  (apply #'append (mapcar #'list (mapcar #'symb key) val)))
+
+(let ((l (pairprop '(a b) '(1 2)))) (pprint (getf l 'a)))
+
 ;; (defmacro define)
 
 

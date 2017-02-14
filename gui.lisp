@@ -138,12 +138,13 @@
   (to-html (path)
 	   (let* ((sch (synth schema query)) 
 		(fields (pairlis sch (synth-all to-html (apply render sch) path))))
-	     (div nil (text "Tabella ") 
-		  (if (not  fields) (text "vuota") (text "con i seguenti campi:"))
-		  (mapcar #'listify 
-			  (mapcar #'(lambda (pair)
-				      (text "~a: " (car pair)) (cdr pair))
-				  fields))))))
+	     (apply #'div nil 
+		    (text "Tabella ") 
+		    (if (not  fields) (text "vuota") (text "con i seguenti campi:"))
+		    (mapcar #'listify 
+			    (mapcar #'(lambda (pair)
+					(text "~a: " (car pair)) (cdr pair))
+				    fields))))))
 
 (defmacro dynamic2 (name queries element)
   `(dynamic ',name ,queries 
@@ -215,9 +216,16 @@
 		 ;; 		 (vert userid passwd (horz ok cancel))))
 		 ;;(vert userid)
 		 ))
+       
        (static :home nil 
 	       (vert (label (const "welcome"))
-		     (label (const "hello"))))))
+		     (label (const "hello"))))
+       (static :home nil 
+	       (vert (label (const "welcome"))
+		     (table 'table *query* #'render-fields)))
+       (static :home nil 
+	       (vert (label (const "welcome"))
+		     (label (const "hello2"))))))
 
 
 (write-file "d:/giusv/temp/test.html" 
@@ -227,6 +235,6 @@
 					     (title nil (text "GUI"))
 					     (meta (list :charset "utf-8"))
 					     (link (list :rel "stylesheet" :href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css")))
-				       (body nil (synth to-html *gui-test* (void))))) 0))
-;; (synth output (synth to-doc (synth to-html *gui-test* (void))) 0)
+				       (body nil (synth to-html *gui* (void))))) 0))
+;;(synth output (synth to-doc (synth to-html *gui-test* (void))) 0)
 
