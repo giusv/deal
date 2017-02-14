@@ -11,5 +11,7 @@
 (load "d:/giusv/lisp/extent/query.lisp")
 (load "d:/giusv/lisp/extent/process.lisp")
 (load "d:/giusv/lisp/extent/jsonschema.lisp")
+(load "d:/giusv/lisp/extent/xml.lisp")
+(load "d:/giusv/lisp/extent/html.lisp")
 (load "d:/giusv/lisp/extent/gui.lisp")
-(load "d:/giusv/lisp/extent/form.lisp")
+;; (load "d:/giusv/lisp/extent/form.lisp")

@@ -1,11 +1,58 @@
+(defmacro deftag-old (name)
+  `(defun ,name (&optional attrs &rest body)
+     (labels ((open-tag (as) (format nil "<~(~a~)~{ ~(~a~)=\"~a\"~}>" ,(lower name) as))
+	      (close-tag () (format nil "</~(~a~)>" ',name))
+	      (open-close-tag (as) (format nil "<~(~a~)~{ ~(~a~)=\"~a\"~}/>" ',name as)))
+       (if (null body)
+	   (text  (open-close-tag attrs))
+	   (vcat (text  (open-tag attrs))
+		 (nest 4 (apply #'vcat body))
+		 (text  (close-tag)))))))
+
+(defmacro deftags (&rest names)
+  `(progn
+     ,@(mapcar #'(lambda (name)
+		   `(deftag ,name))
+	       names)))
+
+;; (defprod html (div ((attributes (list string))
+;; 		    &rest (body (list html))))
+;;   (to-list () `(div (:attributes ,attributes :body ,body)))
+;;   (to-doc () (labels ((open-tag (as) (text "<~(~a~)~{ ~(~a~)=\"~a\"~}>" (lower 'div) as))
+;; 		      (close-tag () (text "</~(~a~)>" 'div))
+;; 		      (open-close-tag (as) (text "<~(~a~)~{ ~(~a~)=\"~a\"~}/>" 'div as)))
+;; 	       (if (null body)
+;; 		   (open-close-tag attributes)
+;; 		   (vcat (open-tag attributes)
+;; 			 (nest 4 (apply #'vcat body))
+;; 			 (close-tag))))))
 
 
-(deftags div h1)
+(defmacro divm (attributes &body body)
+  `(apply #'div (list ,@attributes) ,body))
+(defmacro deftag (name)
+  `(defprod html (,name ((attributes (list string))
+			 &rest (body (list html))))
+     (to-list () (list ',name (list :attributes attributes :body (synth-all to-list body))))
+     (to-doc () (labels ((open-tag (as) (text "<~(~a~)~{ ~(~a~)=\"~(~a~)\"~}>" (lower ',name) as))
+			 (close-tag () (text "</~(~a~)>" ',name))
+			 (open-close-tag (as) (text "<~(~a~)~{ ~(~a~)=\"~a\"~}/>" ',name as)))
+		  (if (null body)
+		      (open-close-tag attributes)
+		      (vcat (open-tag attributes)
+			    (nest 4 (apply #'vcat (synth-all to-doc body)))
+			    (close-tag)))))))
+(deftags html head title meta link body h1 h2 h3 div span li ul)
 
+;; (synth output (synth to-doc (div nil (span nil (text "hello")))) 0)
+;; (pprint (synth to-list (div nil (span nil (text "hello")))))
 
-(format t "~a" (synth pretty (div (list :id 1) 
-				  (h1 nil 
-				      (text "hello"))) 0))
+;; (format t "~a" (synth output (div (list :id 1) 
+;; 				  (h1 nil 
+;; 				      (text "hello"))
+;; 				  (h1 nil 
+;; 				      (text "hello2"))) 0))
+
 ;; https://simon.html5.org/html-elements
 ;; <html manifest>
 ;; <head>

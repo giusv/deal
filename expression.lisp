@@ -1,27 +1,32 @@
 (defprod exp (const ((exp (or string number))))
   (to-list () `(const (:exp ,exp)))
   (to-req () (text "stringa costante: ~a" exp))
+  (to-html () (span (list :class "label label-default") (synth to-req (const exp))))
   (to-chunk () exp))
 
 (defprod exp (attr ((exp string)))
   (to-list () `(attr (:exp ,exp)))
-  (to-req () (text "attributo: ~a" exp)))
+  (to-req () (text "attributo: ~a" exp))
+  (to-html () (span (list :class "label label-danger") (synth to-req (attr exp)))))
 
 (defprod exp (value ((elem element)))
   (to-list () `(value (:elem ,elem)))
   (to-req () (text "valore dell'elemento: ~a" (synth id elem)))
+  (to-html () (span (list :class "label label-default") (synth to-req (value elem))))
   (to-chunk () (text "val(~a)" (lower (synth id elem)))))
 
 (defprod exp (path-parameter ((name string)))
   (to-list () `(path-parameter (:name ,name)))
   (to-req () (text "parametro path: ~a" name))
+  (to-html () (span (list :class "label label-default") (synth to-req (path-parameter name))))
   (to-url () (dynamic-chunk name)))
 
 (defprod exp (cat (&rest (exps exp)))
   (to-list () `(cat (:exps ,(synth-all to-list exps))))
-  (to-req () (apply #'vcat 
+  (to-req () (apply #'hcat 
 		    (text "concatenazione delle espressioni:")
-		    (synth-all to-req exps))))
+		    (synth-all to-req exps)))
+  (to-html () (span (list :class "label label-default") (synth to-req (cat exps)))))
 
 (defprod bexp (<true> ())
   (to-list () `(<true>)))

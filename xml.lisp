@@ -19,7 +19,7 @@
 			 (nest 4 (apply #'vcat (synth-all to-doc nodes)))
 			 (text  (close-tag)))))))
 
-(format t "~a" (synth pretty (synth to-doc (node 'test (list 'name 'myname) (node 'div nil))) 0))
+;;(format t "~a" (synth pretty (synth to-doc (node 'test (list 'name 'myname) (node 'div nil))) 0))
 
 ;; (defmacro deftags (&rest names)
 ;;   `(progn
@@ -34,7 +34,7 @@
 ;; (deftags |xs:element| |xs:attribute| |xs:complex-type|)
 (defprod element (simple ((name string) (type string)))
   (to-xml () (node '|xs:element| (list :name name :type type))))
-(defprod element (attr ((name string) (type string)))
+(defprod element (attrib ((name string) (type string)))
   (to-xml () (node '|xs:attribute| (list :name name :type type))))
 
 (defmacro def-xsd-indicator (tag name)
