@@ -14,7 +14,7 @@
        (to-html () (div nil 
 			(text "Azione ~a verso l'URL " ',name)
 			(synth to-html url)
-			,@(if payload (list '(text "del payload seguente:")
+			,@(if payload (list '(text "con il payload seguente:")
 					    '(synth to-html payload))))))))
 
 (def-http-action get nil)
@@ -41,10 +41,11 @@
   (to-list () `(condition (:expr  ,(synth to-list expr) :true ,(synth to-list true) :false ,(synth to-list false))))
   (to-html () (div nil 
 		   (text "Check condizione ")
-		   (synth to-html expr)
+		   (div (list :class 'well) (synth to-html expr))
 		   (apply #'ul 
 			  (list :class 'list-group)
-			  (mapcar #'listify (list (synth to-html true) (synth to-html false)))))))
+			  (mapcar #'listify (list (span nil (i (list :class "fa fa-thumbs-up") nil) (synth to-html true)) 
+						  (span nil (i (list :class "fa fa-thumbs-down") nil) (synth to-html false))))))))
 
 
 
@@ -67,23 +68,3 @@
 ;; (defparameter *validation* ())
 ;; (defun *submit-user* (data) (let* ((post (http-post data))
 ;; 				   (choice (<equal> (synth response))))))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-;; (defprod transition (transition ((target url) 
-;; 				 &optional (action process)))
-;;   (to-list () `(transition (:target ,target :action ,(synth to-list action)))))
-
