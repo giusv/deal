@@ -45,16 +45,15 @@
 		      (cancel (button 'cancel (const "cancel"))))
 		 (vert userid passwd (horz ok cancel))))
        (static :home nil 
-	       (vert (label (const "welcome"))
-		     (table 'table *query* #'render-fields)
-		     (button 'go (const "go") :click (*submit-user*))))
-       (static :users nil
-	       (alt (label (const "user list"))
-		    (dynamic2 user nil
-			      (post-list user))))
-       (static :form nil
-	       *form*)))
+	       (let* ((search-by-plate 
+		       (panel (label (const "Ricerca per targa"))
+			      (anchor (gensym) (const "Vai alla pagina") :click (target (void))))))
+		 (vert (horz search-by-plate))))))
 
+(defparameter *gui-test* (let* ((search-by-plate 
+		       (panel (label (const "Ricerca per targa"))
+			      (anchor (gensym) (const "Vai alla pagina") :click (target (void))))))
+		 (vert (horz search-by-plate))))
 
 (write-file "d:/giusv/temp/aia.html" 
 	    (synth to-string 
@@ -64,4 +63,4 @@
 					     (meta (list :charset "utf-8"))
 					     (link (list :rel "stylesheet" :href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"))
 					     (link (list :rel "stylesheet" :href "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")))
-				       (body nil (synth to-html *aia* (void))))) 0))
+				       (body nil (synth to-html *gui-test* (void))))) 0))

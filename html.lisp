@@ -15,21 +15,10 @@
 		   `(deftag ,name))
 	       names)))
 
-;; (defprod html (div ((attributes (list string))
-;; 		    &rest (body (list html))))
-;;   (to-list () `(div (:attributes ,attributes :body ,body)))
-;;   (to-doc () (labels ((open-tag (as) (text "<~(~a~)~{ ~(~a~)=\"~a\"~}>" (lower 'div) as))
-;; 		      (close-tag () (text "</~(~a~)>" 'div))
-;; 		      (open-close-tag (as) (text "<~(~a~)~{ ~(~a~)=\"~a\"~}/>" 'div as)))
-;; 	       (if (null body)
-;; 		   (open-close-tag attributes)
-;; 		   (vcat (open-tag attributes)
-;; 			 (nest 4 (apply #'vcat body))
-;; 			 (close-tag))))))
-
 
 (defmacro divm (attributes &body body)
   `(apply #'div (list ,@attributes) ,body))
+
 (defmacro deftag (name)
   `(defprod html (,name ((attributes (list string))
 			 &rest (body (list html))))
@@ -42,10 +31,19 @@
 		      (vcat (open-tag attributes)
 			    (nest 4 (apply #'vcat (synth-all to-doc body)))
 			    (close-tag)))))))
-(deftags html head title meta link body h1 h2 h3 div span li ul ol pre i)
+(deftags html head title meta link body h1 h2 h3 div span li dl dt dd ul ol pre i)
 
+;;(mapcar #'(lambda (pair) (format t "~a: ~a~%" (car pair) (cdr pair))) (pairlis '(a b) '(1 2)))
 (defun listify (elem)
   (li (list :class "list-group-item") elem))
+(defun description-list (keys vals)
+  (apply #'dl 
+	 nil 
+	 (apply #'append (mapcar #'(lambda (pair) 
+				     (list (dt nil (car pair))
+					   (dd nil (cdr pair))))
+				 (pairlis (reverse keys) (reverse vals))))))
+
 ;; (synth output (synth to-doc (div nil (span nil (text "hello")))) 0)
 ;; (pprint (synth to-list (div nil (span nil (text "hello")))))
 

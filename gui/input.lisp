@@ -1,5 +1,3 @@
-
-
 (defprod element (input ((id string)
 			 &optional (expr expression)
 			 &key (binding (binding filter))))
