@@ -24,6 +24,12 @@
   (to-html () (span (list :class "label label-default") (synth to-req (path-parameter name))))
   (to-url () (dynamic-chunk name)))
 
+(defprod exp (query-parameter ((name string)))
+  (to-list () `(query-parameter (:name ,name)))
+  (to-req () (text "parametro query: ~a" name))
+  (to-html () (span (list :class "label label-default") (synth to-req (query-parameter name))))
+  (to-url () (dynamic-chunk name)))
+
 (defprod exp (cat (&rest (exps exp)))
   (to-list () `(cat (:exps ,(synth-all to-list exps))))
   (to-req () (apply #'hcat 

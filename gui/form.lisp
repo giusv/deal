@@ -1,6 +1,6 @@
 (defprod element (form ((id string)
-			(schema jsschema)
-			(element element)))
+			(element element)
+			&key (schema (schema jsschema))))
   (to-list () `(form (:id ,id :schema ,(synth to-list schema) :element ,(synth to-list element))))
   (to-req (path) (vcat (text "Form ~a collegato al seguente formato dati:" id) 
 		       (nest 4 (synth to-req schema))

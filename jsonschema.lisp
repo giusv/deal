@@ -81,19 +81,19 @@
 ;; (pprint (synth to-list (car (funcall (get-elem) *addresses*))))
 
 ;; (pprint (synth to-list (car (funcall (comp (comp (get-prop 'addresses) (get-elem)) (get-prop 'city)) *user*))))
-(defparameter *address*
-  (jsobject (jsprop 'city t (jsstring))
-	   (jsprop 'state t (jsstring))))
-(defparameter *addresses* (jsarray *address*))
-(defparameter *user* 
-  (jsobject (jsprop 'name t (jsstring))
-	    (jsprop 'addresses t *addresses*)
-	    (jsprop 'numbers t (jsarray (jsnumber)))))
+;; (defparameter *address*
+;;   (jsobject (jsprop 'city t (jsstring))
+;; 	   (jsprop 'state t (jsstring))))
+;; (defparameter *addresses* (jsarray *address*))
+;; (defparameter *user* 
+;;   (jsobject (jsprop 'name t (jsstring))
+;; 	    (jsprop 'addresses t *addresses*)
+;; 	    (jsprop 'numbers t (jsarray (jsnumber)))))
 
 
 
-(pprint (synth to-list (car (funcall (compose-filters (get-prop 'addresses) (get-elem) (get-prop 'city)) *user*))))
-(pprint (synth to-list (car (funcall (synth to-func (comp (prop 'addresses) (elem) (prop 'city))) *user*))))
-(pprint (synth to-list (car (funcall 
-			     (synth to-func (parse (parse-filter) 
-						   '((prop 'addresses) >>> (elem) >>> (prop 'city)))) *user*))))
+;; (pprint (synth to-list (car (funcall (compose-filters (get-prop 'addresses) (get-elem) (get-prop 'city)) *user*))))
+;; (pprint (synth to-list (car (funcall (synth to-func (comp (prop 'addresses) (elem) (prop 'city))) *user*))))
+;; (pprint (synth to-list (car (funcall 
+;; 			     (synth to-func (parse (parse-filter) 
+;; 						   '((prop 'addresses) >>> (elem) >>> (prop 'city)))) *user*))))

@@ -1,4 +1,3 @@
-
 (defprod element (horz (&rest (elements (list element))))
   (to-list () `(horz (:elements ,(synth-all to-list elements))))
   (to-req (path) (funcall #'vcat 

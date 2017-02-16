@@ -6,11 +6,12 @@
   (to-url () (text "~a" (lower name)))
   (to-list () `(static-chunk (:name ,name))))
 (defprod chunk (dynamic-chunk ((name string)))
-  (to-url () (text "{~a}" (lower name)))
+  (to-url () (braces (text "~a" (lower name))))
   (to-list () `(dynamic-chunk (:name ,name))))
 (defprod chunk (expression-chunk ((exp expression)))
   (to-url () (braces (synth to-chunk exp)))
   (to-list () `(expression-chunk (:exp ,exp))))
+
 ;; chain holds reversed path
 (defprod pose (chain ((segment chunk) (pose pose)))
   (to-url () (if pose 

@@ -22,44 +22,48 @@
 		 (target (void))
 		 (target (void)))))
 
-(defparameter *form*
-  (let* ((user *user*)
-	 (name (input 'name nil :binding (prop 'name)))
-	 (number (input 'number nil :binding (comp (prop 'numbers) (elem))))
-	 ;; (numbers (replicate number :binding ((prop 'numbers))))
-	 (city (input 'city nil :binding (comp (prop 'addresses) (elem) (prop 'city))))
-	 (state (input 'state nil :binding (comp (prop 'addresses) (elem) (prop 'state))))
-	 ;; (addresses (replicate address :binding ((prop 'addresses))))
-	 (address (vert city state #| :binding (comp (prop 'addresses) (elem)) |#))
+(defparameter *plate-form*
+  (let* ((plate (input 'plate (const "Targa")))
+	 (start-date (input 'start-date (const "Data inizio")))
+	 (end-date (input 'end-date (const"Data fine")))
 	 (ok (button 'ok (const "Submit") :click ())))
-    (form 'form user (vert name number address ok))))
+    (form 'plate-form (vert plate start-date end-date ok))))
+(defparameter *plate-results*
+  (empty)
+  )
+(defparameter *person-form*
+  (let* ((code (input 'code (const "Codice fiscale")))
+	 (start-date (input 'start-date (const "Data inizio")))
+	 (end-date (input 'end-date (const "Data fine")))
+	 (ok (button 'ok (const "Submit") :click ())))
+    (form 'plate-form (vert code start-date end-date ok))))
 
-;;(synth output (synth to-req *form* (void)) 0)
-
-(defun option-panel (label target)
-  (panel (label (const label))
-	 (anchor (gensym) (const "Vai alla pagina") :click (target target))))
-(defmacro hub-spoke (pairs base layout)
-  `(let* ,(mapcar #'(lambda (pair)
-		      (destructuring-bind (name label) pair
-			`(,name (option-panel ,label ,(url `(,base / ,name))))))
-		  pairs)
-     ,layout))
+(defparameter *search-by-plate* 
+  (alt *plate-form*
+       (static :results nil *plate-results*)))
+(defparameter *search-by-person* 
+  (alt *person-form*
+       (static :results nil (label (const "search-by-person")))))
 
 
+(defparameter *navbar* (navbar (gensym) 
+			       (anchor (gensym) (const "Ricerca per veicolo") :click (target (url `(:home / :search-by-plate))))
+			       (anchor (gensym) (const "Ricerca per persona") :click (target (url `(:home / :search-by-person))))))
 (defparameter *aia* 
   (alt nil 
        (static :login nil  
-	       (let* ((userid (input 'userid))
-		      (passwd (input 'passwd))
-		      (ok (button 'ok (const "ok") :click (target (url `(users / { ,(value userid) } / posts)))))
+	       (let* ((userid (input 'userid (const "User id") :init (const "nome.cognome@mail.com")))
+		      (passwd (input 'passwd (const "Password")))
+		      (ok (button 'ok (const "ok") :click (target (url `(:users / { ,(value userid) } / :posts)))))
 		      (cancel (button 'cancel (const "cancel"))))
 		 (vert userid passwd (horz ok cancel))))
        (static :home nil 
-	       (hub-spoke ((search-by-plate "Ricerca per targa" )
-			   (search-by-person "Ricerca per persona"))
-			  home
-			  (horz search-by-plate search-by-person)))))
+	       (let* ((nav *navbar*) 
+		      (main (hub-spoke ((search-by-plate "Ricerca per targa" *search-by-plate*)
+					(search-by-person "Ricerca per persona" *search-by-person*))
+				       :home
+				       (horz search-by-plate search-by-person))))
+		 (vert nav main)))))
 
 (defparameter *gui-test* (let* ((search-by-plate 
 		       (panel (label (const "Ricerca per targa"))
@@ -74,4 +78,6 @@
 					     (meta (list :charset "utf-8"))
 					     (link (list :rel "stylesheet" :href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"))
 					     (link (list :rel "stylesheet" :href "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")))
-				       (body nil (synth to-html *aia* (void))))) 0))
+				       (body nil 
+					     (h1 nil (text "Archivio Integrato Antifrode - Requisiti funzionali")) 
+					     (synth to-html *aia* (void))))) 0))

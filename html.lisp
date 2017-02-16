@@ -36,6 +36,14 @@
 ;;(mapcar #'(lambda (pair) (format t "~a: ~a~%" (car pair) (cdr pair))) (pairlis '(a b) '(1 2)))
 (defun listify (elem)
   (li (list :class "list-group-item") elem))
+(defun maybes (&rest pairs)
+  (apply #'dl nil
+	 (apply #'append 
+		(mapcar #'(lambda (pair) 
+			    (if (car pair)
+				(list (dt nil (cadr pair))
+				      (dd nil (synth to-html (car pair))))))
+			pairs))))
 (defun description-list (keys vals)
   (apply #'dl 
 	 nil 
