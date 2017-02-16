@@ -11,5 +11,5 @@
      (alt ,layout ,@(mapcar #'(lambda (triple) 
 			(let ((name (first triple))
 			      (elem (third triple)))
-			  `(static ,(keyw name) nil ,elem)))
+			  `(static2 ,(keyw name) nil ,elem)))
 		    triples))))

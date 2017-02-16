@@ -81,7 +81,10 @@
 	       (hcat (car docs) p (apply #'punctuate p newline (cdr docs)))))))
 
 
-
+(defun equals () 
+  (text "="))
+(defun textify (x)
+  (text "~a" (lower x)))
 (defparameter *doc* (vcat (hcat (text "public static main(")
 				(vcat (text "String[] argv,")
 				      (text "int a"))

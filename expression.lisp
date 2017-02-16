@@ -2,6 +2,7 @@
   (to-list () `(const (:exp ,exp)))
   (to-req () (text "stringa costante: ~a" exp))
   (to-html () (span (list :class "label label-default") (synth to-req (const exp))))
+  (to-url () (textify exp))
   (to-chunk () exp))
 
 (defprod exp (attr ((exp string)))
@@ -16,6 +17,7 @@
   (to-list () `(value (:elem ,elem)))
   (to-req () (text "valore dell'elemento: ~a" (synth id elem)))
   (to-html () (span (list :class "label label-default") (synth to-req (value elem))))
+  (to-url () (brackets (text "val(~a)" (lower (synth id elem)))))
   (to-chunk () (text "val(~a)" (lower (synth id elem)))))
 
 (defprod exp (path-parameter ((name string)))
@@ -24,11 +26,11 @@
   (to-html () (span (list :class "label label-default") (synth to-req (path-parameter name))))
   (to-url () (dynamic-chunk name)))
 
-(defprod exp (query-parameter ((name string)))
-  (to-list () `(query-parameter (:name ,name)))
-  (to-req () (text "parametro query: ~a" name))
-  (to-html () (span (list :class "label label-default") (synth to-req (query-parameter name))))
-  (to-url () (dynamic-chunk name)))
+;; (defprod exp (query-parameter ((name string)))
+;;   (to-list () `(query-parameter (:name ,name)))
+;;   (to-req () (text "parametro query: ~a" name))
+;;   (to-html () (span (list :class "label label-default") (synth to-req (query-parameter name))))
+;;   (to-url () (dynamic-chunk name)))
 
 (defprod exp (cat (&rest (exps exp)))
   (to-list () `(cat (:exps ,(synth-all to-list exps))))

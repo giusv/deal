@@ -5,5 +5,8 @@
 		   (nest 4 (apply #'vcat (synth-all to-req parameters)))
 		   (synth to-req element path)))
   (to-html (path) (div nil (text "Elemento parametrico ")
-		       (synth-all to-html parameters)
+		       (apply #'maybes (mapcar #'(lambda (par)
+						   (list par (span nil (textify (synth name par)))))
+					       parameters))
+		       
 		       (synth to-html element path))))

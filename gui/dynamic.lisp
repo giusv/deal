@@ -1,7 +1,6 @@
 (defprod named-element (dynamic ((name string) 
-				 (queries (list expression))
 				 (element element)))
-  (to-list () `(dynamic(:name ,name :queries ,queries :element ,(synth to-list element))))
+  (to-list () `(dynamic(:name ,name :element ,(synth to-list element))))
   (to-brief (path) (let ((newpath (chain (dynamic-chunk name) path)))
 		     (div nil (text "Elemento dinamico di nome ~a " (lower name)) 
 			  (parens (hcat (text "percorso: ") (synth to-url newpath))))))
@@ -16,7 +15,7 @@
 			     (parens (hcat (text "percorso: ") (synth to-url newpath))))
 			 (synth to-html element newpath)))))
 
-(defmacro dynamic2 (name queries element)
-  `(dynamic ',name ,queries 
+(defmacro dynamic2 (name element)
+  `(dynamic ',name 
 	    (let ((,name (path-parameter ',name)))
-	      ,element)))
+	      (abst (list ,name) ,element))))
