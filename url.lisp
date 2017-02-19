@@ -78,8 +78,8 @@
 ;;(parse (parse-url) '(a </> b))
 
 ;; (synth output (synth to-url (parse (parse-url) '({ a }))) 0)
-(synth output (synth to-url (parse (parse-url) `(b ? q = a & r = { ,(value (button 'ok nil)) }))) 0)
-(pprint (synth to-list (parse (parse-url) `(b ? q = a & r = { ,(value (button 'ok nil)) }))))
+;; (synth output (synth to-url (parse (parse-url) `(b ? q = a & r = { ,(value (button 'ok nil)) }))) 0)
+;; (pprint (synth to-list (parse (parse-url) `(b ? q = a & r = { ,(value (button 'ok nil)) }))))
 
  
 
