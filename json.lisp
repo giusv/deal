@@ -3,19 +3,19 @@
   (to-string () (text "")))
 
 (defprod json (jbool ((value bool)))
-  (to-list () `(jbool (:value ,value)))
+  (to-list () `(jbool (:value ,(synth to-list value))))
   (to-string () (text "\"~a\"" value)))
 
 (defprod json (jnumber ((value number)))
-  (to-list () `(jnumber (:value ,value)))
+  (to-list () `(jnumber (:value ,(synth to-list value))))
   (to-string () (text "~a" value)))
 
 (defprod json (jstring ((value string)))
-  (to-list () `(jstring (:value ,value)))
+  (to-list () `(jstring (:value ,(synth to-list value))))
   (to-string () (text "\"~a\"" value)))
 
 (defprod json (jarray (&rest (values (list json))))
-  (to-list () `(jarray (:values ,values)))
+  (to-list () `(jarray (:values ,(synth-all to-list values))))
   (to-string () (brackets (apply #'punctuate (comma) t (synth-all to-string values)) :padding 1 :newline nil)))
 
 (defprod json (jobject (&rest (values (plist json))))

@@ -27,8 +27,10 @@
 
 (defmacro synth (func arg &rest args)
   `(and ,arg 
-	(gethash ',func ,arg)
-	(funcall (gethash ',func ,arg) ,@args)))
+   	(gethash ',func ,arg)
+   	(funcall (gethash ',func ,arg) ,@args))
+  ;; (funcall (gethash ',func ,arg) ,@args)
+  )
 
 (defmacro synth-all (func lst &rest args)
   `(mapcar #'(lambda (arg) (synth ,func arg ,@args))

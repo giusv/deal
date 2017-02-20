@@ -68,8 +68,7 @@
        					(search-by-person "Ricerca per persona" search-by-person))
        				       :home
        				       (horz search-by-plate search-by-person))))
-       		 (vert nav main)))
-       ))
+       		 (vert nav main)))))
 
 (defparameter gui-test (hub-spoke ((search-by-plate "Ricerca per targa" search-by-plate)
 				     (search-by-person "Ricerca per persona" search-by-person))

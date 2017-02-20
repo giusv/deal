@@ -12,6 +12,12 @@
   (to-url () (braces (synth to-chunk exp)))
   (to-list () `(expression-chunk (:exp ,exp))))
 
+(defprod parameter (path-parameter ((name string)))
+  (to-list () `(path-parameter (:name ,name)))
+  (to-req () (text "parametro path: ~a" name))
+  (to-html () (span (list :class "label label-default") (synth to-req (path-parameter name))))
+  (to-url () (dynamic-chunk name)))
+
 (defprod parameter (query-parameter ((name symbol) &optional (value expression)))
   (to-url () (hcat (text "~a" (lower name)) 
 		   (if value 

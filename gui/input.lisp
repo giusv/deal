@@ -11,5 +11,10 @@
 			    (maybes (list label (span nil (text "Etichetta")))
 				    (list init (span nil (text  "Valore iniziale")))
 				    (list binding (span nil (text "Data binding")))))))
-  (to-model (schema) ()))
+  (to-model (father) (let ((schema (car (funcall binding father))))
+		       ;; (pprint (synth to-list (synth instance schema (value (input id label :binding binding)))))
+		       ;; (pprint (synth to-list (synth instance schema (const "ddd"))))
+		       (synth instance schema (value (input id label :binding binding))))))
 
+(pprint (synth to-list (synth to-model (input 'userid (const "userid") 
+					      :binding (synth to-func (prop 'name))) *user*)))

@@ -8,16 +8,19 @@
 
 (defprod jsschema (jsstring ())
   (to-list () `(jsstring))
-  (to-req () (text "stringa")))
+  (to-req () (text "stringa"))
+  (instance (val) (jstring val)))
 
 (defprod jsschema (jsnumber ())
   (to-list () `(jsnumber))
-  (to-req () (text "numero")))
+  (to-req () (text "numero"))
+  (instance (val) (jnumber val)))
 
-(defprod jsschema (jschoice (&rest (schemas (list jsschema))))
-  (to-list () `(jschoice :schemas ,(synth-all to-list schemas)))
-  (to-req () (vcat (text "scelta tra i seguenti schemi:")
-		   (nest 4 (apply #'vcat (synth-all to-req schemas))))))
+;; handle choice in instantiation
+;; (defprod jsschema (jschoice (&rest (schemas (list jsschema))))
+;;   (to-list () `(jschoice :schemas ,(synth-all to-list schemas)))
+;;   (to-req () (vcat (text "scelta tra i seguenti schemi:")
+;; 		   (nest 4 (apply #'vcat (synth-all to-req schemas))))))
 
 (defprod jsschema (jsobject (&rest (props (list jsprop))))
   (to-list () `(jsobject :props ,(synth-all to-list props)))
@@ -93,7 +96,7 @@
 
 
 ;; (pprint (synth to-list (car (funcall (compose-filters (get-prop 'addresses) (get-elem) (get-prop 'city)) *user*))))
-;; (pprint (synth to-list (car (funcall (synth to-func (comp (prop 'addresses) (elem) (prop 'city))) *user*))))
+(pprint (synth to-list (car (funcall (synth to-func (comp (prop 'addresses) (elem) (prop 'city))) *user*))))
 (pprint (synth to-list (car (funcall 
 			     (synth to-func (parse (parse-filter) 
 						   '((prop 'addresses) >>> (elem)))) *user*))))
