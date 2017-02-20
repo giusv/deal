@@ -10,5 +10,6 @@
 			    (if (or init label binding) (text "con le seguenti caratteristiche:"))
 			    (maybes (list label (span nil (text "Etichetta")))
 				    (list init (span nil (text  "Valore iniziale")))
-				    (list binding (span nil (text "Data binding"))))))))
+				    (list binding (span nil (text "Data binding")))))))
+  (to-model (schema) ()))
 
