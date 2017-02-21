@@ -35,11 +35,12 @@
 	(label (const end-date))))
 
 (defparameter person-form
-  (let* ((code (input 'code (const "Codice fiscale")))
-	 (start-date (input 'start-date (const "Data inizio")))
-	 (end-date (input 'end-date (const "Data fine")))
+  (let* ((form (object-form2 'of ((code (input 'code (const "Codice fiscale")) :codice-fiscale)
+				  (start-date (input 'start-date (const "Data inizio")) :data-inizio)
+				  (end-date (input 'end-date (const "Data fine")) :data-fine))
+			     (vert code start-date end-date)))
 	 (ok (button 'ok (const "Submit") :click ())))
-    (form 'plate-form (vert code start-date end-date ok))))
+    (vert 'plate-form (vert form ok))))
 
 (defparameter search-by-plate 
   (alt plate-form

@@ -41,15 +41,26 @@
   (to-html (path) (div nil 
 		       (text "Object-Form identificato con ~a collegato al seguente formato dati:" (lower id)) 
 		       (pre nil (synth to-req schema))
+		       (text "produce")
+		       (synth to-string (synth to-model (object-form id bindings element)))
 		       (text "e costituito da:") 
 		       (synth to-html element path)))
-  (to-model () (jobject (apply #'append (synth-all to-model bindings)))))
+  (to-model () (apply #'jobject (apply #'append (synth-all to-model bindings)))))
 
+
+(defmacro object-form2 (id binds elem)
+  `(let* ,(mapcar #'(lambda (bind)
+		      (destructuring-bind (name elem key) bind
+			`(,name (property-form ',name ,key ,elem))))
+		  binds)
+     (object-form ,id (list ,@(mapcar #'car binds)) ,elem)))
 
 (defprod element (array-form ((id string)
-			(element element)
-			&key (schema (schema jsschema))))
-  (to-list () `(array-form (:id ,id :schema ,(synth to-list schema) :element ,(synth to-list element))))
+			      (element element)
+			      (min number)
+			      (max number)
+			      &key (schema (schema jsschema))))
+  (to-list () `(array-form (:id ,id :schema ,(synth to-list schema) :element ,(synth to-list element) :min ,min :max ,max)))
   (to-req (path) (vcat (text "Array-Form ~a collegato al seguente formato dati:" id) 
 		       (nest 4 (synth to-req schema))
 		       (text "e costituito da:") 
@@ -59,20 +70,22 @@
 		       (pre nil (synth to-req schema))
 		       (text "e costituito da:") 
 		       (synth to-html element path)))
-  (to-model () (jarray)))
+  (to-model () (jarray (synth to-model element))))
 
-(defmacro object-form2 (id binds elem)
-  `(let* ,(mapcar #'(lambda (bind)
-		      (destructuring-bind (name elem key) bind
-			`(,name (property-form ',name ,key ,elem))))
-		  binds)
-     (object-form ,id (list ,@(mapcar #'car binds)) ,elem)))
+;; (defmacro array-form2 (id bind elem)
+;;   `(let* ,(destructuring-bind (name elem min max) bind
+;; 			      `(,name (property-form ',name ,key ,elem)))
+;;      binds
+;;      (object-form ,id (list ,@(mapcar #'car binds)) ,elem)))
+
 
 (defparameter of (object-form2 'of ((uid (input 'userid (const "User id")) :userid)
 				    (pwd (input 'password (const "Password")) :password))
 			       (vert uid pwd)))
 
-(synth output (synth to-string (synth to-model of)) 0)
+(defparameter af (array-form 'af (input 'userid (const "User id")) 0 1))
+
+(synth output (synth to-string (synth to-model af)) 0)
 ;; (defparameter af (array-form of 2 'unbounded))
 
 ;; (defparameter uf (property-form 'uid :userid (input 'userid (const "User id"))))
