@@ -23,11 +23,13 @@
 		 (target (void)))))
 
 (defparameter plate-form
-  (let* ((plate (input 'plate (const "Targa")))
-	 (start-date (input 'start-date (const "Data inizio")))
-	 (end-date (input 'end-date (const"Data fine")))
-	 (ok (button 'ok (const "Submit") :click ())))
-    (form 'plate-form (vert plate start-date end-date ok))))
+  (form 'plate-form 
+	(vert (object-form2 'of ((plate (input 'plate (const "Targa")) :targa)
+				 (start-date (input 'start-date (const "Data inizio")) :data-inizio)
+				 (end-date (input 'end-date (const "Data fine")) :data-fine))
+			    (vert plate start-date end-date)) 
+	      (button 'ok (const "Submit") :click ()))))
+
 
 (defun plate-results (plate start-date end-date)
   (vert (label (const plate))
@@ -35,19 +37,19 @@
 	(label (const end-date))))
 
 (defparameter person-form
-  (let* ((form (object-form2 'of ((code (input 'code (const "Codice fiscale")) :codice-fiscale)
-				  (start-date (input 'start-date (const "Data inizio")) :data-inizio)
-				  (end-date (input 'end-date (const "Data fine")) :data-fine))
-			     (vert code start-date end-date)))
-	 (ok (button 'ok (const "Submit") :click ())))
-    (vert 'plate-form (vert form ok))))
+  (form 'person-form 
+	(vert (object-form2 'of ((code (input 'code (const "Codice fiscale")) :codice-fiscale)
+				 (start-date (input 'start-date (const "Data inizio")) :data-inizio)
+				 (end-date (input 'end-date (const "Data fine")) :data-fine))
+			    (vert code start-date end-date)) 
+	      (button 'ok (const "Submit") :click ()))))
 
-(defparameter search-by-plate 
+(defparameter plate-section
   (alt plate-form
        (static2 :results (plate start-date end-date) (plate-results plate start-date end-date))))
 
 
-(defparameter search-by-person 
+(defparameter person-section
   (alt person-form
        (static2 :results nil (label (const "search-by-person")))))
 
@@ -65,21 +67,21 @@
 		 (vert userid passwd (horz ok cancel))))
        (static2 :home nil 
        	       (let* ((nav navbar) 
-       		      (main (hub-spoke ((search-by-plate "Ricerca per targa" search-by-plate)
-       					(search-by-person "Ricerca per persona" search-by-person))
+       		      (main (hub-spoke ((search-by-plate "Ricerca per targa" plate-section)
+       					(search-by-person "Ricerca per persona" person-section))
        				       :home
        				       (horz search-by-plate search-by-person))))
        		 (vert nav main)))))
 
-(defparameter gui-test (hub-spoke ((search-by-plate "Ricerca per targa" search-by-plate)
-				     (search-by-person "Ricerca per persona" search-by-person))
-				    :home
-				    (horz search-by-plate search-by-person)))
+;; (defparameter gui-test (hub-spoke ((search-by-plate "Ricerca per targa" search-by-plate)
+;; 				     (search-by-person "Ricerca per persona" search-by-person))
+;; 				    :home
+;; 				    (horz search-by-plate search-by-person)))
 ;; (defparameter gui-test (alt nil 
 ;; 			      (static2 :home nil 
 ;; 				       (label (const "hello")))))
 
-
+;; (pprint (synth to-list person-form))
 (write-file "d:/giusv/temp/aia.html" 
 	    (synth to-string 
 		   (synth to-doc (html nil 

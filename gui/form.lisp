@@ -7,8 +7,9 @@
 		       (text "e costituito da:") 
 		       (synth to-req element path)))
   (to-html (path) (div nil 
-		       (text "Form identificato con ~a collegato al seguente formato dati:" (lower id)) 
-		       (pre nil (synth to-req schema))
+		       (text "Form identificato con ~a " (lower id)) 
+		       ;; (pre nil (synth to-req schema))
+		       (synth to-model (form id element))
 		       (text "e costituito da:") 
 		       (synth to-html element path))))
 
@@ -22,10 +23,7 @@
 		       (text "e costituito da:") 
 		       (synth to-req element path)))
   (to-html (path) (div nil 
-		       (text "Property-Form identificato con ~a collegato al seguente formato dati:" (lower id)) 
-		       (pre nil (synth to-req schema))
-		       (text "e costituito da:") 
-		       (synth to-html element path)))
+  		       (synth to-html element path)))
   (to-model () (list (keyw name) (synth to-model element))))
 
 
@@ -39,12 +37,12 @@
 		       (text "e costituito da:") 
 		       (synth to-req element path)))
   (to-html (path) (div nil 
-		       (text "Object-Form identificato con ~a collegato al seguente formato dati:" (lower id)) 
-		       (pre nil (synth to-req schema))
-		       (text "produce")
-		       (synth to-string (synth to-model (object-form id bindings element)))
-		       (text "e costituito da:") 
-		       (synth to-html element path)))
+  		       ;; (text "Object-Form identificato con ~a collegato al seguente formato dati:" (lower id)) 
+  		       ;; (pre nil (synth to-req schema))
+  		       ;; (text "produce")
+  		       ;; (synth to-string (synth to-model (object-form id bindings element)))
+  		       ;; (text "e costituito da:") 
+  		       (synth to-html element path)))
   (to-model () (apply #'jobject (apply #'append (synth-all to-model bindings)))))
 
 
@@ -66,10 +64,10 @@
 		       (text "e costituito da:") 
 		       (synth to-req element path)))
   (to-html (path) (div nil 
-		       (text "Array-Form identificato con ~a collegato al seguente formato dati:" (lower id)) 
-		       (pre nil (synth to-req schema))
-		       (text "e costituito da:") 
-		       (synth to-html element path)))
+  		       ;; (text "Array-Form identificato con ~a collegato al seguente formato dati:" (lower id)) 
+  		       ;; (pre nil (synth to-req schema))
+  		       ;; (text "e costituito da:") 
+  		       (synth to-html element path)))
   (to-model () (jarray (synth to-model element))))
 
 ;; (defmacro array-form2 (id bind elem)
