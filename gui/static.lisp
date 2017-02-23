@@ -14,13 +14,15 @@
 			  (parens (hcat (text "percorso: ") (synth to-url newpath))))))
   (to-html (path) (let ((newpath (backward-chain (static-chunk name) path)))
 		    (div nil 
-			    (h3 nil (text "Vista statica ~a " (lower name)) 
+			    (h3 nil (text "Elemento statico ~a " (lower name)) 
 				(parens (hcat (text "percorso: ") (synth to-url newpath))))
 			    (synth to-html element newpath)))))
 
 (defmacro static2 (name queries element)
   `(static ,name 
-	   (let ,(mapcar #'(lambda (query) 
-			     `(,query (query-parameter ',query)))
-			 queries)
-	     (abst (list ,@queries) ,element))))
+	   ,(if queries 
+		`(let ,(mapcar #'(lambda (query) 
+				   `(,query (query-parameter ',query)))
+			       queries)
+		   (abst (list ,@queries) ,element))
+		element)))

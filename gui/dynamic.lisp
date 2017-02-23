@@ -11,7 +11,7 @@
 			 (synth to-req element newpath))))
   (to-html (path) (let ((newpath (backward-chain (dynamic-chunk name) path)))
 		    (div nil 
-			 (h3 nil (text "Vista dinamica ~a " (lower name)) 
+			 (h3 nil (text "Elemento dinamico ~a " (lower name)) 
 			     (parens (hcat (text "percorso: ") (synth to-url newpath))))
 			 (synth to-html element newpath)))))
 
