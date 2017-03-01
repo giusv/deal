@@ -13,12 +13,13 @@
 	(label end-date)))
 
 (defelement person-form
-  (form 'person-form 
-	(vert (object-form2 'of ((code (input 'code (const "Codice fiscale")) :codice-fiscale)
-				 (start-date (input 'start-date (const "Data inizio")) :data-inizio)
-				 (end-date (input 'end-date (const "Data fine")) :data-fine))
-			    (vert code start-date end-date)) 
-	      (button 'ok (const "Submit") :click (http-post (const "www.example.com") (payload form))))))
+    (let* ((of (object-form2 'of ((code (input 'code (const "Codice fiscale")) :codice-fiscale)
+                                  (start-date (input 'start-date (const "Data inizio")) :data-inizio)
+                                  (end-date (input 'end-date (const "Data fine")) :data-fine))
+                             (vert code start-date end-date))))
+      (form 'person-form 
+            (vert  of (button 'ok (const "Submit") :click (http-post (const "www.example.com") (payload of) nil))))))
+
 
 (defelement plate-section
   (alt plate-form

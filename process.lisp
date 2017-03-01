@@ -24,6 +24,10 @@
 
 (pprint (synth to-list (http-get (void) (gensym "GET"))))
 
+(defprod exp (status ((action action)))
+  (to-list () `(status (:action ,action)))
+  (to-html () (span nil (text "Codice HTTP di risposta"))))
+
 (defprod command (skip ())
   (to-list () `(skip))
   (to-html () (div nil)))
@@ -47,7 +51,12 @@
 			  (mapcar #'listify (list (span nil (i (list :class "fa fa-thumbs-up") nil) (synth to-html true)) 
 						  (span nil (i (list :class "fa fa-thumbs-down") nil) (synth to-html false))))))))
 
-
+(defprod action (compile ((source expression)
+                          (target variable)))
+  (to-list () `(compile (:source  ,(synth to-list source) :target ,(synth to-list target))))
+  (to-html () (div nil 
+		   (text "Compilazione del seguente sorgente:")
+		   (div (list :class 'well) (synth to-html source)))))
 
 ;; (defprod process (sync-server ((parameters (list expression))
 ;; 			       (input format)

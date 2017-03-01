@@ -1,4 +1,7 @@
 *~
 *#
 *.wx64fsl
+*.abcl
 *.tem
+*.cls
+*.abcl-tmp

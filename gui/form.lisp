@@ -12,6 +12,9 @@
 		       (synth to-model (form id element))
 		       (text "e costituito da:") 
 		       (synth to-html element path))))
+(defprod exp (payload ((elem element)))
+  (to-list () `(payload (:elem ,elem)))
+  (to-html () (pre nil (synth to-string (synth to-model elem)))))
 
 (defprod element (property-form ((id string)
 				 (name symbol)
