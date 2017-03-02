@@ -1,3 +1,6 @@
+(defmacro defprocess (name proc)
+  `(defparameter ,name ,proc))
+
 (defprod action (target ((pose pose)))
   (to-list () `(target :pose ,pose))
   (to-req () (hcat (text "effettua una transizione verso ") (synth to-url pose)))
@@ -22,11 +25,15 @@
 (def-http-action put)
 (def-http-action delete nil)
 
-(pprint (synth to-list (http-get (void) (gensym "GET"))))
+;; (pprint (synth to-list (http-get (void) (gensym "GET"))))
 
 (defprod exp (status ((action action)))
   (to-list () `(status (:action ,action)))
   (to-html () (span nil (text "Codice HTTP di risposta"))))
+
+;; (defprod exp (result ((action action)))
+;;   (to-list () `(result (:action ,action)))
+;;   (to-html () (span nil (text "Risultato dell'azione"))))
 
 (defprod command (skip ())
   (to-list () `(skip))
@@ -38,6 +45,13 @@
 		   (apply #'ol 
 			  (list :class 'list-group)
 			  (mapcar #'listify (synth-all to-html actions))))))
+
+(defmacro concat2 (&rest bindings)
+  (let ((new-bindings (mapcar #'(lambda (binding)
+			  (cons (gensym) binding)) 
+			      bindings)))
+    `(bindall ,new-bindings
+      (concat ,@(mapcar #'car new-bindings)))))
 
 (defprod command (condition ((expr expression) 
 			     (true command)
@@ -51,20 +65,31 @@
 			  (mapcar #'listify (list (span nil (i (list :class "fa fa-thumbs-up") nil) (synth to-html true)) 
 						  (span nil (i (list :class "fa fa-thumbs-down") nil) (synth to-html false))))))))
 
-(defprod action (compile ((source expression)
-                          (target variable)))
-  (to-list () `(compile (:source  ,(synth to-list source) :target ,(synth to-list target))))
+(defprod action (translate ((source filter)
+                            (target variable)
+                            (result variable)))
+  (to-list () `(translate (:source  ,(synth to-list source) :target ,(synth to-list target) :result ,(synth to-list result))))
   (to-html () (div nil 
-		   (text "Compilazione del seguente sorgente:")
-		   (div (list :class 'well) (synth to-html source)))))
+		   (text "Sia ") 
+		   (synth to-html result) 
+		   (text " il risultato della compilazione del seguente sorgente:")
+		   (div (list :class 'well) (synth to-req source)))))
+(defun translate2 (source)
+  (let ((result (variable (gensym))))
+    (values (translate source nil result) result)))
 
-;; (defprod process (sync-server ((parameters (list expression))
-;; 			       (input format)
-;; 			       (command command)
-;; 			       (output format)))
-;;   (to-list () `(sync-server :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
-;; 			    :command ,(synth to-list command) :output ,(synth to-list output)))
-;;   ())
+
+(defprod process (sync-server ((parameters (list expression))
+			       (input format)
+			       (command command)
+			       &optional (output format)))
+  (to-list () `(sync-server :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
+			    :command ,(synth to-list command) :output ,(synth to-list output)))
+  (to-html () (div nil 
+                   (text "Processo server sincrono che prende in ingresso una istanza del seguente formato dati:")
+                   (pre nil (synth to-req input))
+                   (text "e esegue i seguenti passi:")
+                   (synth to-html command))))
 
 ;; (defprod process (async-server ((parameters (list expression))
 ;; 				(input format)

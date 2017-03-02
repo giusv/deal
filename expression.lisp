@@ -14,7 +14,9 @@
 
 (defprod exp (variable ((name string)))
   (to-list () `(attr (:name ,name)))
-  (to-string () (textify name)))
+  (to-string () (textify name))
+  (to-req () (text "variabile: ~a" name))
+  (to-html () (span (list :class "label label-danger") (synth to-req (variable name)))))
 
 (defprod exp (value ((elem element)))
   (to-list () `(value (:elem ,elem)))
@@ -34,16 +36,27 @@
   (to-string () (text "~{~a~^ ++ ~}" (synth-all to-string exps))))
 
 (defmacro def-bexp (operator &optional (arity 0))
-  (let ((name (symb "<" operator ">")))
+  (let ((name (symb "+" operator "+")))
     `(defprod bexp (,name 
 		    ,(if (eq arity 'unbounded)
 			 `(&rest (exps bexp))
 			 (loop for i from 1 to arity collect `(,(symb "EXP" i) exp))))
+       ;; (to-req () (hcat (text "espressione booleana: ~a [" (lower ',name))
+       ;; 			,@(if (eq arity 'unbounded)
+       ;; 			     `((punctuate (comma) (synth-all to-req exps)))
+       ;; 			     (loop for i from 1 to arity collect `(synth to-req ,(symb "EXP" i))))
+       ;; 			(text "]")))
+       ;; (to-req () (hcat (text "espressione booleana: ~a [" (lower ',name))
+       ;;                  ,@(if (eq arity 'unbounded)
+       ;;                       `((synth-all to-req exps))
+       ;;                       (loop for i from 1 to arity collect `(synth to-req ,(symb "EXP" i))))
+       ;;                  (text "]")))
        (to-req () (hcat (text "espressione booleana: ~a [" (lower ',name))
-       			,@(if (eq arity 'unbounded)
-       			     `((synth-all to-req exps))
-       			     (loop for i from 1 to arity collect `(synth to-req ,(symb "EXP" i))))
-       			(text "]")))
+                        ,@(if (eq arity 'unbounded)
+                             `((synth-all to-req exps))
+                             `(punctuate (comma) nil ,@(loop for i from 1 to arity collect `(synth to-req ,(symb "EXP" i)))))
+                        (text "]")))
+
        (to-list () (list ',name 
 			 ,(if (eq arity 'unbounded)
 			      `(list :exps (synth-all to-list exps))
@@ -61,6 +74,6 @@
 	       bexps)))
 
 ;;(def-bexp true)
-
+;;(def-bexp equal 2)
 (def-bexps (true) (false) (and unbounded) (or unbounded) (not 1) (equal 2) (less-than 2) (greater-than 2))
 

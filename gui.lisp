@@ -1,6 +1,7 @@
 (defun option-panel (label target)
   (panel (label (const label))
 	 (anchor (gensym) (const "Vai alla pagina") :click (target target))))
+
 (defmacro defelement (name elem)
   `(defparameter ,name ,elem))
 
@@ -8,7 +9,9 @@
   `(let* ,(mapcar #'(lambda (triple)
 		      (let ((name (first triple))
 			    (label (second triple)))
-			`(,name (option-panel ,label ,(url `(,base / ,name))))))
+			`(,name (option-panel ,label ,(if base 
+                                                          (url `(,base / ,name))
+                                                          (url `(,name)))))))
 		  triples)
      (alt ,layout ,@(mapcar #'(lambda (triple) 
 			(let ((name (first triple))

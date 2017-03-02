@@ -6,15 +6,20 @@
 ;; 		     :definitions (apply #'jobject defs)
 ;; 		     (synth-plist to-json defs))))
 
+(defmacro deformat (name elem)
+  `(defparameter ,name ,elem))
+
 (defprod jsschema (jsstring ())
   (to-list () `(jsstring))
   (to-req () (text "stringa"))
-  (instance (val) (jstring val)))
+  ;; (instance (val) (jstring val))
+  )
 
 (defprod jsschema (jsnumber ())
   (to-list () `(jsnumber))
   (to-req () (text "numero"))
-  (instance (val) (jnumber val)))
+  ;; (instance (val) (jnumber val))
+  )
 
 ;; handle choice in instantiation
 ;; (defprod jsschema (jschoice (&rest (schemas (list jsschema))))
@@ -54,13 +59,12 @@
 	(apply #'append (mapcar #'(lambda (temp) 
 				    (funcall g temp))
 				temps)))))
+
 (defun compose-filters (&rest filters)
   #'(lambda (jsschema)
       (funcall (reduce #'compose-filter filters) jsschema)))
 
-(defun parse-filter ()
-  (do-with ((filters (sepby (item) (sym '>>>))))
-    (result (apply #'comp (mapcar #'eval filters)))))
+
 
 (defprod filter (prop ((name string)))
   (to-list () `(prop (:name ,name)))
@@ -77,7 +81,9 @@
   (to-func () (apply #'compose-filters (synth-all to-func filters)))
   (to-req () (apply #'punctuate (forward-slash) nil (synth-all to-req filters))))
 
-
+(defun parse-filter ()
+  (do-with ((filters (sepby (item) (sym '>>>))))
+    (result (apply #'comp (mapcar #'eval filters)))))
 
 
 ;; (pprint (synth to-list (car (funcall (get-prop 'addresses) *user*))))
@@ -96,7 +102,7 @@
 
 
 ;; (pprint (synth to-list (car (funcall (compose-filters (get-prop 'addresses) (get-elem) (get-prop 'city)) *user*))))
-(pprint (synth to-list (car (funcall (synth to-func (comp (prop 'addresses) (elem) (prop 'city))) *user*))))
-(pprint (synth to-list (car (funcall 
-			     (synth to-func (parse (parse-filter) 
-						   '((prop 'addresses) >>> (elem)))) *user*))))
+;; (pprint (synth to-list (car (funcall (synth to-func (comp (prop 'addresses) (elem) (prop 'city))) *user*))))
+;; (pprint (synth to-list (car (funcall 
+;; 			     (synth to-func (parse (parse-filter) 
+;; 						   '((prop 'addresses) >>> (elem)))) *user*))))

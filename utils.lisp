@@ -70,7 +70,16 @@
 (defun pairprop (key val)
   (apply #'append (mapcar #'list (mapcar #'symb key) val)))
 
-(let ((l (pairprop '(a b) '(1 2)))) (pprint (getf l 'a)))
+(defmacro bindall (bindings form)
+  (if (null bindings)
+      form
+      (let ((binding (car bindings)))
+	`(multiple-value-bind ,(butlast binding) ,@(last binding)
+	   (bindall ,(cdr bindings) ,form)))))
+
+;; (pprint (bindall ((x y (values 1 2))
+;; 		  (z 4)) (+ x y z)))
+;; (let ((l (pairprop '(a b) '(1 2)))) (pprint (getf l 'a)))
 
 ;; (defmacro define)
 

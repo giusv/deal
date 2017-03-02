@@ -39,4 +39,4 @@
 
 ;; (synth to-string *json*)
 ;; (synth output (synth to-string (jstring (const "ss"))) 0)
-(synth output (synth to-string *json*) 0)
+;; (synth output (synth to-string *json*) 0)

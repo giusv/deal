@@ -18,5 +18,5 @@
 ;; 		       (synth instance schema (value (input id label :binding binding)))))
 )
 
-(pprint (synth to-list (synth to-model (input 'userid (const "userid") 
-					      :binding (synth to-func (prop 'name))))))
+;; (pprint (synth to-list (synth to-model (input 'userid (const "userid") 
+;; 					      :binding (synth to-func (prop 'name))))))

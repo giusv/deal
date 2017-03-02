@@ -86,7 +86,7 @@
 
 (defparameter af (array-form 'af (input 'userid (const "User id")) 0 1))
 
-(synth output (synth to-string (synth to-model af)) 0)
+;; (synth output (synth to-string (synth to-model af)) 0)
 ;; (defparameter af (array-form of 2 'unbounded))
 
 ;; (defparameter uf (property-form 'uid :userid (input 'userid (const "User id"))))
