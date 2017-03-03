@@ -99,4 +99,4 @@
 ;; (defparameter f (form 'f 
 ;; 		      *user*
 ;; 		     (vert of
-;; 			   (button 'ok (const "ok") :click (http-post (void) (value of))))))
+;; 			   (button 'ok (const "ok") :click (http-post (void-url) (value of))))))

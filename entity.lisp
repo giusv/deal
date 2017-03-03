@@ -1,9 +1,9 @@
-;; (def-typeclass primitive
+;; (def-typeklass primitive
 ;;   java
 ;;   to-list)
 
-(defun class (name &rest body)
-  (vcat (text "public class ~a{" name)
+(defun klass (name &rest body)
+  (vcat (text "public klass ~a{" name)
 	(nest 4 (apply #'vcat body))
 	(text "}")))
 
@@ -26,7 +26,7 @@
 (defun setter (attribute)
   (let ((nm (slot-value 'name attribute))
 	(tp (slot-value 'type  attribute)))
-    (vcat (text "public void set~a(~a ~a){" nm tp nm)
+    (vcat (text "public void-url set~a(~a ~a){" nm tp nm)
 	  (nest 4 (text "this.~a = ~a;" nm nm))
 	  (text "}"))))
 
@@ -61,7 +61,7 @@
 			    (primary primary-key)
 			    (fields (list attribute))
 			    &rest (foreigns (list foreign-key))))
-  (java () (class (upper name) 
+  (java () (klass (upper name) 
 		  (synth java primary)
 		  (synth-all java fields nil)
 		  (synth-all java foreigns)))

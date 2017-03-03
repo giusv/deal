@@ -64,4 +64,4 @@
 				       (body nil
 					     (h1 nil (text "Archivio Integrato Antifrode"))
 					     (h2 nil (text "Requisiti funzionali web application"))
-					     (synth to-html aia (void))))) 0))
+					     (synth to-html aia (void-url))))) 0))

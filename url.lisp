@@ -1,4 +1,4 @@
-(defprod pose (void ())
+(defprod pose (void-url ())
   (to-url () (empty))
   (to-list () `(empty)))
 
@@ -89,13 +89,13 @@
 
  
 
-;; (synth output (synth to-url (reduce #'forward-chain (parse (parse-url) '({ a } / b)) :from-end t :initial-value (void))) 0)
+;; (synth output (synth to-url (reduce #'forward-chain (parse (parse-url) '({ a } / b)) :from-end t :initial-value (void-url))) 0)
 
-;; (synth output (synth to-url (reduce #'forward-chain (parse (parse-url) '({ a } / < b & c >)) :from-end t :initial-value (void))) 0)
+;; (synth output (synth to-url (reduce #'forward-chain (parse (parse-url) '({ a } / < b & c >)) :from-end t :initial-value (void-url))) 0)
 
-;; (synth output (synth to-url (reduce #'forward-chain (parse (parse-url) '({ a } / < b & c >)) :from-end t :initial-value (void))) 0)
+;; (synth output (synth to-url (reduce #'forward-chain (parse (parse-url) '({ a } / < b & c >)) :from-end t :initial-value (void-url))) 0)
 
-;; (reduce #'forward-chain (parse (parse-url) '({ a } / < b & c >)) :from-end t :initial-value (void))
+;; (reduce #'forward-chain (parse (parse-url) '({ a } / < b & c >)) :from-end t :initial-value (void-url))
 
 
 

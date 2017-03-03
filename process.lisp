@@ -25,7 +25,7 @@
 (def-http-action put)
 (def-http-action delete nil)
 
-;; (pprint (synth to-list (http-get (void) (gensym "GET"))))
+;; (pprint (synth to-list (http-get (void-url) (gensym "GET"))))
 
 (defprod exp (status ((action action)))
   (to-list () `(status (:action ,action)))
@@ -53,10 +53,10 @@
     `(bindall ,new-bindings
       (concat ,@(mapcar #'car new-bindings)))))
 
-(defprod command (condition ((expr expression) 
+(defprod command (fork ((expr expression) 
 			     (true command)
 			     (false command)))
-  (to-list () `(condition (:expr  ,(synth to-list expr) :true ,(synth to-list true) :false ,(synth to-list false))))
+  (to-list () `(fork (:expr  ,(synth to-list expr) :true ,(synth to-list true) :false ,(synth to-list false))))
   (to-html () (div nil 
 		   (text "Check condizione ")
 		   (div (list :class 'well) (synth to-html expr))
@@ -75,7 +75,7 @@
 		   (text " il risultato della compilazione del seguente sorgente:")
 		   (div (list :class 'well) (synth to-req source)))))
 (defun translate2 (source)
-  (let ((result (variable (gensym))))
+  (let ((result (variab (gensym))))
     (values (translate source nil result) result)))
 
 

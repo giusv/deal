@@ -12,7 +12,7 @@
   (to-list () `(restrict :expression ,(synth to-list expression) :query ,(synth to-list query)))
   (schema () (synth attributes query)))
 
-(defparameter *query* (project (restrict (table '*people*) (<equal> (<true>) (<true>))) 'id 'name))
+(defparameter *query* (project (restrict (table '*people*) (+equal+ (+true+) (+true+))) 'id 'name))
 
 (synth schema *query*)
 

@@ -5,3 +5,4 @@
 *.tem
 *.cls
 *.abcl-tmp
+*.fasl

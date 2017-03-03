@@ -5,7 +5,7 @@
     (sync-server nil 
                  ind-form
 		 (concat2 (result (translate2 (prop 'codice)))
-			  ((condition (+equal+ result (const "Success"))
+			  ((fork (+equal+ result (const "Success"))
 				      (skip)
 				      (skip))))))
 

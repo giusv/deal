@@ -12,11 +12,11 @@
   (to-html () (span (list :class "label label-danger") (synth to-req (attr exp))))
   (to-string () (textify exp)))
 
-(defprod exp (variable ((name string)))
+(defprod exp (variab ((name string)))
   (to-list () `(attr (:name ,name)))
   (to-string () (textify name))
   (to-req () (text "variabile: ~a" name))
-  (to-html () (span (list :class "label label-danger") (synth to-req (variable name)))))
+  (to-html () (span (list :class "label label-danger") (synth to-req (variab name)))))
 
 (defprod exp (value ((elem element)))
   (to-list () `(value (:elem ,elem)))
@@ -54,7 +54,7 @@
        (to-req () (hcat (text "espressione booleana: ~a [" (lower ',name))
                         ,@(if (eq arity 'unbounded)
                              `((synth-all to-req exps))
-                             `(punctuate (comma) nil ,@(loop for i from 1 to arity collect `(synth to-req ,(symb "EXP" i)))))
+                             `((punctuate (comma) nil ,@(loop for i from 1 to arity collect `(synth to-req ,(symb "EXP" i))))))
                         (text "]")))
 
        (to-list () (list ',name 
@@ -74,6 +74,7 @@
 	       bexps)))
 
 ;;(def-bexp true)
-;;(def-bexp equal 2)
+;; (def-bexp equal 2)
+
 (def-bexps (true) (false) (and unbounded) (or unbounded) (not 1) (equal 2) (less-than 2) (greater-than 2))
 

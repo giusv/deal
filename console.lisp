@@ -34,4 +34,4 @@
 				       (body nil
 					     (h1 nil (text "Archivio Integrato Antifrode"))
 					     (h2 nil (text "Requisiti funzionali Console amministrazione"))
-					     (synth to-html console (void))))) 0))
+					     (synth to-html console (void-url))))) 0))

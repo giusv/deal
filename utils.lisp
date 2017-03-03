@@ -22,12 +22,7 @@
         :if-exists :supersede
         :if-does-not-exist :create)
     (format stream content)))
-(defun lower (sym)
-  (let ((words (mapcar #'string-capitalize (split-str (symbol-name sym)))))
-    (format nil "~(~a~)~{~a~}" (car words) (cdr words))))
-(defun upper (sym)
-  (let ((words (mapcar #'string-capitalize (split-str (symbol-name sym)))))
-    (format nil "~{~a~}" words)))
+
 
 
 (defun split-str (string &optional (separator "-"))
@@ -41,7 +36,12 @@
     (if n
 	(split-str-1 (subseq string 0 n) separator (cons (subseq string (1+ n)) r))
       (cons string r))))
-
+(defun lower (sym)
+  (let ((words (mapcar #'string-capitalize (split-str (symbol-name sym)))))
+    (format nil "~(~a~)~{~a~}" (car words) (cdr words))))
+(defun upper (sym)
+  (let ((words (mapcar #'string-capitalize (split-str (symbol-name sym)))))
+    (format nil "~{~a~}" words)))
 (defun flatten (ls &key (test #'atom))
   (labels ((mklist (x) (if (listp x) x (list x))))
     (mapcan #'(lambda (x) (if (funcall test x) (mklist x) (flatten x :test test))) ls)))
