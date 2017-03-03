@@ -1,5 +1,3 @@
-;; (defparameter *prj-home* "d:/lisp/extent/")
-
 (load "d:/giusv/lisp/extent/utils.lisp")
 (load "d:/giusv/lisp/extent/parser.lisp")
 (load "d:/giusv/lisp/extent/grammar.lisp")
@@ -12,7 +10,15 @@
 (load "d:/giusv/lisp/extent/json.lisp")
 (load "d:/giusv/lisp/extent/entity.lisp")
 (load "d:/giusv/lisp/extent/query.lisp")
+
+(load "d:/giusv/lisp/extent/action/rest.lisp")
+(load "d:/giusv/lisp/extent/action/translate.lisp")
+(load "d:/giusv/lisp/extent/action/persistence.lisp")
+(load "d:/giusv/lisp/extent/action/target.lisp")
+(load "d:/giusv/lisp/extent/action/data.lisp")
 (load "d:/giusv/lisp/extent/process.lisp")
+
+
 (load "d:/giusv/lisp/extent/gui/button.lisp")
 (load "d:/giusv/lisp/extent/gui/input.lisp")
 (load "d:/giusv/lisp/extent/gui/textarea.lisp")
@@ -29,5 +35,6 @@
 (load "d:/giusv/lisp/extent/gui/navbar.lisp")
 (load "d:/giusv/lisp/extent/gui/panel.lisp")
 (load "d:/giusv/lisp/extent/gui.lisp")
+
 (load "d:/giusv/lisp/extent/server.lisp")
 

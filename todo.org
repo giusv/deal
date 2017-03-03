@@ -1,0 +1,8 @@
+* Tasks
+** DONE Make todo document
+** TODO Name JSON Schema formats?
+** TODO Server validation (regex? Static or dynamic with DB access)
+** TODO pre/post conditions 
+** TODO HTML escaping
+** TODO HTML <pre> handling
+

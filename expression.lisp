@@ -15,7 +15,7 @@
 (defprod exp (variab ((name string)))
   (to-list () `(attr (:name ,name)))
   (to-string () (textify name))
-  (to-req () (text "variabile: ~a" name))
+  (to-req () (text "~a" name))
   (to-html () (span (list :class "label label-danger") (synth to-req (variab name)))))
 
 (defprod exp (value ((elem element)))
@@ -25,6 +25,10 @@
   (to-url () (brackets (text "val(~a)" (lower (synth id elem)))))
   (to-chunk () (text "val(~a)" (lower (synth id elem))))
   (to-string () (text "val(~a)" (lower (synth id elem)))))
+
+(defprod exp (status ((action action)))
+  (to-list () `(status (:action ,action)))
+  (to-html () (span nil (text "Codice HTTP di risposta"))))
 
 
 (defprod exp (cat (&rest (exps exp)))

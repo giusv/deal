@@ -61,6 +61,8 @@
   `(defun ,name (doc &key newline (padding 0))
      (wrap doc (text ,start) (text ,end) :newline newline :padding padding)))
 
+(defmacro vcat-all (fn lst)
+  `(apply #'vcat (mapcar #',fn ,lst)))
 (defwrapper parens "(" ")")
 (defwrapper brackets "[" "]")
 (defwrapper braces "{" "}")
