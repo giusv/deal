@@ -9,6 +9,14 @@
 	    l
 	    (cons pref l)))))
 
+(defun make-lambda-list (args)
+  (let* ((req (arg-list 'req args nil #'identity))
+	 (opt (arg-list 'opt args '&optional #'identity))
+	 (rest (arg-list 'rest args '&rest #'identity))
+	 (key (arg-list 'key args '&key #'identity)))
+    (pprint req)
+    (append req opt rest key)))
+
 (defun arg-names (lambda-list)
   (let* ((args (parse (destruc) lambda-list))
 	 (req (arg-list 'req args))

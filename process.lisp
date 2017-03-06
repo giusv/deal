@@ -2,6 +2,19 @@
   `(defparameter ,name ,proc))
 
 
+(defprod command (contractful ((precond bexp)
+                               (command command)
+                               (postcond bexp)))
+  (to-list () `(contractful :precond ,precond :command ,command :postcond ,postcond))
+  (to-html () (div nil (text "Comando con seguente contratto:")
+                   (maybes (list precond (span nil (text "Precondizione:")))
+                           (list postcond (span nil (text "Postcondizione:")))
+                           (list command (span nil (text "Comando:")))))))
+
+(defun contractful2 (pre command post)
+  (let ((result (variab (gensym))))
+    (values (apply #'validate exp result validators) result)))
+
 (defprod command (skip ())
   (to-list () `(skip))
   (to-html () (div nil)))

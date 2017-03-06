@@ -1,10 +1,12 @@
 (deformat indicator-format 
-    (jsobject (jsprop 'codice t (jsstring))
-              (jsprop 'data-inizio t (jsstring))))
+    (jsobject 'formato-indicatore
+              (jsprop 'codice t (jsstring 'stringa-codice))
+              (jsprop 'data-inizio t (jsstring 'data-data-inizio))))
 
 (deformat company-format 
-    (jsobject (jsprop 'name t (jsstring))
-              (jsprop 'address t (jsstring))))
+    (jsobject 'formato-compagnia
+              (jsprop 'name t (jsstring 'stringa-nome))
+              (jsprop 'address t (jsstring 'stringa-indirizzo))))
 
 (defentity indicator-entity (entity 'indicator-entity
 			       (primary-key 
@@ -20,11 +22,11 @@
                           (result (translate2 ind-code))
 			  ((fork (+equal+ result (const "Success"))
                                  (concat2 (indic (create-instance2 indicator-entity 
-                                                                   (prop 'id) (variab (gensym)) 
-                                                                   (prop 'code) result
-                                                                   (prop 'start-date) ind-startdate))
+                                                                   (list (prop 'id) (variab (gensym)) 
+                                                                         (prop 'code) result
+                                                                         (prop 'start-date) ind-startdate)))
                                           ((persist indic))
-                                          ((http-response 201 result)))
+                                          ((http-response 201 :payload result)))
                                  (http-response 403))))))
 
 (defprocess ind-collection
@@ -33,7 +35,7 @@
       (sync-server (list page length)
                    nil
                    (concat2 (result (fetch2 indicator-entity))
-                            ((http-response 200 result))))))
+                            ((http-response 200 :payload result))))))
 
 (defentity company-entity (entity 'company-entity
                                   (primary-key
@@ -44,18 +46,18 @@
 (defprocess add-company 
     (sync-server nil 
                  company-format
-		 (concat2 (comp-name (extract2 (prop 'name) company-format)) 
+		 (concat2 (comp-name (extract2 (prop 'name) company-format))
                           (comp-add (extract2 (prop 'address) company-format))
-                          (comp-name-valid (validate2 comp-name (required) (minlen 2) (maxlen 5)))
-                          (comp-add-valid (validate2 comp-add (regex "[0..9]+")))
+                          (comp-name-valid (validate2 comp-name (list (required) (minlen 2) (maxlen 5))))
+                          (comp-add-valid (validate2 comp-add (list (regex "[0..9]+"))))
                           ((fork (+and+ comp-name-valid comp-add-valid) 
                                  (concat2 
                                   (company (create-instance2 company-entity 
-                                                             (prop 'id) (variab (gensym)) 
-                                                             (prop 'name) comp-name
-                                                             (prop 'adderss) comp-add)) 
+                                                             (list (prop 'id) (variab (gensym)) 
+                                                                   (prop 'name) comp-name
+                                                                   (prop 'address) comp-add))) 
                                   ((persist company)) 
-                                  ((http-response 201 company)))
+                                  ((http-response 201 :payload company)))
                                  (http-response 403))))))
 
 (write-file "d:/giusv/temp/server.html" 
@@ -69,4 +71,4 @@
 				       (body nil
 					     (h1 nil (text "Archivio Integrato Antifrode"))
 					     (h2 nil (text "Requisiti funzionali processo acquisizione indicatori"))
-					     (synth to-html add-company)))) 0))
+					     (synth to-html ind-spec)))) 0))

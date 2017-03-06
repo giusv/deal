@@ -11,11 +11,15 @@
 (load "d:/giusv/lisp/extent/entity.lisp")
 (load "d:/giusv/lisp/extent/query.lisp")
 
+
+(load "d:/giusv/lisp/extent/action.lisp")
 (load "d:/giusv/lisp/extent/action/rest.lisp")
 (load "d:/giusv/lisp/extent/action/translate.lisp")
 (load "d:/giusv/lisp/extent/action/persistence.lisp")
 (load "d:/giusv/lisp/extent/action/target.lisp")
 (load "d:/giusv/lisp/extent/action/data.lisp")
+(load "d:/giusv/lisp/extent/action/validate.lisp")
+
 (load "d:/giusv/lisp/extent/process.lisp")
 
 

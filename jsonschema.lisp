@@ -9,17 +9,20 @@
 (defmacro deformat (name elem)
   `(defparameter ,name ,elem))
 
-(defprod jsschema (jsstring ())
-  (to-list () `(jsstring))
-  (to-req () (text "stringa"))
+(defprod jsschema (jsstring ((name symbol)))
+  (to-list () `(jsstring :name ,(lower name)))
+  (to-req () (text "~a: stringa" (lower name)))
+  (to-html () (span nil (text "~a: stringa" (lower name))))
   ;; (instance (val) (jstring val))
   )
 
-(defprod jsschema (jsnumber ())
-  (to-list () `(jsnumber))
-  (to-req () (text "numero"))
+(defprod jsschema (jsnumber ((name symbol)))
+  (to-list () `(jsnumber :name ,(lower name)))
+  (to-req () (text "~a: numero" (lower name)))
+  (to-html () (span nil (text "~a: numero" (lower name))))
   ;; (instance (val) (jnumber val))
   )
+
 
 ;; handle choice in instantiation
 ;; (defprod jsschema (jschoice (&rest (schemas (list jsschema))))
@@ -27,20 +30,26 @@
 ;;   (to-req () (vcat (text "scelta tra i seguenti schemi:")
 ;; 		   (nest 4 (apply #'vcat (synth-all to-req schemas))))))
 
-(defprod jsschema (jsobject (&rest (props (list jsprop))))
-  (to-list () `(jsobject :props ,(synth-all to-list props)))
-  (to-req () (vcat (text "oggetto dalle seguenti proprietà:")
-		   (nest 4 (apply #'vcat (synth-all to-req props))))))
+(defprod jsschema (jsobject ((name symbol) &rest (props (list jsprop))))
+  (to-list () `(jsobject :name ,(lower name) :props ,(synth-all to-list props)))
+  (to-req () (vcat (text "oggetto denominato ~a dalle seguenti proprietà:" (lower name))
+		   (nest 4 (apply #'vcat (synth-all to-req props)))))
+  (to-html () (div nil (text "oggetto denominato ~a dalle seguenti proprietà:" (lower name))
+                   (nest 4 (apply #'vcat (synth-all to-html props))))))
 
 (defprod jsprop (jsprop ((name string) (required bool) (content jsschema)))
   (to-list () `(jsprop :name ,name :required ,required :content ,(synth to-list content)))
   (to-req () (hcat (text "~a" name) (if required (text " (obbligatoria)") (text " (facoltativa)")) 
-		   (text ": ") (synth to-req content))))
+		   (text ": ") (synth to-req content)))
+  (to-html () (span nil (text "~a" name) (if required (text " (obbligatoria)") (text " (facoltativa)")) 
+                    (text ": ") (synth to-html content))))
 
-(defprod (jsschema) (jsarray ((elem jsschema)))
-  (to-list () `(jsarray :elem ,(synth to-list elem)))
-  (to-req () (vcat (text "array costituito dal seguente elemento:")
-		   (nest 4 (synth to-req elem)))))
+(defprod (jsschema) (jsarray ((name symbol) (elem jsschema)))
+  (to-list () `(jsarray :name ,(lower name) :elem ,(synth to-list elem)))
+  (to-req () (vcat (text "array denominato ~a costituito dal seguente elemento:" (lower name))
+		   (nest 4 (synth to-req elem))))
+  (to-html () (span nil (text "array denominato ~a costituito dal seguente elemento:" (lower name))
+                    (nest 4 (synth to-html elem)))))
 
 (defun get-elem ()
   #'(lambda (jsschema)
@@ -91,13 +100,14 @@
 
 ;; (pprint (synth to-list (car (funcall (comp (comp (get-prop 'addresses) (get-elem)) (get-prop 'city)) *user*))))
 (defparameter *address*
-  (jsobject (jsprop 'city t (jsstring))
-	   (jsprop 'state t (jsstring))))
-(defparameter *addresses* (jsarray *address*))
+  (jsobject (jsprop 'city t (jsstring 'city-string))
+            (jsprop 'state t (jsstring 'state-string))))
+(defparameter *addresses* (jsarray 'address-array *address*))
 (defparameter *user* 
-  (jsobject (jsprop 'name t (jsstring))
+  (jsobject 'user-object 
+            (jsprop 'name t (jsstring 'name-string))
 	    (jsprop 'addresses t *addresses*)
-	    (jsprop 'numbers t (jsarray (jsnumber)))))
+	    (jsprop 'numbers t (jsarray 'numbers-array (jsnumber 'number-number)))))
 
 
 

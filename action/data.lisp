@@ -1,18 +1,21 @@
-(defprod action (extract ((filter filter)
-                          (source format)
-                          (result variable)))
-  (to-list () `(translate (:filter  ,(synth to-list filter) :source ,(synth to-list source) :result ,(synth to-list result))))
+(defaction (extract ((filter filter)
+                     (source format)
+                     (result variable)))
+    (to-list () `(translate (:filter  ,(synth to-list filter) :source ,(synth to-list source) :result ,(synth to-list result) :pre ,(synth to-list precond) :post ,(synth to-list postcond))))
+
   (to-html () (div nil 
 		   (text "Sia ") 
 		   (synth to-html result) 
 		   (text " il risultato della estrazione da ")
-                   (synth to-html source)
+                   (textify (synth name source))
                    (text" con il seguente filtro:")
-		   (div nil (synth to-req filter)))))
+		   (div nil (synth to-req filter))
+                   (maybes (list precond (span nil (text "Precondizione:")))
+                           (list postcond (span nil (text "Postcondizione:")))))))
 
-(defun extract2 (filter source)
+(defun extract2 (filter source &key pre post)
   (let ((result (variab (gensym))))
-    (values (extract filter source result) result)))
+    (values (extract filter source result :precond pre :postcond post) result)))
 
 
 ;; (defprod action (extract ((source format)
