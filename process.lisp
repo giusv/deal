@@ -21,8 +21,8 @@
       (concat ,@(mapcar #'car new-bindings)))))
 
 (defprod command (fork ((expr expression) 
-			     (true command)
-			     (false command)))
+                        (true command)
+                        (false command)))
   (to-list () `(fork (:expr  ,(synth to-list expr) :true ,(synth to-list true) :false ,(synth to-list false))))
   (to-html () (div nil 
 		   (text "Check condizione ")

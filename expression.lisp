@@ -67,7 +67,7 @@
 			      `(list ,@(apply #'append (loop for i from 1 to arity collect (list (keyw "EXP" i) `(synth to-list ,(symb "EXP" i)))))))))
        (to-html () (span nil (synth to-req 
        				    ,(if (eq arity 'unbounded)
-       					 `(,name exps)
+       					 `(apply #',name exps)
        					 `(,name ,@(loop for i from 1 to arity collect (symb "EXP" i)))))))
        )))
   

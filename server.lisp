@@ -34,6 +34,7 @@
                    nil
                    (concat2 (result (fetch2 indicator-entity))
                             ((http-response 200 result))))))
+
 (defentity company-entity (entity 'company-entity
                                   (primary-key
                                    (attribute 'id 'integer))
@@ -44,13 +45,18 @@
     (sync-server nil 
                  company-format
 		 (concat2 (comp-name (extract2 (prop 'name) company-format)) 
-                          (comp-add (extract2 (prop 'address) company-format)) 
-                          (company (create-instance2 company-entity 
-                                                     (prop 'id) (variab (gensym)) 
-                                                     (prop 'name) comp-name
-                                                     (prop 'adderss) comp-add))
-                          ((persist company))
-                          ((http-response 201 company)))))
+                          (comp-add (extract2 (prop 'address) company-format))
+                          (comp-name-valid (validate2 comp-name (required) (minlen 2) (maxlen 5)))
+                          (comp-add-valid (validate2 comp-add (regex "[0..9]+")))
+                          ((fork (+and+ comp-name-valid comp-add-valid) 
+                                 (concat2 
+                                  (company (create-instance2 company-entity 
+                                                             (prop 'id) (variab (gensym)) 
+                                                             (prop 'name) comp-name
+                                                             (prop 'adderss) comp-add)) 
+                                  ((persist company)) 
+                                  ((http-response 201 company)))
+                                 (http-response 403))))))
 
 (write-file "d:/giusv/temp/server.html" 
 	    (synth to-string 
