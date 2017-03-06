@@ -31,6 +31,7 @@
                     (maybes (list precond (span nil (text "Precondizione:")))
                             (list postcond (span nil (text "Postcondizione:")))))))
 
+
 (defaction (fetch ((entity expression)
                    (result variable)
                    &key (id (id expression))))
@@ -54,3 +55,27 @@
 (defun fetch2 (entity &key id pre post)
   (let ((result (variab (gensym))))
     (values (fetch entity result :id id :precond pre :postcond post) result)))
+
+
+(defaction (erase ((entity expression)
+                   (result variable)
+                   (id expression)))
+  (to-list () `(erase :entity ,(synth to-list entity) :result ,(synth to-list result) :id ,(synth to-list id) :pre ,(synth to-list precond) :post ,(synth to-list postcond)))
+  (to-req () (hcat (text "Rimuove dal database l'entità")
+                   (synth to-req entity)
+                   (hcat (text "usando come chiave primaria il valore della seguente espressione:")
+                         (synth to-req id))))
+  (to-html () (div nil 
+		   (text "Sia ") 
+		   (synth to-html result) 
+		   (text " il risultato della rimozione dal database della seguente entità:")
+		   (div (list :class 'well) (synth to-html entity))
+                   (div nil (text "usando come chiave primaria il valore della seguente espressione:")
+                        (synth to-html id))
+                   (maybes (list precond (span nil (text "Precondizione:")))
+                           (list postcond (span nil (text "Postcondizione:")))))))
+
+
+(defun erase2 (entity id &key pre post)
+  (let ((result (variab (gensym))))
+    (values (erase entity result id :precond pre :postcond post) result)))

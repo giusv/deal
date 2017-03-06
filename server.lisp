@@ -19,7 +19,7 @@
 		 (concat2 (ind-code (extract2 (prop 'codice) indicator-format)) 
                           (ind-startdate (extract2 (prop 'data-inizio) indicator-format)) 
                           ;; (ind-code ind-startdate (extract2 indicator-format (prop 'codice) (prop 'data-inizio))) 
-                          (result (translate2 ind-code))
+                          (result (translate2 ind-code :pre (+false+) :post (+true+)))
 			  ((fork (+equal+ result (const "Success"))
                                  (concat2 (indic (create-instance2 indicator-entity 
                                                                    (list (prop 'id) (variab (gensym)) 
@@ -59,6 +59,34 @@
                                   ((persist company)) 
                                   ((http-response 201 :payload company)))
                                  (http-response 403))))))
+(defprocess remove-company
+    (let* ((comp (path-parameter 'company)))
+      (sync-server (list comp) 
+                  nil
+                  (concat2 (comp-valid (validate2 comp (list (regex "[0..9]+"))))
+                           ((fork comp-valid
+                                  (concat2 
+                                   ((erase2 company-entity comp)) 
+                                   ((http-response 204)))
+                                  (http-response 400)))))))
+(defprocess modify-company
+    (let* ((comp (path-parameter 'company)))
+      (sync-server (list comp) 
+                   company-format
+                   (concat2 (comp-valid (validate2 comp (list (regex "[0..9]+"))))
+                            (comp-name (extract2 (prop 'name) company-format))
+                            (comp-add (extract2 (prop 'address) company-format))
+                            (comp-name-valid (validate2 comp-name (list (required) (minlen 2) (maxlen 5))))
+                            (comp-add-valid (validate2 comp-add (list (regex "[0..9]+"))))
+                            ((fork (+and+ comp-valid comp-name-valid comp-add-valid) 
+                                   (concat2 
+                                    (company (create-instance2 company-entity 
+                                                               (list (prop 'id) (variab (gensym)) 
+                                                                     (prop 'name) comp-name
+                                                                     (prop 'address) comp-add))) 
+                                    ((persist company)) 
+                                    ((http-response 201 :payload company)))
+                                   (http-response 403)))))))
 
 (write-file "d:/giusv/temp/server.html" 
 	    (synth to-string 
@@ -71,4 +99,4 @@
 				       (body nil
 					     (h1 nil (text "Archivio Integrato Antifrode"))
 					     (h2 nil (text "Requisiti funzionali processo acquisizione indicatori"))
-					     (synth to-html ind-spec)))) 0))
+					     (synth to-html remove-company)))) 0))

@@ -3,7 +3,10 @@
    CLOSED: [2017-03-06 lun 10:41]
 ** DONE Server validation (regex? Static or dynamic with DB access)
    CLOSED: [2017-03-06 lun 10:41]
-** TODO pre/post conditions 
+** DONE pre/post conditions 
+   CLOSED: [2017-03-06 lun 16:00]
 ** TODO HTML escaping
 ** TODO HTML <pre> handling
+** TODO to-html should retur lists of tags
+** TODO create CRUD abstraction
 

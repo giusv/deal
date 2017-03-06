@@ -21,6 +21,7 @@
 (load "d:/giusv/lisp/extent/action/validate.lisp")
 
 (load "d:/giusv/lisp/extent/process.lisp")
+(load "d:/giusv/lisp/extent/service.lisp")
 
 
 (load "d:/giusv/lisp/extent/gui/button.lisp")

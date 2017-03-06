@@ -11,9 +11,7 @@
                            (list postcond (span nil (text "Postcondizione:")))
                            (list command (span nil (text "Comando:")))))))
 
-(defun contractful2 (pre command post)
-  (let ((result (variab (gensym))))
-    (values (apply #'validate exp result validators) result)))
+
 
 (defprod command (skip ())
   (to-list () `(skip))
