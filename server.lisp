@@ -24,12 +24,12 @@
          (sync-server 
           :name 'ind-spec
           :input indicator-format
-          :command (concat2 (ind-code (extract2 (prop 'codice) indicator-format)) 
+          :command (concat* (ind-code (extract2 (prop 'codice) indicator-format)) 
                             (ind-startdate (extract2 (prop 'data-inizio) indicator-format)) 
                             ;; (ind-code ind-startdate (extract2 indicator-format (prop 'codice) (prop 'data-inizio))) 
                             (result (translate2 ind-code :pre (+false+) :post (+true+)))
                             ((fork (+equal+ result (const "Success"))
-                                   (concat2 (indic (create-instance2 indicator-entity 
+                                   (concat* (indic (create-instance2 indicator-entity 
                                                                      (list (prop 'id) (variab (gensym)) 
                                                                            (prop 'code) result
                                                                            (prop 'start-date) ind-startdate)))
@@ -43,19 +43,19 @@
            (sync-server 
             :name 'ind-collection
             :parameters (list page length)
-            :command (concat2 (result (fetch2 indicator-entity))
+            :command (concat* (result (fetch2 indicator-entity))
                               ((http-response 200 :payload result))))))
 
 (process add-company 
          (sync-server
           :name 'add-company
           :input company-format
-          :command (concat2 (comp-name (extract2 (prop 'name) company-format))
+          :command (concat* (comp-name (extract2 (prop 'name) company-format))
                             (comp-add (extract2 (prop 'address) company-format))
                             (comp-name-valid (validate2 comp-name (list (required) (minlen 2) (maxlen 5))))
                             (comp-add-valid (validate2 comp-add (list (regex "[0..9]+"))))
                             ((fork (+and+ comp-name-valid comp-add-valid) 
-                                   (concat2 
+                                   (concat* 
                                     (company (create-instance2 company-entity 
                                                                (list (prop 'id) (variab (gensym)) 
                                                                      (prop 'name) comp-name
@@ -68,9 +68,9 @@
            (sync-server
             :name 'remove-company
             :parameters (list comp) 
-            :command (concat2 (comp-valid (validate2 comp (list (regex "[0..9]+"))))
+            :command (concat* (comp-valid (validate2 comp (list (regex "[0..9]+"))))
                               ((fork comp-valid
-                                     (concat2 
+                                     (concat* 
                                       ((erase2 company-entity comp)) 
                                       ((http-response 204)))
                                      (http-response 400)))))))
@@ -81,13 +81,13 @@
             :name 'modify-company
             :parameters (list comp) 
             :input company-format
-            :command (concat2 (comp-valid (validate2 comp (list (regex "[0..9]+"))))
+            :command (concat* (comp-valid (validate2 comp (list (regex "[0..9]+"))))
                               (comp-name (extract2 (prop 'name) company-format))
                               (comp-add (extract2 (prop 'address) company-format))
                               (comp-name-valid (validate2 comp-name (list (required) (minlen 2) (maxlen 5))))
                               (comp-add-valid (validate2 comp-add (list (regex "[0..9]+"))))
                               ((fork (+and+ comp-valid comp-name-valid comp-add-valid) 
-                                     (concat2 
+                                     (concat* 
                                       (company (create-instance2 company-entity 
                                                                  (list (prop 'id) (variab (gensym)) 
                                                                        (prop 'name) comp-name

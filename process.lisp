@@ -36,7 +36,7 @@
 			  (list :class 'list-group)
 			  (mapcar #'listify (synth-all to-html actions))))))
 
-(defmacro concat2 (&rest bindings)
+(defmacro concat* (&rest bindings)
   (let ((new-bindings (mapcar #'(lambda (binding)
 			  (cons (gensym) binding)) 
 			      bindings)))

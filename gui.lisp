@@ -2,7 +2,7 @@
   (panel (label (const label))
 	 (anchor (gensym) (const "Vai alla pagina") :click (target target))))
 
-(defmacro defelement (name elem)
+(defmacro element (name elem)
   `(defparameter ,name ,elem))
 
 (defmacro hub-spoke (triples base layout)
