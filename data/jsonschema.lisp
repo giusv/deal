@@ -6,17 +6,17 @@
 ;; 		     :definitions (apply #'jobject defs)
 ;; 		     (synth-plist to-json defs))))
 
-(defmacro deformat (name elem)
+(defmacro json-schema (name elem)
   `(defparameter ,name ,elem))
 
-(defprod jsschema (jsstring ((name symbol)))
+(defprod data (jsstring ((name symbol)))
   (to-list () `(jsstring :name ,(lower name)))
   (to-req () (text "~a: stringa" (lower name)))
   (to-html () (span nil (text "~a: stringa" (lower name))))
   ;; (instance (val) (jstring val))
   )
 
-(defprod jsschema (jsnumber ((name symbol)))
+(defprod data (jsnumber ((name symbol)))
   (to-list () `(jsnumber :name ,(lower name)))
   (to-req () (text "~a: numero" (lower name)))
   (to-html () (span nil (text "~a: numero" (lower name))))
@@ -25,12 +25,12 @@
 
 
 ;; handle choice in instantiation
-;; (defprod jsschema (jschoice (&rest (schemas (list jsschema))))
+;; (defprod data (jschoice (&rest (schemas (list jsschema))))
 ;;   (to-list () `(jschoice :schemas ,(synth-all to-list schemas)))
 ;;   (to-req () (vcat (text "scelta tra i seguenti schemi:")
 ;; 		   (nest 4 (apply #'vcat (synth-all to-req schemas))))))
 
-(defprod jsschema (jsobject ((name symbol) &rest (props (list jsprop))))
+(defprod data (jsobject ((name symbol) &rest (props (list jsprop))))
   (to-list () `(jsobject :name ,(lower name) :props ,(synth-all to-list props)))
   (to-req () (vcat (text "oggetto denominato ~a dalle seguenti proprietà:" (lower name))
 		   (nest 4 (apply #'vcat (synth-all to-req props)))))
@@ -44,7 +44,7 @@
   (to-html () (span nil (text "~a" name) (if required (text " (obbligatoria)") (text " (facoltativa)")) 
                     (text ": ") (synth to-html content))))
 
-(defprod (jsschema) (jsarray ((name symbol) (elem jsschema)))
+(defprod data (jsarray ((name symbol) (elem jsschema)))
   (to-list () `(jsarray :name ,(lower name) :elem ,(synth to-list elem)))
   (to-req () (vcat (text "array denominato ~a costituito dal seguente elemento:" (lower name))
 		   (nest 4 (synth to-req elem))))
