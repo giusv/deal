@@ -42,7 +42,7 @@
   `(and ,arg 
    	(gethash ',func ,arg)
    	(funcall (gethash ',func ,arg) ,@args))
-  ;; (funcall (gethash ',func ,arg) ,@args)
+  ;; `(funcall (gethash ',func ,arg) ,@args)
   )
 
 (defmacro synth-all (func lst &rest args)

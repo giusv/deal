@@ -14,13 +14,13 @@
 
 
 
-;; (defprod command (contractful ((precond bexp)
+;; (defprod command (contractful ((pre bexp)
 ;;                                (command command)
-;;                                (postcond bexp)))
-;;   (to-list () `(contractful :precond ,precond :command ,command :postcond ,postcond))
+;;                                (post bexp)))
+;;   (to-list () `(contractful :pre ,pre :command ,command :post ,post))
 ;;   (to-html () (div nil (text "Comando con seguente contratto:")
-;;                    (maybes (list precond (span nil (text "Precondizione:")))
-;;                            (list postcond (span nil (text "Postcondizione:")))
+;;                    (maybes (list pre (span nil (text "Precondizione:")))
+;;                            (list post (span nil (text "Postcondizione:")))
 ;;                            (list command (span nil (text "Comando:")))))))
 
 

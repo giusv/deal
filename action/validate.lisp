@@ -1,7 +1,7 @@
 (defaction (validate ((expr expression) 
                            (result variable) 
                            (validators (list validator))))
-  (to-list () `(validate :expr ,(synth to-list expr) :result (synth to-list result) :validators (synth-all to-list validators) :pre ,(synth to-list precond) :post ,(synth to-list postcond)))
+  (to-list () `(validate :expr ,(synth to-list expr) :result (synth to-list result) :validators (synth-all to-list validators) :pre ,(synth to-list pre) :post ,(synth to-list post)))
   (to-req () (hcat (text "TODO ")))
   (to-html () (apply #'div nil 
 		   (text "Sia ") 
@@ -10,8 +10,8 @@
 		   (div (list :class 'well) (synth to-html expr))
                    (div nil (text "con i seguenti validatori:"))
                    (append (synth-all to-html validators)
-                           (list (maybes (list precond (span nil (text "Precondizione:")))
-                                    (list postcond (span nil (text "Postcondizione:")))))))))
+                           (list (maybes (list pre (span nil (text "Precondizione:")))
+                                    (list post (span nil (text "Postcondizione:")))))))))
 
 (defprod validator (required ())
   (to-list () `(required))
@@ -31,4 +31,4 @@
 
 (defun validate2 (exp validators &key pre post)
   (let ((result (variab (gensym))))
-    (values (validate exp result validators :precond pre :postcond post) result)))
+    (values (validate exp result validators :pre pre :post post) result)))
