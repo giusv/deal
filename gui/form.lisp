@@ -25,7 +25,7 @@
 		      (destructuring-bind (name key elem) bind
 			`(,name (bnd ',key ,elem))))
 		  binds)
-     (obj ,name ,schema (list ,@(mapcar #'car binds)) ,elem)))
+     (values (obj ,name ,schema (list ,@(mapcar #'car binds)) ,elem) (obj ,name ,schema (list ,@(mapcar #'car binds)) ,elem))))
 
 (defprod element (arr ((name symbol)
                        (schema jsschema)

@@ -54,6 +54,12 @@
 			  (list :class 'list-group)
 			  (mapcar #'listify (list (span nil (i (list :class "fa fa-thumbs-up") nil) (synth to-html true)) 
 						  (span nil (i (list :class "fa fa-thumbs-down") nil) (synth to-html false))))))))
+(defprocess (client (&key (command (command command))))
+    (to-list () `(client :command ,(synth to-list command)))
+  (to-html () (div nil 
+                   (text "Processo client denominato ~a" (lower name)) 
+                   (text "che esegue i seguenti passi:")
+                   (synth to-html command))))
 
 (defprocess (sync-server (&key (command (command command))
                                (input (input format))

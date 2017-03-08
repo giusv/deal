@@ -7,17 +7,25 @@
                                              ,@(if payload (list ':payload '(synth to-list payload))) 
                                              :response response
                                              :pre pre
-                                             :post post)))
+                                             :post post))) 
        (to-html () (div nil 
 			(text "Azione ~a verso l'URL " ',name)
 			(synth to-html url)
 			,@(if payload (list '(text "con il payload seguente:")
 					    '(synth to-html payload)))
+                        (text "Sia ") 
+                        (synth to-html response) 
+                        (text " il risultato di tale azione.")
                         (maybes (list pre (span nil (text "Precondizione:")))
                                 (list post (span nil (text "Postcondizione:")))))))))
 
 (def-http-action get :payload nil)
 (def-http-action post)
+
+(defun http-post* (url payload)
+  (let ((result (variab (gensym))))
+    (values (http-post url payload result) result)))
+
 (def-http-action put)
 (def-http-action delete :payload nil)
 

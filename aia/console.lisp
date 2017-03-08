@@ -3,24 +3,32 @@
              (anchor* (const "Specifica indicatori") :click (target (url `(ind-spec))))))
 
 (element admin-section
-  (label (const "Amministrazione")))
+         (label (const "Amministrazione")))
+
+(defun post-ind-spec (payload)
+  (concat* (response (http-post* (const "www.ivass.it/aia/indspec") payload))
+           ((fork (+equal+ response (const 201))
+                  (target (url `(ind-list)))
+                  (target (url `(ind-error)))))))
 
 (element indicator-form
          (vert* (ind (obj* 'ind-data indicator-format 
                            ((code codice (textarea* (const "Codice indicatore")))
                             (start-date data-inizio (input* (const "Data inizio validità"))))
                            (vert code start-date)))
-                ((button* (const "Invio") :click (http-post (const "www.example.com") (payload ind) (gensym))))))
+                ((button* (const "Invio") :click (post-ind-spec (payload ind))))))
+(element indicator-list 
+         (label (const "indicator list")))
 (element ind-section
-  (alt indicator-form)) 
+  (alt indicator-list
+       (static2 :ind-spec nil indicator-form))) 
 
 (element console 
-  (let* ((nav navbar) 
+  (vert* (nav navbar) 
          (main (hub-spoke ((admin "Amministrazione" admin-section)
-                           (ind-spec "Specifica indicatori" ind-section))
+                           (ind-spec "Indicatori" ind-section))
                           nil
-                          (horz admin ind-spec))))
-    (vert nav main)))
+                          (horz admin ind-spec)))))
 
 (write-file "d:/giusv/temp/console.html" 
 	    (synth to-string 
