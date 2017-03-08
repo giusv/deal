@@ -1,6 +1,0 @@
-(defmacro baz (name)
-  `(defun ,(symb "TEST-" name) (x) (incf x)))
-(defmacro foo (name)
-  `(progn (baz ,name)
-	  (defun test (a)
-	    ((symb "TEST-" name) a))))

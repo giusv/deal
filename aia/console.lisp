@@ -1,23 +1,22 @@
-(defelement navbar 
-    (navbar (gensym) 
-	    (anchor (gensym) (const "Amministrazione") :click (target (url `(:admin))))
-	    (anchor (gensym) (const "Specifica indicatori") :click (target (url `(:ind-spec))))))
+(element navbar 
+    (navbar* (anchor* (const "Amministrazione") :click (target (url `(admin))))
+             (anchor* (const "Specifica indicatori") :click (target (url `(ind-spec))))))
 
-(defelement admin-section
+(element admin-section
   (label (const "Amministrazione")))
 
-(defelement indicator-form
-    (let* ((of (object-form2 'of ((code (textarea 'code (const "Codice indicatore")) :codice)
-                                  (start-date (input 'start-date (const "Data inizio validità")) :data-inizio))
-                             (vert code start-date))))
-      (form 'indicator-form 
-            (vert  of (button 'ok (const "Invio") :click (http-post (const "www.example.com") (payload of) (gensym)))))))
-(defelement ind-section
+(element indicator-form
+         (vert* (ind (obj* 'ind-data indicator-format 
+                           ((code codice (textarea* (const "Codice indicatore")))
+                            (start-date data-inizio (input* (const "Data inizio validità"))))
+                           (vert code start-date)))
+                ((button* (const "Invio") :click (http-post (const "www.example.com") (payload ind) (gensym))))))
+(element ind-section
   (alt indicator-form)) 
 
-(defelement console 
+(element console 
   (let* ((nav navbar) 
-         (main (hub-spoke ((admin "Amministrazinoe" admin-section)
+         (main (hub-spoke ((admin "Amministrazione" admin-section)
                            (ind-spec "Specifica indicatori" ind-section))
                           nil
                           (horz admin ind-spec))))

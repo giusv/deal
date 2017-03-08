@@ -43,5 +43,10 @@
 (load "d:/giusv/lisp/extent/gui/panel.lisp")
 (load "d:/giusv/lisp/extent/gui.lisp")
 
-(load "d:/giusv/lisp/extent/server.lisp")
+
+(load "d:/giusv/lisp/extent/aia/dataformats.lisp")
+(load "d:/giusv/lisp/extent/aia/console.lisp")
+;; (load "d:/giusv/lisp/extent/aia/server.lisp")
+;; (load "d:/giusv/lisp/extent/aia/console.lisp")
+
 

@@ -44,6 +44,27 @@
                                             (list (dt nil (cadr pair))
                                                   (dd nil (synth to-html (car pair))))))
                                     pairs)))))
+
+(defun maybes2 (pairs path)
+  (apply #'dl nil
+	 (remove nil (apply #'append 
+                            (mapcar #'(lambda (pair) 
+                                        (if (car pair)
+                                            (list (dt nil (cadr pair))
+                                                  (dd nil (synth to-html (car pair) path)))))
+                                    pairs)))))
+(defmacro dlist (&rest args)
+  `(apply #'dl nil (apply #'append
+                          (remove nil 
+                                  (list ,@(loop while args
+                                             collecting `(if ,(pop args)
+                                                             (list (dt nil ,(pop args))
+                                                                   (dl nil ,(pop args))))))))))
+
+
+
+;; (dlist label (span nil "Nome:") (synth to-html label path)
+;;        input (span nil "input:") (synth to-html input path))
 (defun description-list (keys vals)
   (apply #'dl 
 	 nil 

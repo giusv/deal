@@ -58,7 +58,7 @@
 			   (group ,plst 2))))
 
 (defmacro synth-plist-both (key-func value-func plst &rest args)
-  `(apply #'append (mapcar #'(lambda (pair) (list (funcall ,key-func (car pair)) (synth ,value-func (cadr pair) ,@args)))
+  `(apply #'append (mapcar #'(lambda (pair) (list (synth ,key-func (car pair)) (synth ,value-func (cadr pair) ,@args)))
 			   (group ,plst 2))))
 (defmacro synth-plist-merge (func plst &rest args)
   `(mapcar #'(lambda (pair) (funcall ,func pair ,@args))

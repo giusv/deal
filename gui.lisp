@@ -1,9 +1,9 @@
-(defun option-panel (label target)
-  (panel (label (const label))
-	 (anchor (gensym) (const "Vai alla pagina") :click (target target))))
-
 (defmacro element (name elem)
   `(defparameter ,name ,elem))
+
+(defun option-panel (label target)
+  (panel* (label (const label))
+          (anchor* (const "Vai alla pagina") :click (target target))))
 
 (defmacro hub-spoke (triples base layout)
   `(let* ,(mapcar #'(lambda (triple)
