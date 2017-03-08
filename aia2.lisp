@@ -44,8 +44,8 @@
   		       (synth to-html element path)))
   (to-model () (jarray (synth to-model element))))
 
-(defmacro arr* (name schema elem)
-  `(arr ,name ,schema ,elem))
+;; (defmacro arr* (name schema min max elem)
+;;   `(arr ,name ,schema ,min ,max ,elem))
 
 (data number-format
       (jsarray 'numbers (jsnumber 'number)))
@@ -54,11 +54,23 @@
               (jsprop 'name t (jsstring 'string))
               (jsprop 'numbers t number-format)))
 (element number-form 
-         (arr* 'numbers-form number-format
-               (input 'number (const "number"))))
+         (arr 'numbers-form number-format 1 2
+              (input 'number (const "number"))))
 (element test-form 
          (obj* 'test-form test-format
                ((name name (input 'name (const "name")) )
-                (numbers numbers (arr 'numbers-form number-form)))
+                (numbers numbers number-form))
                (vert name numbers)))
-
+(pprint (synth to-list test-form))
+(write-file "d:/giusv/temp/server.html" 
+	    (synth to-string 
+		   (synth to-doc (html nil 
+				       (head nil 
+					     (title nil (text "Server"))
+					     (meta (list :charset "utf-8"))
+					     (link (list :rel "stylesheet" :href "https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"))
+					     (link (list :rel "stylesheet" :href "https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css")))
+				       (body nil
+					     (h1 nil (text "Archivio Integrato Antifrode"))
+					     (h2 nil (text "Requisiti funzionali processo acquisizione indicatori"))
+					     (synth to-html test-form (void-url))))) 0))
