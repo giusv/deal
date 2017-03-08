@@ -36,13 +36,13 @@
 	  (nest 4 (text "return ~a" nm))
 	  (text "}"))))
 
-(defprod primitive (attribute ((name string) 
+(defprod data (attribute ((name string) 
 			       (type string)))
   (java (annotations) (field name type annotations)) 
   (to-list () `(attribute :name ,name :type ,type))
   (to-html () (div nil (text "Attributo ~a (~a)" (lower name) (lower type)))))
 
-(defprod primitive (foreign-key ((reference string) &rest (attributes (list attribute))))
+(defprod data (foreign-key ((reference string) &rest (attributes (list attribute))))
   (java () (apply #'vcat (synth-all java attributes (list (list reference))))) 
   (to-list () `(foreign-key :attributes ,(synth-all to-list attributes) :reference ,reference))
   (attributes () (synth-all name attributes))
@@ -50,7 +50,7 @@
                    (text "Foreign key verso ~a costituita dai seguenti attributi:" (lower reference))
                    (synth-all to-html attributes))))
 
-(defprod primitive (primary-key (&rest (attributes (list attribute))))
+(defprod data (primary-key (&rest (attributes (list attribute))))
   (java () (case (length attributes)
 	     (0 (error "Empty primary key"))
 	     (1 (synth java (first attributes) (list (list 'id))))
@@ -61,7 +61,7 @@
                      (text "Primary key costituita dai seguenti attributi:")
                      (synth-all to-html attributes))))
 
-(defprod primitive (entity ((name string) 
+(defprod data (entity ((name string) 
 			    (primary primary-key)
 			    (fields (list attribute))
 			    &rest (foreigns (list foreign-key))))

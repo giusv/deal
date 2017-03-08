@@ -1,15 +1,27 @@
-(defmacro defprocess (name proc)
+(defmacro process (name proc)
   `(defparameter ,name ,proc))
 
 
-(defprod command (contractful ((precond bexp)
-                               (command command)
-                               (postcond bexp)))
-  (to-list () `(contractful :precond ,precond :command ,command :postcond ,postcond))
-  (to-html () (div nil (text "Comando con seguente contratto:")
-                   (maybes (list precond (span nil (text "Precondizione:")))
-                           (list postcond (span nil (text "Postcondizione:")))
-                           (list command (span nil (text "Comando:")))))))
+(defmacro defprocess ((name lambda-list) &rest attrs)
+  (let* ((new-lambda-list (add-parameters lambda-list 'key '(name (name symbol))))) 
+    `(defprod process (,name ,new-lambda-list) ,@attrs)))
+
+;; (defmacro process (name proc) 
+;;   `(defparameter ,name ,(append proc `(:name ',name))))
+
+
+
+
+
+
+;; (defprod command (contractful ((pre bexp)
+;;                                (command command)
+;;                                (post bexp)))
+;;   (to-list () `(contractful :pre ,pre :command ,command :post ,post))
+;;   (to-html () (div nil (text "Comando con seguente contratto:")
+;;                    (maybes (list pre (span nil (text "Precondizione:")))
+;;                            (list post (span nil (text "Postcondizione:")))
+;;                            (list command (span nil (text "Comando:")))))))
 
 
 
@@ -24,7 +36,7 @@
 			  (list :class 'list-group)
 			  (mapcar #'listify (synth-all to-html actions))))))
 
-(defmacro concat2 (&rest bindings)
+(defmacro concat* (&rest bindings)
   (let ((new-bindings (mapcar #'(lambda (binding)
 			  (cons (gensym) binding)) 
 			      bindings)))
@@ -43,14 +55,14 @@
 			  (mapcar #'listify (list (span nil (i (list :class "fa fa-thumbs-up") nil) (synth to-html true)) 
 						  (span nil (i (list :class "fa fa-thumbs-down") nil) (synth to-html false))))))))
 
-(defprod process (sync-server ((parameters (list expression))
-			       (input format)
-			       (command command)
-			       &optional (output format)))
-  (to-list () `(sync-server :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
-			    :command ,(synth to-list command) :output ,(synth to-list output)))
+(defprocess (sync-server (&key (command (command command))
+                               (input (input format))
+                               (parameters (parameters (list expression))) 
+                               (output (output (output format)))))
+    (to-list () `(sync-server :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
+                              :command ,(synth to-list command) :output ,(synth to-list output)))
   (to-html () (div nil 
-                   (text "Processo server sincrono")
+                   (text "Processo server sincrono denominato ~a" (lower name))
                    (if input 
                        (div nil 
                             (text " con ingresso una istanza del seguente formato dati:")

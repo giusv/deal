@@ -14,8 +14,13 @@
 	 (opt (arg-list 'opt args '&optional #'identity))
 	 (rest (arg-list 'rest args '&rest #'identity))
 	 (key (arg-list 'key args '&key #'identity)))
-    (pprint req)
+    ;; (pprint (gethash 'key args))
     (append req opt rest key)))
+
+(defun add-parameters (lambda-list key &rest pars)
+  (let* ((args (parse (destruc) lambda-list)))
+    (setf (gethash key args) (append (gethash key args) pars))
+    (make-lambda-list args)))
 
 (defun arg-names (lambda-list)
   (let* ((args (parse (destruc) lambda-list))
@@ -37,7 +42,7 @@
   `(and ,arg 
    	(gethash ',func ,arg)
    	(funcall (gethash ',func ,arg) ,@args))
-  ;; (funcall (gethash ',func ,arg) ,@args)
+  ;; `(funcall (gethash ',func ,arg) ,@args)
   )
 
 (defmacro synth-all (func lst &rest args)

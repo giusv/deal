@@ -7,3 +7,10 @@
 		       (if (not  elements) (text "vuota") (text "dei seguenti elementi:"))
 		       (apply #'ul (list :class 'list-inline)
 			      (mapcar #'listify (synth-all to-html elements path))))))
+
+(defmacro horz* (&rest elements)
+  (let ((new-elements (mapcar #'(lambda (element)
+			  (cons (gensym) element)) 
+			      elements)))
+    `(bindall ,new-elements
+      (horz ,@(mapcar #'car new-elements)))))
