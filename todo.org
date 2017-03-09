@@ -6,8 +6,10 @@
 ** DONE pre/post conditions 
    CLOSED: [2017-03-06 lun 16:00]
 ** TODO HTML escaping
-** TODO HTML <pre> handlin
-** TODO to-html should retur lists of tags
+** TODO HTML <pre> handling
+** DONE to-html should retur lists of tags
+   CLOSED: [2017-03-09 gio 16:50] multitags and req to produce sections for nonleaf elements
 ** TODO create CRUD abstraction
 ** DONE vert* horz*
+   CLOSED: [2017-03-09 gio 16:50]
 ** TODO 

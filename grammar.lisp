@@ -1,6 +1,3 @@
-;; (demacro synth (func arg &rest args)
-;;   `(funcall (cdr (assoc ',func ,arg)) ,@args))
-
 (defun arg-list (sym args &optional (pref nil) (func #'car))
   (let ((l (mapcar func (gethash sym args))))
     (if (null l)
@@ -76,54 +73,11 @@
        (pairhash ',(append #|slots|# (mapcar #'attr-name attrs)) 
 		(list #|,@slots|# ,@(mapcar #'attr-func attrs))))))
 
-;; (defmacro defprod2 (base (name lambda-list) &rest attrs)
-;;   (declare (ignorable base))
-;;   (labels ((attr-name (attr) 
-;; 	     (car attr))
-;; 	   (attr-func (attr)  
-;; 	     `#'(lambda (,@(second attr))
-;; 		  (declare (ignorable ,@(second attr))) 
-;; 		  ,(third attr)))
-;; 	   (access-func (arg)
-;; 	     `#'(lambda ())))
-;;     `(defun ,name (,@(untype lambda-list))
-;;        (pairhash ',(append (arg-names lambda-list) 
-;; 			   (mapcar #'attr-name attrs)) 
-;; 		 (append (mapcar #'access-func (arg-names lambda-list)) 
-;; 			 (mapcar #'attr-func attrs))))))
-
 (defmacro defprod (base (name lambda-list) &rest attrs)
   (let ((accessors (mapcar #'(lambda (arg)
 			       (list arg () arg))
 			   (arg-names lambda-list))))
     `(defprod-old ,base (,name ,lambda-list) ,@(append accessors attrs))))
-
-;; (defprod tree (tip ((i integer)))
-;;   (minimum () i)
-;;   (tree (rep) (tip rep))
-;;   (to-list () `(tip ,i)))
-
-
-;; (defprod tree (fork ((l tree) (r tree)))
-;;   (minimum () (min (synth minimum l) (synth minimum r)))
-;;   (tree (rep) (fork (synth tree l rep) (synth tree r rep)))
-;;   (to-list () `(fork ,(synth to-list l) ,(synth to-list r))))
-
-
-
-;; (defparameter *tree* (fork (tip 1) (fork (tip 2) (tip 3))))
-
-
-;; (defprod term (factor term-prime)
-;;   ((inherit term-prime inh) (val factor)
-;;    (synthesize term val) (syn term-prime)))
-;; (defprod term-prime (times factor term-prime1)
-;;   ((inherit term-prime1 inh) (* (inh term-prime) (val factor))
-;;    (synthesize term-prime syn) (syn term-prime1)))
-;; (defprod term-prime (empty)
-;;   ((synthesize term-prime syn) (inh term-prime1)))
-;; (defprod factor (digit i)
-;;   ((synthesize factor val) i))
 
 
 

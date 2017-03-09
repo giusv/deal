@@ -4,6 +4,7 @@
 (load "d:/giusv/lisp/extent/doc.lisp")
 (load "d:/giusv/lisp/extent/xml.lisp")
 (load "d:/giusv/lisp/extent/html.lisp")
+(load "d:/giusv/lisp/extent/documentation.lisp")
 (load "d:/giusv/lisp/extent/expression.lisp")
 (load "d:/giusv/lisp/extent/url.lisp")
 

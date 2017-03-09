@@ -7,7 +7,10 @@
 			    (if (or init label) (text "con le seguenti caratteristiche:"))
 			    (dlist label (span nil (text "Etichetta")) (synth to-html label)
                                    init (span nil (text "Valore iniziale")) (synth to-html init)))))
-  (to-model () (jstring (value (input name label :init init)))))
+  (to-brief (path) (synth to-html (input name label :init init) path))
+  (to-model () (jstring (value (input name label :init init))))
+  (toplevel () nil)
+  (req (path) nil))
 
 (defmacro input* (label &key init)
   `(input (gensym "input") ,label :init ,init))

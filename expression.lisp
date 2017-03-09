@@ -1,7 +1,7 @@
 (defprod exp (const ((exp (or string number))))
   (to-list () `(const (:exp ,exp)))
   (to-req () (text "stringa costante: ~a" exp))
-  (to-html () (span (list :class "label label-default") (text "stringa costante: ~a" exp)))
+  (to-html () (span (list :class "label label-default") (text "~a" exp)))
   (to-url () (textify exp))
   (to-chunk () exp)
   (to-string () (double-quotes (text "~a" exp))))

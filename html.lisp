@@ -19,6 +19,10 @@
 (defmacro divm (attributes &body body)
   `(apply #'div (list ,@attributes) ,body))
 
+(defprod html (multitags (&rest (tags html)))
+  (to-list () `(multitags (:tags ,(synth-all to-list tags))))
+  (to-doc () (apply #'vcat (synth-all to-doc tags))))
+
 (defmacro deftag (name)
   `(defprod html (,name ((attributes (list string))
 			 &rest (body (list html))))
@@ -31,11 +35,11 @@
 		      (vcat (open-tag attributes)
 			    (nest 4 (apply #'vcat (synth-all to-doc body)))
 			    (close-tag)))))))
-(deftags html head title meta link body h1 h2 h3 div span li dl dt dd ul ol pre i)
+(deftags html head title meta link body h1 h2 h3 div span li dl dt dd ul ol pre i strong code)
 
 ;;(mapcar #'(lambda (pair) (format t "~a: ~a~%" (car pair) (cdr pair))) (pairlis '(a b) '(1 2)))
 (defun listify (elem)
-  (li (list :class "list-group-item") elem))
+  (li #|(list :class "list-group-item")|# nil elem))
 (defun maybes (&rest pairs)
   (apply #'dl nil
 	 (remove nil (apply #'append 
@@ -65,13 +69,13 @@
 
 ;; (dlist label (span nil "Nome:") (synth to-html label path)
 ;;        input (span nil "input:") (synth to-html input path))
-(defun description-list (keys vals)
-  (apply #'dl 
-	 nil 
-	 (apply #'append (mapcar #'(lambda (pair) 
-				     (list (dt nil (car pair))
-					   (dd nil (cdr pair))))
-				 (pairlis (reverse keys) (reverse vals))))))
+;; (defun description-list (keys vals)
+;;   (apply #'dl 
+;; 	 nil 
+;; 	 (apply #'append (mapcar #'(lambda (pair) 
+;; 				     (list (dt nil (car pair))
+;; 					   (dd nil (cdr pair))))
+;; 				 (pairlis (reverse keys) (reverse vals))))))
 
 ;; (synth output (synth to-doc (div nil (span nil (text "hello")))) 0)
 ;; (pprint (synth to-list (div nil (span nil (text "hello")))))

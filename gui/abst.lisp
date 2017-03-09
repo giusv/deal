@@ -9,4 +9,7 @@
 						   (list par (span nil (textify (synth name par)))))
 					       parameters))
 		       
-		       (synth to-html element path))))
+		       (synth to-html element path)))
+  (to-brief (path) (synth to-html (abst parameters element) path))
+  (toplevel () (list (synth toplevel element)))
+  (req (path) (synth req element path)))

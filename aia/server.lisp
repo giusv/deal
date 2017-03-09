@@ -9,7 +9,7 @@
                             ((fork (+equal+ result (const "Success"))
                                    (concat* (indic (create-instance2 indicator-entity 
                                                                      (list (prop 'id) (variab (gensym)) 
-                                                                           (prop 'code) result
+                 aia2                                                          (prop 'code) result
                                                                            (prop 'start-date) ind-startdate)))
                                             ((persist indic))
                                             ((http-response 201 :payload result)))

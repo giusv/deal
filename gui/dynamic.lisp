@@ -13,7 +13,10 @@
 		    (div nil 
 			 (h3 nil (text "Elemento dinamico ~a " (lower name)) 
 			     (parens (hcat (text "percorso: ") (synth to-url newpath))))
-			 (synth to-html element newpath)))))
+			 (synth to-html element newpath))))
+  (toplevel () (list (dynamic name element)))
+  (req (path) (cons (synth to-html (dynamic name element) path)
+                    (synth req element path))))
 
 (defmacro dynamic2 (name element)
   `(dynamic ',name 

@@ -7,7 +7,10 @@
 			    (if (or init label) (text "con le seguenti caratteristiche:"))
 			    (dlist label (span nil (text "Etichetta")) (synth to-html label)
                                    init (span nil (text "Valore iniziale")) (synth to-html init)))))
-  (to-model () (jstring (value (textarea name label :init init)))))
+  (to-brief (path) (synth to-html (textarea name label :init init) path))
+  (to-model () (jstring (value (textarea name label :init init))))
+  (toplevel () nil)
+  (req (path) nil))
 
 (defmacro textarea* (label &key init)
   `(textarea (gensym "TEXTAREA") ,label :init ,init))

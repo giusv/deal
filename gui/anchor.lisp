@@ -8,10 +8,16 @@
   ;;       	       (nest 4 (hcat (text "Sottoposto a click, ") (synth to-req click)))
   ;;       	       (synth to-req hover)))
   (to-html (path) (div nil 
-		       (div nil (text "Link identificato come ~a e etichettato con la seguente espressione:" (lower name)) 
+		       (div nil 
+                            (text "Link identificato come ")
+                            (span (list :class "label label-info") (text "~a" (lower name)))
+                            (text " e etichettato con la seguente espressione:") 
 			    (synth to-html expr))
                        (dlist click (span nil (text "Sottoposto a click: ")) (synth to-html click)
-                              hover (span nil (text "Sottoposto a hover: ")) (synth to-html hover)))))
+                              hover (span nil (text "Sottoposto a hover: ")) (synth to-html hover))))
+  (to-brief (path) (synth to-html (anchor name expr :click click :hover hover) path)) 
+  (toplevel () nil)
+  (req (path) nil))
 
 (defmacro anchor* (expr &key click hover)
   `(anchor (gensym "ANCHOR") ,expr :click ,click :hover ,hover))

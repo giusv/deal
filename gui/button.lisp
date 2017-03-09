@@ -13,7 +13,9 @@
                        ;; (maybes2 (list (list click (span nil (text "Sottoposto a click: ")))
                        ;;                (list hover (span nil (text "Sottoposto a hover: "))) path))
                        (dlist click (span nil (text "Sottoposto a click: ")) (synth to-html click)
-                              hover (span nil (text "Sottoposto a hover: ")) (synth to-html hover)))))
+                              hover (span nil (text "Sottoposto a hover: ")) (synth to-html hover))))
+  (to-brief (path) (synth to-html (button name expr :click click :hover hover) path)) 
+  (req (path) nil))
 
 (defmacro button* (expr &key click hover)
   `(button (gensym "BUTTON") ,expr :click ,click :hover ,hover))
