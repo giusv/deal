@@ -35,7 +35,7 @@
 		      (vcat (open-tag attributes)
 			    (nest 4 (apply #'vcat (synth-all to-doc body)))
 			    (close-tag)))))))
-(deftags html head title meta link body h1 h2 h3 div span li dl dt dd ul ol pre i strong code)
+(deftags html head title meta link body h1 h2 h3 div span li dl dt dd ul ol pre i strong code script)
 
 ;;(mapcar #'(lambda (pair) (format t "~a: ~a~%" (car pair) (cdr pair))) (pairlis '(a b) '(1 2)))
 (defun listify (elem)

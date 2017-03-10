@@ -1,7 +1,8 @@
 (data indicator-format 
     (jsobject 'formato-indicatore
-              (jsprop 'codice t (jsstring 'stringa-codice))
-              (jsprop 'data-inizio t (jsstring 'data-data-inizio))))
+              (jsprop 'name t (jsstring 'stringa-nome))
+              (jsprop 'code t (jsstring 'stringa-codice))
+              (jsprop 'start-date t (jsstring 'data-data-inizio))))
 
 (data company-format 
     (jsobject 'formato-compagnia

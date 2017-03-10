@@ -13,7 +13,7 @@
 (load "d:/giusv/lisp/extent/data/entity.lisp")
 (load "d:/giusv/lisp/extent/data/jsonschema.lisp")
 
-(load "d:/giusv/lisp/extent/query.lisp")
+;; (load "d:/giusv/lisp/extent/query.lisp")
 
 (load "d:/giusv/lisp/extent/action.lisp")
 (load "d:/giusv/lisp/extent/action/rest.lisp")
@@ -37,7 +37,7 @@
 (load "d:/giusv/lisp/extent/gui/abst.lisp")
 (load "d:/giusv/lisp/extent/gui/static.lisp")
 (load "d:/giusv/lisp/extent/gui/dynamic.lisp")
-(load "d:/giusv/lisp/extent/gui/tabular.lisp")
+(load "d:/giusv/lisp/extent/gui/table.lisp")
 (load "d:/giusv/lisp/extent/gui/form.lisp")
 (load "d:/giusv/lisp/extent/gui/anchor.lisp")
 (load "d:/giusv/lisp/extent/gui/navbar.lisp")

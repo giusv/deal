@@ -3,7 +3,8 @@
 			 &key (init (init expression))))
   (to-list () `(input (:name ,name :label ,(synth to-list label) :init ,(synth to-list init))))
   (to-html (path) (div (list :class 'well) 
-		       (div nil (text "Campo di input identificato come ~a " (lower name)) 
+		       (div nil (text "Campo di input identificato come")
+                            (span (list :class "label label-info") (text "~a" (lower name))) 
 			    (if (or init label) (text "con le seguenti caratteristiche:"))
 			    (dlist label (span nil (text "Etichetta")) (synth to-html label)
                                    init (span nil (text "Valore iniziale")) (synth to-html init)))))
@@ -13,6 +14,6 @@
   (req (path) nil))
 
 (defmacro input* (label &key init)
-  `(input (gensym "input") ,label :init ,init))
+  `(input (gensym "INPUT") ,label :init ,init))
 
 ;; (input* (const "name") :init (const "a"))

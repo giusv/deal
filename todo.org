@@ -12,4 +12,5 @@
 ** TODO create CRUD abstraction
 ** DONE vert* horz*
    CLOSED: [2017-03-09 gio 16:50]
-** TODO 
+** TODO abstraction on documentation generation (section, list, etc.) to be compiled in either html or markdown or docx
+

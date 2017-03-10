@@ -3,7 +3,7 @@
   ;; (to-req (path) (funcall #'hcat (text "Etichetta inizializzata con la seguente espressione:") 
   ;;       		  (synth to-req expr)))
   (to-html (path) (div nil 
-                       (text "Etichetta inizializzata con la seguente espressione: ") 
+                       (text "Etichetta contenente la seguente espressione: ") 
 		       (synth to-html expr)))
   (to-brief (path) (synth to-html (label expr) path))
   (toplevel () nil)

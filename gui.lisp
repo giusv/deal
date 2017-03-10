@@ -1,5 +1,5 @@
-(defmacro element (name elem)
-  `(defparameter ,name ,elem))
+(defmacro element (name &body elem)
+  `(defparameter ,name ,@elem))
 
 (defun option-panel (label target)
   (panel* (label (const label))
