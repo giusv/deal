@@ -49,8 +49,9 @@
   (to-list () `(jsarray :name ,(lower name) :elem ,(synth to-list elem)))
   ;; (to-req () (vcat (text "array denominato ~a costituito dal seguente elemento:" (lower name))
   ;;       	   (nest 4 (synth to-req elem))))
-  (to-html () (div nil (text "array denominato ~a costituito dal seguente elemento:" (lower name))
-                    (nest 4 (synth to-html elem)))))
+  (to-html () (div nil 
+                   (text "array denominato ~a costituito dal seguente elemento:" (lower name))
+                   (synth to-html elem))))
 
 (defun get-elem ()
   #'(lambda (jsschema)

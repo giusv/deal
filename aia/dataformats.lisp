@@ -4,11 +4,13 @@
               (jsprop 'code t (jsstring 'stringa-codice))
               (jsprop 'start-date t (jsstring 'data-data-inizio))))
 
+(data company-address
+      (jsstring 'stringa-indirizzo))
+
 (data company-format 
     (jsobject 'formato-compagnia
               (jsprop 'name t (jsstring 'stringa-nome))
-              (jsprop 'address t (jsstring 'stringa-indirizzo))))
-
+              (jsprop 'addresses t company-address)))
 
 
 (data indicator-entity (entity 'indicator-entity
@@ -22,3 +24,4 @@
                                    (attribute 'id 'integer))
                                   (list (attribute 'name 'string)
                                         (attribute 'address 'string))))
+

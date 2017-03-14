@@ -24,10 +24,6 @@
     (format stream content)))
 
 
-
-(defun split-str (string &optional (separator "-"))
-  (split-str-1 string separator))
-
 (defun split-str-1 (string &optional (separator "-") (r nil))
   (let ((n (position separator string
 		     :from-end t
@@ -36,6 +32,11 @@
     (if n
 	(split-str-1 (subseq string 0 n) separator (cons (subseq string (1+ n)) r))
       (cons string r))))
+
+(defun split-str (string &optional (separator "-"))
+  (split-str-1 string separator))
+
+
 (defun lower (sym)
   (let ((words (mapcar #'string-capitalize (split-str (symbol-name sym)))))
     (format nil "~(~a~)~{~a~}" (car words) (cdr words))))
@@ -62,11 +63,12 @@
   (values (intern (apply #'mkstr args))))
 (defun keyw (&rest args)
   (values (intern (apply #'mkstr args) "KEYWORD")))
-(defun plist-p (lst)
-  (every #'ppair-p (group lst 2)))
 (defun ppair-p (pair)
   (and (consp pair)
        (typep (car pair) 'symbol)))
+(defun plist-p (lst)
+  (every #'ppair-p (group lst 2)))
+
 (defun pairprop (key val)
   (apply #'append (mapcar #'list (mapcar #'symb key) val)))
 

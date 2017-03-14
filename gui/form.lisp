@@ -43,7 +43,7 @@
                            :max ,(synth to-list max) 
                            :element ,(synth to-list element))))
   (to-html (path) (div nil 
-  		       (text "Form identificato con ~a collegato al seguente formato dati:" (lower name)) 
+  		       (text "Sezione identificata con ~a collegata al seguente formato dati:" (lower name)) 
   		       (synth to-html schema) 
                        (synth to-html element path)
                        (text "Essa produce il seguente oggetto JSON:")
@@ -52,3 +52,10 @@
   (to-model () (jarray (synth to-model element)))
   (toplevel () nil)
   (req (path) nil))
+
+;; (defmacro arr* (name schema min max elem)
+;;   `(let* ,(mapcar #'(lambda (bind)
+;; 		      (destructuring-bind (name key elem) bind
+;; 			`(,name (bnd ',key ,elem))))
+;; 		  binds)
+;;      ))

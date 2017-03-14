@@ -6,11 +6,12 @@
   (to-chunk () exp)
   (to-string () (double-quotes (text "~a" exp))))
 
-(defprod exp (attr ((exp string)))
-  (to-list () `(attr (:exp ,exp)))
-  (to-req () (text "attributo: ~a" exp))
-  (to-html () (span (list :class "label label-danger") (text "attributo: ~a" exp)))
-  (to-string () (textify exp)))
+(defprod exp (attr ((data datasource)
+                    (exp symbol)))
+  (to-list () `(attr (:data ,data :exp ,exp)))
+  (to-req () (text "~a!~a" data exp))
+  (to-html () (span (list :class "label label-danger") (text "~a!~a" (lower (synth name data)) (lower exp))))
+  (to-string () (text "~a!~a" data exp)))
 
 (defprod exp (variab ((name string)))
   (to-list () `(attr (:name ,name)))
@@ -40,7 +41,7 @@
   (to-req () (apply #'hcat 
 		    (text "concatenazione delle espressioni:")
 		    (synth-all to-req exps)))
-  (to-html () (span (list :class "label label-default") (synth to-req (cat exps))))
+  (to-html () (apply #'span (list :class "label label-default") (synth-all to-html exps)))
   (to-string () (text "~{~a~^ ++ ~}" (synth-all to-string exps))))
 
 (defmacro def-bexp (operator &optional (arity 0))
@@ -62,8 +63,7 @@
        (to-html () (span nil (synth to-req 
        				    ,(if (eq arity 'unbounded)
        					 `(apply #',name exps)
-       					 `(,name ,@(loop for i from 1 to arity collect (symb "EXP" i)))))))
-       )))
+       					 `(,name ,@(loop for i from 1 to arity collect (symb "EXP" i))))))))))
   
 (defmacro def-bexps (&rest bexps)
   `(progn

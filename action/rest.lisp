@@ -1,6 +1,6 @@
 (defmacro def-http-action (name &key (payload t))
   (let ((full-name (symb "HTTP-" name)))
-    `(defaction (,full-name ((url expression)
+    `(defaction (,full-name ((url url)
                              ,@(if payload `((payload payload)))
                              (response variable)))
          (to-list () (list ',full-name (list :url (synth to-list url) 
@@ -10,7 +10,7 @@
                                              :post post))) 
        (to-html () (div nil 
 			(text "Azione ~a verso l'URL " ',name)
-			(synth to-html url)
+			(synth to-url url)
 			,@(if payload (list '(text "con il payload seguente:")
 					    '(synth to-html payload)))
                         (text "Sia ") 
@@ -20,14 +20,24 @@
                                 (list post (span nil (text "Postcondizione:")))))))))
 
 (def-http-action get :payload nil)
-(def-http-action post)
 
+(def-http-action post)
 (defun http-post* (url payload)
   (let ((result (variab (gensym))))
     (values (http-post url payload result) result)))
 
+
+
 (def-http-action put)
+(defun http-put* (url payload)
+  (let ((result (variab (gensym))))
+    (values (http-put url payload result) result)))
+
 (def-http-action delete :payload nil)
+(defun http-delete* (url)
+  (let ((result (variab (gensym))))
+    (values (http-delete url result) result)))
+
 
 (defaction (http-response ((code number)
                            &key (payload (payload expression))))

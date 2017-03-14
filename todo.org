@@ -1,4 +1,5 @@
 * Tasks
+* 
 ** DONE Name JSON Schema formats?
    CLOSED: [2017-03-06 lun 10:41]
 ** DONE Server validation (regex? Static or dynamic with DB access)
@@ -13,4 +14,7 @@
 ** DONE vert* horz*
    CLOSED: [2017-03-09 gio 16:50]
 ** TODO abstraction on documentation generation (section, list, etc.) to be compiled in either html or markdown or docx
+** TODO pandoric macros on productions
+
+
 

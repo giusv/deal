@@ -55,6 +55,6 @@
                                    bindings))))
 
 
-(table* indicator-format
-       ('codice code (label it))
-       ('start-date data-inizio (button* it)))
+;; (table* indicator-format
+;;        ('codice code (label it))
+;;        ('start-date data-inizio (button* it)))
