@@ -5,12 +5,12 @@
                              (format format)
                              (url url)))
   (to-list () `(remote (:name ,name :format ,(synth to-list format) :url ,(synth to-list url))))
-  (to-html ()  (div (list :class 'well) 
-                    (div nil (text "Sorgente dati remota identificata come")
-                         (span (list :class "label label-info") (text "~a" (lower name))) 
-                         (text "istanza del formato dati ~a:" (lower (synth name format)))
-                         (text "e popolata al caricamento dell'elemento tramite richiesta HTTP GET verso il seguente URL:")
-                         (span nil (synth to-url url))))))
+  (to-html ()  (multitags
+                (text "Sorgente dati remota identificata come")
+                (strong nil (text "~a" (lower name))) 
+                (text "istanza del formato dati ~a:" (lower (synth name format)))
+                (text "e popolata al caricamento dell'elemento tramite richiesta HTTP GET verso il seguente URL:")
+                (synth to-url url))))
 
 ;; (defmacro remote* (format url)
 ;;   `(remote (gensym "REMOTE") format url))

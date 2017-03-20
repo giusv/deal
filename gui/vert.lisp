@@ -3,7 +3,7 @@
   ;; (to-req (path) (funcall #'vcat 
   ;;       	    (text "Tale elemento si presenta come oncatenazione verticale dei seguenti sottoelementi:")
   ;;       	    (nest 4 (apply #'vcat (synth-all to-req elements path)))))
-  (to-html (path) (div nil (text "Tale elemento si presenta come concatenazione verticale")
+  (to-html (path) (multitags (text "Tale elemento si presenta come concatenazione verticale")
 		       (if (not  elements) (text "vuota") (text "dei seguenti sottoelementi:"))
 		       (apply #'ul nil ;; (list :class 'list-group)
 			      (mapcar #'listify (synth-all to-html elements path)))))

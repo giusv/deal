@@ -3,15 +3,15 @@
                      (result variable)))
     (to-list () `(translate (:filter  ,(synth to-list filter) :source ,(synth to-list source) :result ,(synth to-list result) :pre ,(synth to-list pre) :post ,(synth to-list post))))
 
-  (to-html () (div nil 
+  (to-html () (multitags  
 		   (text "Sia ") 
 		   (synth to-html result) 
 		   (text " il risultato della estrazione da ")
                    (textify (synth name source))
                    (text" con il seguente filtro:")
-		   (div nil (synth to-req filter))
-                   (maybes (list pre (span nil (text "Precondizione:")))
-                           (list post (span nil (text "Postcondizione:")))))))
+		   (synth to-req filter)
+                   (dlist pre (text "Precondizione: ") (synth to-html pre)
+                          post (text "Postcondizione:") (synth to-html post)))))
 
 (defun extract2 (filter source &key pre post)
   (let ((result (variab (gensym))))

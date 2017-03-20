@@ -37,7 +37,7 @@
 (load "d:/giusv/lisp/extent/gui/abst.lisp")
 (load "d:/giusv/lisp/extent/gui/static.lisp")
 (load "d:/giusv/lisp/extent/gui/dynamic.lisp")
-(load "d:/giusv/lisp/extent/gui/table.lisp")
+(load "d:/giusv/lisp/extent/gui/tabular.lisp")
 (load "d:/giusv/lisp/extent/gui/form.lisp")
 (load "d:/giusv/lisp/extent/gui/anchor.lisp")
 (load "d:/giusv/lisp/extent/gui/navbar.lisp")
@@ -49,8 +49,8 @@
 (load "d:/giusv/lisp/extent/aia/console/indicators2.lisp")
 (load "d:/giusv/lisp/extent/aia/console/companies.lisp")
 (load "d:/giusv/lisp/extent/aia/console/news.lisp")
-(load "d:/giusv/lisp/extent/aia/console/console.lisp")
-;; (load "d:/giusv/lisp/extent/aia/server.lisp")
+;; (load "d:/giusv/lisp/extent/aia/console/console.lisp")
+(load "d:/giusv/lisp/extent/aia/server/companycrud.lisp")
 ;; (load "d:/giusv/lisp/extent/aia/console.lisp")
 
 

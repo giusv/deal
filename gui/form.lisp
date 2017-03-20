@@ -14,12 +14,12 @@
   (to-list () `(obj (:name ,name :schema ,(synth to-list schema) 
                            :bindings ,(synth-plist-both to-list to-list bindings) 
                            :element ,(synth to-list element))))
-  (to-html (path) (div nil 
+  (to-html (path) (multitags 
   		       (text "Sezione identificata con ~a collegata al seguente formato dati:" (lower name)) 
-  		       (synth to-html schema)
+  		       (p nil (synth to-html schema))
                        (synth to-html element path)
-                       (text "Essa produce il seguente oggetto JSON:")
-  		       (pre nil (code (list :class "json" :style "github") (synth to-string (synth to-model (obj name schema bindings element)))))))
+                       (p nil (text "Essa produce il seguente oggetto JSON:")
+                          (code nil (synth to-string (synth to-model (obj name schema bindings element)))))))
   (to-brief (path) (synth to-html (obj name schema bindings element) path))
   (to-model () (apply #'jobject (apply #'append (synth-all to-model bindings))))
   (toplevel () nil)
@@ -42,12 +42,12 @@
                            :min ,(synth to-list min) 
                            :max ,(synth to-list max) 
                            :element ,(synth to-list element))))
-  (to-html (path) (div nil 
+  (to-html (path) (multitags 
   		       (text "Sezione identificata con ~a collegata al seguente formato dati:" (lower name)) 
-  		       (synth to-html schema) 
+  		       (p nil (synth to-html schema)) 
                        (synth to-html element path)
-                       (text "Essa produce il seguente oggetto JSON:")
-  		       (pre nil (code nil (synth to-string (synth to-model (arr name schema min max element)))))))
+                       (p nil (text "Essa produce il seguente oggetto JSON:")
+                          (code nil (synth to-string (synth to-model (arr name schema min max element)))))))
   (to-brief (path) (synth to-html (arr name schema min max element) path))
   (to-model () (jarray (synth to-model element)))
   (toplevel () nil)

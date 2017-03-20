@@ -8,16 +8,16 @@
                                              :response response
                                              :pre pre
                                              :post post))) 
-       (to-html () (div nil 
-			(text "Azione ~a verso l'URL " ',name)
-			(synth to-url url)
-			,@(if payload (list '(text "con il payload seguente:")
-					    '(synth to-html payload)))
-                        (text "Sia ") 
-                        (synth to-html response) 
-                        (text " il risultato di tale azione.")
-                        (maybes (list pre (span nil (text "Precondizione:")))
-                                (list post (span nil (text "Postcondizione:")))))))))
+       (to-html () (multitags
+                    (text "Azione ~a verso l'URL " ',name)
+                    (synth to-url url)
+                    ,@(if payload (list '(text "con il payload seguente:")
+                                        '(code nil (synth to-html payload))))
+                    (p nil (text "Sia ") 
+                       (synth to-html response) 
+                       (text " il risultato di tale azione."))
+                    (dlist pre (text "Precondizione: ") (synth to-html pre)
+                           post (text "Postcondizione:") (synth to-html post)))))))
 
 (def-http-action get :payload nil)
 
@@ -41,10 +41,11 @@
 
 (defaction (http-response ((code number)
                            &key (payload (payload expression))))
-  (to-list () `(http-response :code ,code :payload ,(synth to-html payload) :pre ,(synth to-list pre) :post ,(synth to-list post)))
-  (to-html () (div nil (text "Restituzione risposta HTTP ~a" code)
-                   (if payload (div nil (text "con il seguente payload:")
-                                    (synth to-html payload)))
-                   (maybes (list pre (span nil (text "Precondizione:")))
-                           (list post (span nil (text "Postcondizione:")))))))
+    (to-list () `(http-response :code ,code :payload ,(synth to-html payload) :pre ,(synth to-list pre) :post ,(synth to-list post)))
+  (to-html () (multitags (text "Restituzione risposta HTTP ~a" code)
+                         (if payload 
+                             (multitags (text " con il seguente payload:")
+                                        (synth to-html payload)))
+                         (dlist pre (text "Precondizione: ") (synth to-html pre)
+                                post (text "Postcondizione:") (synth to-html post)))))
 ;; (pprint (synth to-list (http-get (void-url) (gensym "GET"))))

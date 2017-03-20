@@ -2,7 +2,7 @@
   (to-list () `(label :expr ,(synth to-list expr)))
   ;; (to-req (path) (funcall #'hcat (text "Etichetta inizializzata con la seguente espressione:") 
   ;;       		  (synth to-req expr)))
-  (to-html (path) (div nil 
+  (to-html (path) (multitags 
                        (text "Etichetta contenente la seguente espressione: ") 
 		       (synth to-html expr)))
   (to-brief (path) (synth to-html (label expr) path))

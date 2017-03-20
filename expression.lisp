@@ -18,7 +18,7 @@
   (to-list () `(attr (:name ,name)))
   (to-string () (textify name))
   (to-req () (text "~a" name))
-  (to-html () (brackets (text " variabile ~a" name))))
+  (to-html () (brackets (text "~a" name))))
   ;; (to-html () (span (list :class "label label-danger") (text "~a" name))))
 
 (defprod exp (value ((elem element)))
@@ -39,13 +39,17 @@
   (to-list () `(status (:action ,action)))
   (to-html () (text "Codice HTTP di risposta")))
 
+(defprod exp (autokey ())
+  (to-list () `(autokey))
+  (to-html () (text "Chiave generata automaticamente")))
+
 
 (defprod exp (cat (&rest (exps exp)))
   (to-list () `(cat (:exps ,(synth-all to-list exps))))
   (to-html () (brackets (apply #'hcat 
                                (text "concatenazione delle espressioni:")
                                (synth-all to-req exps))))
-  (to-html () (apply #'span (list :class "label label-default") (synth-all to-html exps)))
+  ;; (to-html () (apply #'span (list :class "label label-default") (synth-all to-html exps)))
   (to-string () (text "~{~a~^ ++ ~}" (synth-all to-string exps))))
 
 (defmacro def-bexp (operator &optional (arity 0))
@@ -54,9 +58,9 @@
 		    ,(if (eq arity 'unbounded)
 			 `(&rest (exps bexp))
 			 (loop for i from 1 to arity collect `(,(symb "EXP" i) exp))))
-       (to-html () (brackets (hcat (text "espressione booleana: ~a " (lower ',name))
+       (to-html () (brackets (hcat (text "~a " (lower ',name))
                                    ,@(if (eq arity 'unbounded)
-                                         `((synth-all to-req exps))
+                                         `((parens (apply #'punctuate (comma) nil (synth-all to-req exps))))
                                          `((punctuate (comma) nil ,@(loop for i from 1 to arity collect `(synth to-req ,(symb "EXP" i)))))))))
 
        (to-list () (list ',name 
@@ -68,7 +72,7 @@
        ;; 					 `(apply #',name exps)
        ;; 					 `(,name ,@(loop for i from 1 to arity collect (symb "EXP" i)))))))
        )))
-  
+(def-bexp and 2)
 (defmacro def-bexps (&rest bexps)
   `(progn
      ,@(mapcar #'(lambda (bexp)

@@ -24,8 +24,8 @@
 (data news-format 
     (jsobject 'formato-notizia
               (jsprop 'text t (jsstring 'testo-notizia))
-              (jsprop 'start-date t (jsstring 'data-inizio) )
-              (jsprop 'start-date t (jsstring 'data-fine))
+              (jsprop 'start-date t (jsstring 'data-inizio))
+              (jsprop 'end-date t (jsstring 'data-fine))
               (jsprop 'subscribers t (jsarray 'formato-sottoscrittore subscriber-format))))
 
 (data auditing-format
@@ -43,4 +43,11 @@
                                    (attribute 'id 'integer))
                                   (list (attribute 'name 'string)
                                         (attribute 'address 'string))))
+
+(data news-entity (entity 'news-entity
+                          (primary-key
+                           (attribute 'id 'integer))
+                          (list (attribute 'text 'string)
+                                (attribute 'start-date 'string)
+                                (attribute 'end-date 'string))))
 

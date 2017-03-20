@@ -9,32 +9,14 @@
 ;; (defmacro process (name proc) 
 ;;   `(defparameter ,name ,(append proc `(:name ',name))))
 
-
-
-
-
-
-;; (defprod command (contractful ((pre bexp)
-;;                                (command command)
-;;                                (post bexp)))
-;;   (to-list () `(contractful :pre ,pre :command ,command :post ,post))
-;;   (to-html () (div nil (text "Comando con seguente contratto:")
-;;                    (maybes (list pre (span nil (text "Precondizione:")))
-;;                            (list post (span nil (text "Postcondizione:")))
-;;                            (list command (span nil (text "Comando:")))))))
-
-
-
 (defprod command (skip ())
   (to-list () `(skip))
   (to-html () (div nil)))
 
 (defprod command (concat (&rest (actions (list action))))
   (to-list () `(concat (:actions ,(synth-all to-list actions))))
-  (to-html () (div nil 
-		   (apply #'ol 
-			  (list :class 'list-group)
-			  (mapcar #'listify (synth-all to-html actions))))))
+  (to-html () (apply #'ol nil
+                     (mapcar #'listify (synth-all to-html actions)))))
 
 (defmacro concat* (&rest bindings)
   (let ((new-bindings (mapcar #'(lambda (binding)
@@ -47,19 +29,18 @@
                         (true command)
                         (false command)))
   (to-list () `(fork (:expr  ,(synth to-list expr) :true ,(synth to-list true) :false ,(synth to-list false))))
-  (to-html () (div nil 
-		   (text "Check condizione ")
-		   (div (list :class 'well) (synth to-html expr))
-		   (apply #'ul 
-			  (list :class 'list-group)
-			  (mapcar #'listify (list (span nil (i (list :class "fa fa-thumbs-up") nil) (synth to-html true)) 
-						  (span nil (i (list :class "fa fa-thumbs-down") nil) (synth to-html false))))))))
+  (to-html () (multitags
+               (text "Check della condizione ")
+               (synth to-html expr)
+               (ul nil
+                   (li nil (multitags (text "In caso di successo, ") (synth to-html true)))
+                   (li nil (multitags (text "In caso di fallimento, ") (synth to-html false)))))))
 (defprocess (client (&key (command (command command))))
     (to-list () `(client :command ,(synth to-list command)))
-  (to-html () (div nil 
-                   (text "Processo client denominato ~a" (lower name)) 
-                   (text "che esegue i seguenti passi:")
-                   (synth to-html command))))
+  (to-html () (multitags
+               (text "Processo client denominato ~a" (lower name)) 
+               (text " che esegue i seguenti passi:")
+               (p nil (synth to-html command)))))
 
 (defprocess (sync-server (&key (command (command command))
                                (input (input format))
@@ -67,17 +48,19 @@
                                (output (output (output format)))))
     (to-list () `(sync-server :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
                               :command ,(synth to-list command) :output ,(synth to-list output)))
-  (to-html () (div nil 
-                   (text "Processo server sincrono denominato ~a" (lower name))
-                   (if input 
-                       (div nil 
-                            (text " con ingresso una istanza del seguente formato dati:")
-                            (pre nil (synth to-req input))))
-                   (if parameters 
-                       (apply #'div nil (text " con parametri:")
-                              (synth-all to-html parameters))) 
-                   (text "che esegue i seguenti passi:")
-                   (synth to-html command))))
+  (to-html () (multitags
+               (text "Processo server sincrono denominato ~a" (lower name))
+               (if input 
+                   (multitags
+                    (text " con ingresso una istanza del seguente formato dati:")
+                    (p nil (synth to-html input))))
+               (if parameters 
+                   (p nil (apply #'multitags 
+                                 (text " con parametri:")
+                                 (synth-all to-html parameters))))
+               
+               (text "che esegue i seguenti passi:")
+               (p nil (synth to-html command)))))
 
 ;; (defprod process (async-server ((parameters (list expression))
 ;; 				(input format)

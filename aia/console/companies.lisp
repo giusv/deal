@@ -78,7 +78,7 @@
 
 (element company-list 
   (with-doc "Vista di tutte le compagnie assicurative registrate."
-    (table* company-format
+    (tabular* company-format
         ('nome name (label it)))))
 
 

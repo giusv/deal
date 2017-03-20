@@ -35,7 +35,7 @@
 
 (element indicator-list 
   (with-doc "Vista di tutti gli indicatori specificati dall'utente."
-    (table* indicator-format
+    (tabular* indicator-format
         ('nome name (label it))
         ('codice code (label it))
         ('data-inizio start-date (label it))

@@ -15,11 +15,11 @@
 
   (to-html (path) (let ((newpath (backward-chain (static-chunk name) path)))
 		    (multitags 
-                     (h3 nil 
-                         (text "Elemento statico di nome ~a (URL: " (lower name)) 
-                         (code nil (synth to-url newpath))
-                         (text ")"))
-                     (synth to-html element newpath))))
+                     (section nil 
+                              (h3 nil (text "Elemento statico di nome ~a (URL: " (lower name)) 
+                                  (code nil (synth to-url newpath))
+                                  (text ")"))
+                              (p nil (synth to-html element newpath))))))
   (toplevel () (list (static name element)))
   (req (path) 
        (let ((newpath (backward-chain (static-chunk name) path))) 

@@ -6,8 +6,8 @@
   ;;       	   (nest 4 (apply #'vcat (synth-all to-req (cons default elements) path)))))
   (to-html (path)
 	   (multitags 
-                  (span nil (text "Tale elemento mostra, a seconda dell'URL, una alternativa della lista")
-                        (if (not elements) (text " vuota") (text " seguente:")))
+                  (text "Tale elemento mostra, a seconda dell'URL, una alternativa della lista")
+                  (if (not elements) (text " vuota") (text " seguente:"))
 		  (apply #'ul nil ;; (list :class 'list-group)
 			 (listify (synth to-html default path))
 			 (mapcar #'listify (synth-all to-brief elements path)))

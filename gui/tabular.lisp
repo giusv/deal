@@ -1,4 +1,4 @@
-;; (defprod element (table ((name symbol)
+;; (defprod element (tabular ((name symbol)
 ;;                            (query query)
 ;;                            (render function)))
 ;;   (to-list () `(tabular (:name ,name :query ,(synth to-list query) :render ,render)))
@@ -12,10 +12,10 @@
 ;;   ;;       		   fields))))
 ;;   )
 
-(defprod element (table ((name symbol)
+(defprod element (tabular ((name symbol)
                          (schema jsschema)
                          &rest (bindings (list binding))))
-  (to-list () `(table (:name ,name 
+  (to-list () `(tabular (:name ,name 
                              :schema ,(synth to-list schema) 
                              :bindings ,(synth-list-merge 3
                                          (lambda (triple) 
@@ -43,18 +43,18 @@
                             (multitags (dt nil header) 
                                        (dl nil element))))
                         bindings))))
-  (to-brief (path) (synth to-html (apply #'table name schema bindings)))
+  (to-brief (path) (synth to-html (apply #'tabular name schema bindings)))
   (toplevel () nil)
   (req (path) nil))
 
-(defmacro table* (schema &body bindings)
-  `(table (gensym "TABLE") 
+(defmacro tabular* (schema &body bindings)
+  `(tabular (gensym "TABULAR") 
           ,schema 
           ,@(apply #'append (mapcar (lambda (binding)
                                      (list (first binding) `(prop ',(second binding)) `(lambda (it) (declare (ignorable it)) ,(third binding))))
                                    bindings))))
 
 
-;; (table* indicator-format
+;; (tabular* indicator-format
 ;;        ('codice code (label it))
 ;;        ('start-date data-inizio (button* it)))

@@ -118,7 +118,7 @@
 
 (element indicator-list 
   (with-doc "Vista di tutti gli indicatori registrati."
-    (table* indicator-format
+    (tabular* indicator-format
         ('nome name (label it)))))
 
 (defun indicator-details (indicator-id)

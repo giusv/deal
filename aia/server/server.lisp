@@ -8,8 +8,8 @@
                             (result (translate2 ind-code :pre (+false+) :post (+true+)))
                             ((fork (+equal+ result (const "Success"))
                                    (concat* (indic (create-instance2 indicator-entity 
-                                                                     (list (prop 'id) (variab (gensym)) 
-                 aia2                                                          (prop 'code) result
+                                                                     (list (prop 'id) (autokey)
+                                                                           (prop 'code) result
                                                                            (prop 'start-date) ind-startdate)))
                                             ((persist indic))
                                             ((http-response 201 :payload result)))
@@ -35,7 +35,7 @@
                             ((fork (+and+ comp-name-valid comp-add-valid) 
                                    (concat* 
                                     (company (create-instance2 company-entity 
-                                                               (list (prop 'id) (variab (gensym)) 
+                                                               (list (prop 'id) (autokey)
                                                                      (prop 'name) comp-name
                                                                      (prop 'address) comp-add))) 
                                     ((persist company)) 
@@ -67,7 +67,7 @@
                               ((fork (+and+ comp-valid comp-name-valid comp-add-valid) 
                                      (concat* 
                                       (company (create-instance2 company-entity 
-                                                                 (list (prop 'id) (variab (gensym)) 
+                                                                 (list (prop 'id) (autokey) 
                                                                        (prop 'name) comp-name
                                                                        (prop 'address) comp-add))) 
                                       ((persist company)) 
@@ -76,8 +76,9 @@
 
 (service company-service 
          (rest-service 'company-service 
-                       (url `(aia / compagnie))
-                       (rest-post (void-url) add-company)))
+                       (url `(aia))
+                       (rest-post (url `(compagnie)) add-company)
+                       (rest-delete (url `(compagnie / id)) remove-company)))
 
 (write-file "d:/giusv/temp/server.html" 
 	    (synth to-string 
