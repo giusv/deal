@@ -15,6 +15,14 @@
                       (vert code start-date)))
            ((button* (const "Invio") :click (post-ind-spec (payload ind)))))))
 
+(element indicator-parameters-form
+  (with-doc "Il form di inserimento della specifica di un nuovo indicatore"
+    (vert* (ind (obj* 'ind-data indicator-format 
+                      ((code code (textarea* (const "Codice indicatore")))
+                       (start-date start-date (input* (const "Data inizio validità"))))
+                      (vert code start-date)))
+           ((button* (const "Invio") :click (post-ind-spec (payload ind)))))))
+
 (element indicator-error 
   (with-doc "Pagina visualizzata in presenza di errori nella specifica del nuovo indicatore"
     (vert (label (const "Errore nella specifica dell'indicatore!"))

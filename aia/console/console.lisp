@@ -13,6 +13,7 @@
     (hub-spoke ((administration "Amministrazione" admin-section)
                 (indicator-management "Indicatori" indicator-section)
                 (company-management "Compagnie" company-section)
+                (news-management "Notizie" news-section)
                 )
                nil
                (with-doc "Sequenza di pannelli di scelta"
