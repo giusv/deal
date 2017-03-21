@@ -28,6 +28,7 @@
 
 
 (load "d:/giusv/lisp/extent/gui/button.lisp")
+(load "d:/giusv/lisp/extent/gui/checkbox.lisp")
 (load "d:/giusv/lisp/extent/gui/input.lisp")
 (load "d:/giusv/lisp/extent/gui/textarea.lisp")
 (load "d:/giusv/lisp/extent/gui/label.lisp")
@@ -49,8 +50,11 @@
 (load "d:/giusv/lisp/extent/aia/console/indicators2.lisp")
 (load "d:/giusv/lisp/extent/aia/console/companies.lisp")
 (load "d:/giusv/lisp/extent/aia/console/news.lisp")
-;; (load "d:/giusv/lisp/extent/aia/console/console.lisp")
-(load "d:/giusv/lisp/extent/aia/server/newscrud.lisp")
-;; (load "d:/giusv/lisp/extent/aia/console.lisp")
+(load "d:/giusv/lisp/extent/aia/console/console.lisp")
 
+(load "d:/giusv/lisp/extent/aia/server/companycrud.lisp")
+(load "d:/giusv/lisp/extent/aia/server/newscrud.lisp")
+(load "d:/giusv/lisp/extent/aia/server/indicatorcrud.lisp")
+
+(load "d:/giusv/lisp/extent/aia/main.lisp")
 

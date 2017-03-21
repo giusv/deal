@@ -1,21 +1,21 @@
 (data parameter-format
       (jsobject 'formato-parametro
-                (jsprop 'name t (jsstring 'stringa-nome))
-                (jsprop 'value t (jsstring 'stringa-valore))))
+                (jsprop 'name t (jsstring 'nome))
+                (jsprop 'value t (jsstring 'valore))))
 
 (data indicator-format 
     (jsobject 'formato-indicatore
-              (jsprop 'name t (jsstring 'stringa-nome))
-              (jsprop 'code t (jsstring 'stringa-codice))
-              (jsprop 'start-date t (jsstring 'data-data-inizio))
+              (jsprop 'name t (jsstring 'nome))
+              (jsprop 'code t (jsstring 'codice))
+              (jsprop 'start-date t (jsstring 'data-inizio))
               (jsprop 'parameters t (jsarray 'formato-parametro parameter-format))))
 
 (data company-address
-      (jsstring 'stringa-indirizzo))
+      (jsstring 'indirizzo))
 
 (data company-format 
     (jsobject 'formato-compagnia
-              (jsprop 'name t (jsstring 'stringa-nome))
+              (jsprop 'name t (jsstring 'nome))
               (jsprop 'addresses t company-address)))
 
 (data subscriber-format

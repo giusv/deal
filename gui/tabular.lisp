@@ -17,29 +17,21 @@
                          &rest (bindings (list binding))))
   (to-list () `(tabular (:name ,name 
                              :schema ,(synth to-list schema) 
-                             :bindings ,(synth-list-merge 3
-                                         (lambda (triple) 
-                                           ;; (pprint triple)
-                                           (list (first triple) 
-                                                 (synth to-list (second triple)) 
-                                                 (synth to-list (funcall (third triple) 
-                                                                         (car (funcall (synth to-func (second triple))
-                                                                                       schema))))))
+                             :bindings ,(synth-list-merge 2
+                                         (lambda (pair) 
+                                           (list (first pair) 
+                                                 (synth to-list (funcall (second pair) schema))))
                                          bindings))))
   (to-html (path)
 	   (div nil 
                 (text "Tabella con le seguenti colonne:") 
                 (apply #'dl nil 
-                       (synth-list-merge 3
-                        (lambda (triple) 
-                          (let ((header (textify (first triple)))
-                                ;; (property (synth to-req (second triple)))
+                       (synth-list-merge 2
+                        (lambda (pair) 
+                          (let ((header (textify (first pair))) 
                                 (element (synth to-html 
-                                                (funcall (third triple) 
-                                                         (second triple)
-                                                         ;; (car (funcall (synth to-func (second triple))
-                                                         ;;           schema))
-                                                         ) path))) 
+                                                (funcall (second pair) schema)
+                                                path))) 
                             (multitags (dt nil header) 
                                        (dl nil element))))
                         bindings))))
@@ -51,7 +43,7 @@
   `(tabular (gensym "TABULAR") 
           ,schema 
           ,@(apply #'append (mapcar (lambda (binding)
-                                     (list (first binding) `(prop ',(second binding)) `(lambda (it) (declare (ignorable it)) ,(third binding))))
+                                     (list (first binding) `(lambda (it) (declare (ignorable it)) ,(second binding))))
                                    bindings))))
 
 

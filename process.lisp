@@ -1,6 +1,5 @@
-(defmacro process (name proc)
-  `(defparameter ,name ,proc))
-
+(defmacro process (name &body proc)
+  `(defparameter ,name ,@proc))
 
 (defmacro defprocess ((name lambda-list) &rest attrs)
   (let* ((new-lambda-list (add-parameters lambda-list 'key '(name (name symbol))))) 
@@ -91,14 +90,53 @@
                (text "che esegue i seguenti passi:")
                (p nil (synth to-html command)))))
 
-;; (defprod process (auxiliary ((parameters (list expression))
-;; 				(input format)
-;; 				(command command)
-;; 				(output format)))
-;;   (to-list () `(aauxiliary :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
-;; 			     :command ,(synth to-list command) :output ,(synth to-list output)))
-;;   ())
 
-;; (defparameter *validation* ())
-;; (defun *submit-user* (data) (let* ((post (http-post data))
-;; 				   (choice (<equal> (synth response))))))
+
+(defmacro create* (name format autogen fields additions &optional finally)
+  (labels ((generate-extractor (field)
+             (destructuring-bind (fname getter setter validators) field
+               (declare (ignorable validators setter))
+               (let* ((extracted (symb name "-" fname))
+                      (valid (symb extracted "-VALID")))
+                 `((,extracted (extract2 ,getter ,format))
+                   (,valid (validate2 ,extracted (list ,@validators)))))))
+           (generate-persistor (field)
+             (destructuring-bind (fname getter setter validators) field
+               (declare (ignorable getter validators))
+               `(,setter ,(symb name "-" fname)))))
+    `(sync-server 
+      :name ',(symb "CREATE-" name)
+      ,@(if format `(:input ,(symb name "-FORMAT")))
+      :command (concat* ,@(apply #'append (mapcar #'generate-extractor fields)) 
+                        ((fork (+and+ ,@(append (mapcar #'(lambda (arg) (symb name "-" arg "-VALID"))
+                                                        (mapcar #'car fields)))) 
+                               (concat* 
+                                (,name (create-instance2 ,(symb name "-ENTITY") 
+                                                         (list 
+                                                          ,@(if autogen `(,autogen (autokey)))
+                                                          ,@additions
+                                                          ,@(apply #'append (mapcar #'generate-persistor fields))))) 
+                                ((persist ,name))
+                                ,@(if finally (list `(,finally)) nil)
+                                ((http-response 201 :payload (value ,name))))
+                               (http-response 403)))))))
+
+(defmacro remove* (name format validators &optional finally)
+  (let* ((valid (symb name "-VALID")))
+    `(let ((,name (path-parameter ',name)))
+       (sync-server 
+        :name ',(symb "REMOVE-" name)
+        :parameters (list ,name) 
+        :command (concat* (,valid (validate2 ,name (list ,@validators)))
+                          ((fork ,valid
+                                 (concat* 
+                                  ((erase2 ,format ,name)) 
+                                  ,@(if finally (list `(,finally)) nil)
+                                  ((http-response 204)))
+                                 (http-response 400))))))))
+
+
+
+
+
+

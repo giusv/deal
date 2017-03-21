@@ -12,14 +12,14 @@
 (defprod data (jsstring ((name symbol)))
   (to-list () `(jsstring :name ,(lower name)))
   ;; (to-req () (text "~a: stringa" (lower name)))
-  (to-html () (text "stringa"))
+  (to-html () (text "~a (stringa)" (lower name)))
   ;; (instance (val) (jstring val))
   )
 
 (defprod data (jsnumber ((name symbol)))
   (to-list () `(jsnumber :name ,(lower name)))
   ;; (to-req () (text "~a: numero" (lower name)))
-  (to-html () (text "numero" (lower name)))
+  (to-html () (text "~a (numero)" (lower name)))
   ;; (instance (val) (jnumber val))
   )
 

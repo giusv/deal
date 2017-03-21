@@ -23,3 +23,15 @@
                    (strong nil (text "~a" conclusion))
                    (empty)))) 
   (toplevel () (list (synth toplevel process))))
+
+(defprod element (with-description ((description string)
+                                    (element element)))
+  (to-list () `(with-description (:description (synth to-list description) :element (synth to-list element))))
+  (to-html (path) (multitags 
+                   (h4 nil (text "Descrizione"))
+                   (text "~a" description) 
+                   (h4 nil (text "Controlli e logica elaborativa"))
+                   (synth to-html element path)))
+  (to-brief (path) (synth to-brief element path))
+  (toplevel () (list (synth toplevel element)))
+  (req (path) (synth req element path)))

@@ -51,28 +51,28 @@
            ((button* (const "Invio") :click (post-indicator-code (payload ind)))))))
 
 (element indicator-creation-error 
-  (with-doc "Pagina visualizzata in presenza di errori nella creazione di un nuovo indicatore"
+  (with-description "Pagina visualizzata in presenza di errori nella creazione di un nuovo indicatore"
     (vert (label (const "Errore nella specifica dell'indicatore"))
           (button* (const "Indietro") :click (target (url `(indicator-management)))))))
 
 (element indicator-creation-success 
-  (with-doc "Pagina visualizzata in caso di successo nella creazione di un nuovo indicatore"
+  (with-description "Pagina visualizzata in caso di successo nella creazione di un nuovo indicatore"
     (vert (label (const "Indicatore creato con successo"))
           (button* (const "Indietro") :click (target (url `(indicator-management)))))))
 
 (element create-indicator 
-  (with-doc "La sezione in cui l'utente può specificare i dati di un nuovo indicatore"
+  (with-description "La sezione in cui l'utente può specificare i dati di un nuovo indicatore"
     (alt indicator-creation-form
          (static2 :indicator-creation-error nil indicator-creation-error)
          (static2 :indicator-creation-success nil indicator-creation-success))))
 
 (element indicator-code-modification-error 
-  (with-doc "Pagina visualizzata in presenza di errori nella modifica del codice di un indicatore"
+  (with-description "Pagina visualizzata in presenza di errori nella modifica del codice di un indicatore"
     (vert (label (const "Errore nella specifica dell'indicatore"))
           (button* (const "Indietro") :click (target (url `(indicator-management)))))))
 
 (element indicator-code-modification-success 
-  (with-doc "Pagina visualizzata in caso di successo nella modifica del codice di un indicatore"
+  (with-description "Pagina visualizzata in caso di successo nella modifica del codice di un indicatore"
     (vert (label (const "Indicatore modificato con successo"))
           (button* (const "Indietro") :click (target (url `(indicator-management)))))))
 
@@ -86,12 +86,12 @@
            ((button* (const "Invio") :click (put-indicator-code indicator-id (payload ind))))))))
 
 (element indicator-parameters-modification-error 
-  (with-doc "Pagina visualizzata in presenza di errori nella modifica dei parametri di un indicatore"
+  (with-description "Pagina visualizzata in presenza di errori nella modifica dei parametri di un indicatore"
     (vert (label (const "Errore nella specifica dei parametri dell'indicatore"))
           (button* (const "Indietro") :click (target (url `(indicator-management)))))))
 
 (element indicator-parameters-modification-success 
-  (with-doc "Pagina visualizzata in caso di successo nella modifica dei parametri di un indicatore"
+  (with-description "Pagina visualizzata in caso di successo nella modifica dei parametri di un indicatore"
     (vert (label (const "Parametri dell'indicatore modificati con successo"))
           (button* (const "Indietro") :click (target (url `(indicator-management)))))))
 
@@ -105,13 +105,13 @@
            ((button* (const "Invio") :click (put-indicator-parameters indicator-id (payload ind))))))))
 
 (defun modify-indicator-code (indicator-id)
-  (with-doc "La sezione in cui l'utente può modificare i dati di un indicatore esistente"
+  (with-description "La sezione in cui l'utente può modificare i dati di un indicatore esistente"
     (alt (indicator-code-modification-form indicator-id)
          (static2 :indicator-code-modification-error nil indicator-code-modification-error)
          (static2 :indicator-code-modification-success nil indicator-code-modification-success))))
 
 (defun modify-indicator-parameters (indicator-id)
-  (with-doc "La sezione in cui l'utente può modificare i parametri di un indicatore esistente"
+  (with-description "La sezione in cui l'utente può modificare i parametri di un indicatore esistente"
     (alt (indicator-parameters-modification-form indicator-id)
          (static2 :indicator-modification-error nil indicator-parameters-modification-error)
          (static2 :indicator-modification-success nil indicator-parameters-modification-success))))
@@ -119,10 +119,11 @@
 (element indicator-list 
   (with-doc "Vista di tutti gli indicatori registrati."
     (tabular* indicator-format
-        ('nome name (label it)))))
+        ('seleziona (checkbox*))
+        ('nome (label (filter (prop 'name) it))))))
 
 (defun indicator-details (indicator-id)
-  (with-doc "La sezione con i dettagli di una indicatore"
+  (with-description "La sezione con i dettagli di una indicatore"
     (with-data* ((indicator-data (remote 'indicator-data indicator-format (url `(aia / indicators / { ,(value indicator-id) })))))
       (vert (label (cat (const "Indicatore id:") indicator-id))
             (label (attr indicator-data 'code))

@@ -85,7 +85,7 @@
 (element news-list 
   (with-doc "Vista di tutte le notizie registrate."
     (tabular* news-format
-        ('testo text (label it)))))
+        ('testo (label it)))))
 
 
 (defun news-details (news-id)

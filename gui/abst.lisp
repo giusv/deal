@@ -4,7 +4,8 @@
   (to-req (path) (vcat (text "Elemento parametrico con parametri:")
                        (nest 4 (apply #'vcat (synth-all to-req parameters)))
                        (synth to-req element path)))
-  (to-html (path) (multitags (text "Elemento parametrico caratterizzato dai seguenti parametri:")
+  (to-html (path) (multitags (h4 nil (text "Input")) 
+                             (text "Elemento parametrico caratterizzato dai seguenti parametri:")
                              (apply #'table nil
                                     (tr nil 
                                         (th nil (text "Parametro"))
