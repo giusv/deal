@@ -32,6 +32,7 @@
       (jsobject 'formato-auditing
                 (jsprop 'name t (jsstring 'nome-compagnia))))
 
+
 (data indicator-entity (entity 'indicator-entity
 			       (primary-key 
 				(attribute 'id 'string))
@@ -43,6 +44,12 @@
                                    (attribute 'id 'integer))
                                   (list (attribute 'name 'string)
                                         (attribute 'address 'string))))
+
+(data subscription-entity (entity 'subscription-entity
+                                  (primary-key
+                                   (attribute 'company-id 'integer)
+                                   (attribute 'news-id 'integer))
+                                  nil))
 
 (data news-entity (entity 'news-entity
                           (primary-key

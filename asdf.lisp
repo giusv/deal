@@ -50,7 +50,7 @@
 (load "d:/giusv/lisp/extent/aia/console/companies.lisp")
 (load "d:/giusv/lisp/extent/aia/console/news.lisp")
 ;; (load "d:/giusv/lisp/extent/aia/console/console.lisp")
-(load "d:/giusv/lisp/extent/aia/server/companycrud.lisp")
+(load "d:/giusv/lisp/extent/aia/server/newscrud.lisp")
 ;; (load "d:/giusv/lisp/extent/aia/console.lisp")
 
 

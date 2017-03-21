@@ -1,8 +1,17 @@
-(process get-subscriber 
-         (auxiliary 
-          :name 'get-subscriber
-          :input subscriber-format
-          :command (concat* (subscriber-id (extract2 (prop 'text) news-format)))))
+(defun create-subscription (news-id)
+  (auxiliary
+   :name 'create-subscription
+   :input subscriber-format
+   :command (concat* (subscriber-number (extract2 (this) subscriber-format))
+                     (subscriber-number-valid (validate2 subscriber-number (list (minlen 2) (maxlen 5)))) 
+                     ((fork (+equal+ subscriber-number-valid (+true+)) 
+                            (concat* 
+                             (subscription (create-instance2 subscription-entity 
+                                                           (list (prop 'news-id) news-id
+                                                                 (prop 'company-id) subscriber-number))) 
+                             ((persist subscription)))
+                            (http-response 403))))))
+
 (process create-news 
          (sync-server
           :name 'create-news
@@ -10,8 +19,7 @@
           :command (concat* (news-text (extract2 (prop 'text) news-format))
                             (news-start-date (extract2 (prop 'start-date) news-format))
                             (news-end-date (extract2 (prop 'end-date) news-format))
-                            (news-text-valid (validate2 news-text (list (required) (minlen 2) (maxlen 5))))
-                            (subscribers (map-process get-subscriber (extract2 (prop 'subscribers) news-format)))
+                            (news-text-valid (validate2 news-text (list (required) (minlen 2) (maxlen 5)))) 
                             (news-start-date-valid (validate2 news-start-date (list (regex "[0..9]+"))))
                             ((fork (+and+ news-text-valid news-start-date-valid) 
                                    (concat* 
@@ -21,7 +29,7 @@
                                                                      (prop 'start-date) news-start-date
                                                                      (prop 'end-date) news-end-date))) 
                                     ((persist news))
-                                    
+                                    ((map-command (create-subscription (attr news 'id)) (filter (prop 'subscribers) news-format)))
                                     ((http-response 201 :payload (value news))))
                                    (http-response 403))))))
 

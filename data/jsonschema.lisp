@@ -53,6 +53,9 @@
                (text "array denominato ~a costituito dal seguente elemento:" (lower name))
                (synth to-html elem))))
 
+(defun get-this ()
+  #'(lambda (jsschema)
+      (list jsschema)))
 (defun get-elem ()
   #'(lambda (jsschema)
       (list (synth elem jsschema))))
@@ -76,6 +79,12 @@
       (funcall (reduce #'compose-filter filters) jsschema)))
 
 
+
+(defprod filter (this ())
+  (to-list () `(this))
+  (to-func () (get-this))
+  (to-req () (text "this"))
+  (to-html () (text "this")))
 
 (defprod filter (prop ((name string)))
   (to-list () `(prop (:name ,name)))
@@ -114,7 +123,8 @@
 	    (jsprop 'addresses t *addresses*)
 	    (jsprop 'numbers t (jsarray 'numbers-array (jsnumber 'number-number)))))
 
-
+(defun filter (filt obj) 
+  (car (funcall (synth to-func filt) obj)))
 
 ;; (pprint (synth to-list (car (funcall (compose-filters (get-prop 'addresses) (get-elem) (get-prop 'city)) *user*))))
 ;; (pprint (synth to-list (car (funcall (synth to-func (comp (prop 'addresses) (elem) (prop 'city))) *user*))))

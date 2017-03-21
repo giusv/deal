@@ -35,6 +35,15 @@
                (ul nil
                    (li nil (multitags (text "In caso di successo, ") (synth to-html true)))
                    (li nil (multitags (text "In caso di fallimento, ") (synth to-html false)))))))
+
+(defprocess (map-command ((command command)
+                          (array format)))
+    (to-list () `(map-command (:command ,(synth to-list command) :array ,(synth to-list array))))
+  (to-html () (multitags
+               (text "Processo che mappa sull'array ~a" (lower (synth name array))) 
+               (text " il seguente sottoprocesso:")
+               (p nil (synth to-html command)))))
+
 (defprocess (client (&key (command (command command))))
     (to-list () `(client :command ,(synth to-list command)))
   (to-html () (multitags
@@ -62,11 +71,31 @@
                (text "che esegue i seguenti passi:")
                (p nil (synth to-html command)))))
 
-;; (defprod process (async-server ((parameters (list expression))
+(defprocess (auxiliary (&key (command (command command))
+                               (input (input format))
+                               (parameters (parameters (list expression))) 
+                               (output (output (output format)))))
+    (to-list () `(auxiliary :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
+                              :command ,(synth to-list command) :output ,(synth to-list output)))
+  (to-html () (multitags
+               (text "Processo ausiliario denominato ~a" (lower name))
+               (if input 
+                   (multitags
+                    (text " con ingresso una istanza del seguente formato dati:")
+                    (p nil (synth to-html input))))
+               (if parameters 
+                   (p nil (apply #'multitags 
+                                 (text " con parametri:")
+                                 (synth-all to-html parameters))))
+               
+               (text "che esegue i seguenti passi:")
+               (p nil (synth to-html command)))))
+
+;; (defprod process (auxiliary ((parameters (list expression))
 ;; 				(input format)
 ;; 				(command command)
 ;; 				(output format)))
-;;   (to-list () `(async-server :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
+;;   (to-list () `(aauxiliary :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
 ;; 			     :command ,(synth to-list command) :output ,(synth to-list output)))
 ;;   ())
 
