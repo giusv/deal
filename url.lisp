@@ -14,7 +14,7 @@
 
 (defprod parameter (path-parameter ((name string)))
   (to-list () `(path-parameter (:name ,name)))
-  (to-req () (text "parametro path: ~a" name))
+  (to-req () (text "~a (path)" (lower name)))
   (type () (text "path"))
   (to-html () (synth to-req (path-parameter name)))
   (to-url () (dynamic-chunk name)))
@@ -25,7 +25,7 @@
 		       (hcat (equals) (synth to-url value))
 		       (empty))))
   (to-html () (synth to-req (query-parameter name value)))
-  (to-req () (text "parametro query: ~a" name))
+  (to-req () (text "~a (query)" (lower name)))
   (type () (text "query"))
   (to-list () `(query-parameter (:name ,name :value ,(synth to-list value)))))
 

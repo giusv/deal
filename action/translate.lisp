@@ -5,8 +5,8 @@
   (to-html () (multitags 
                (text "Sia ") 
                (synth to-html result) 
-               (text " il risultato della compilazione del seguente sorgente:")
-               (div (list :class 'well) (synth to-req source))
+               (text " il risultato della compilazione di")
+               (synth to-req source)
                (dlist pre (text "Precondizione: ") (synth to-html pre)
                       post (text "Postcondizione:") (synth to-html post)))))
 

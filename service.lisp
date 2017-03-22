@@ -1,5 +1,5 @@
-(defmacro service (name serv)
-  `(defparameter ,name ,serv))
+(defmacro service (name &body serv)
+  `(defparameter ,name ,@serv))
 
 
 
@@ -20,13 +20,14 @@
        (to-list () (list ',full-name (list :url (synth to-list url) 
                                            :process (synth to-list process))))
        (to-html () (multitags 
-                    (text "Endpoint REST con metodo ~a all'URL" ',name)
-                    (synth to-url url) 
-                    (text "e associato al seguente processo:")
-                    (p nil (synth to-html process)))))))
+                    (section nil 
+                             (h3 nil (text "Endpoint REST con metodo ~a all'URL" ',name)
+                                 (code nil (synth to-url url) ))
+                             (p nil (synth to-html process))))))))
 
 (def-rest-endpoint get)
 (def-rest-endpoint post)
 (def-rest-endpoint put)
 (def-rest-endpoint delete)
+
 

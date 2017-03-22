@@ -6,11 +6,19 @@
   (to-chunk () exp)
   (to-string () (double-quotes (text "~a" exp))))
 
+
+(defprod exp (argument ((name symbol)))
+  (to-list () `(argument (:name ,name)))
+  (to-req () (text "~a" name))
+  (to-html () (braces (text "~a" (lower name))))
+  ;; (to-html () (span (list :class "label label-danger") (text "~a!~a" (lower (synth name data)) (lower exp))))
+  )
+
 (defprod exp (attr ((data datasource)
                     (exp symbol)))
   (to-list () `(attr (:data ,data :exp ,exp)))
-  (to-req () (text "~a!~a" data exp))
-  (to-html () (brackets (text "valore del campo ~a" exp)))
+  (to-req () (text "~a!~a" (lower (synth name data)) (lower exp)))
+  (to-html () (brackets (text "~a!~a" (lower (synth name data)) (lower exp))))
   ;; (to-html () (span (list :class "label label-danger") (text "~a!~a" (lower (synth name data)) (lower exp))))
   (to-string () (text "~a!~a" data exp)))
 

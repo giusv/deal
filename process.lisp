@@ -40,15 +40,26 @@
     (to-list () `(map-command (:command ,(synth to-list command) :array ,(synth to-list array))))
   (to-html () (multitags
                (text "Processo che mappa sull'array ~a" (lower (synth name array))) 
-               (text " il seguente sottoprocesso:")
+               (text " il seguente comando:")
                (p nil (synth to-html command)))))
 
-(defprocess (client (&key (command (command command))))
-    (to-list () `(client :command ,(synth to-list command)))
+;; (defprocess (client (&key (command (command command))))
+;;     (to-list () `(client :command ,(synth to-list command)))
+;;   (to-html () (multitags
+;;                (text "Processo client denominato ~a" (lower name)) 
+;;                (text " che esegue i seguenti passi:")
+;;                (p nil (synth to-html command)))))
+
+(defprocess (mu ((input symbol)
+                 (command command)))
+    (to-list () `(mu (:input ,input :command ,(synth to-list command))))
   (to-html () (multitags
-               (text "Processo client denominato ~a" (lower name)) 
-               (text " che esegue i seguenti passi:")
+               (text "Comando parametrico di parametro ~a che esegue:" (lower input))
                (p nil (synth to-html command)))))
+
+(defmacro mu* (input command)
+  `(let* ((,input ',input)) 
+     (mu ,input ,command)))
 
 (defprocess (sync-server (&key (command (command command))
                                (input (input format))
@@ -70,25 +81,25 @@
                (text "che esegue i seguenti passi:")
                (p nil (synth to-html command)))))
 
-(defprocess (auxiliary (&key (command (command command))
-                               (input (input format))
-                               (parameters (parameters (list expression))) 
-                               (output (output (output format)))))
-    (to-list () `(auxiliary :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
-                              :command ,(synth to-list command) :output ,(synth to-list output)))
-  (to-html () (multitags
-               (text "Processo ausiliario denominato ~a" (lower name))
-               (if input 
-                   (multitags
-                    (text " con ingresso una istanza del seguente formato dati:")
-                    (p nil (synth to-html input))))
-               (if parameters 
-                   (p nil (apply #'multitags 
-                                 (text " con parametri:")
-                                 (synth-all to-html parameters))))
+;; (defprocess (auxiliary (&key (command (command command))
+;;                                (input (input format))
+;;                                (parameters (parameters (list expression))) 
+;;                                (output (output (output format)))))
+;;     (to-list () `(auxiliary :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
+;;                               :command ,(synth to-list command) :output ,(synth to-list output)))
+;;   (to-html () (multitags
+;;                (text "Processo ausiliario denominato ~a" (lower name))
+;;                (if input 
+;;                    (multitags
+;;                     (text " con ingresso una istanza del seguente formato dati:")
+;;                     (p nil (synth to-html input))))
+;;                (if parameters 
+;;                    (p nil (apply #'multitags 
+;;                                  (text " con parametri:")
+;;                                  (synth-all to-html parameters))))
                
-               (text "che esegue i seguenti passi:")
-               (p nil (synth to-html command)))))
+;;                (text "che esegue i seguenti passi:")
+;;                (p nil (synth to-html command)))))
 
 
 

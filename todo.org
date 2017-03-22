@@ -15,6 +15,10 @@
 ** TODO abstraction on documentation generation (section, list, etc.) to be compiled in either html or markdown or docx
 ** TODO pandoric macros on productions
 ** TODO list element linked to json array
+** TODO create hyperlinks in output document
+** TODO better management of parametric process (synth name not applicable to everything)
+** TODO query implementation
+** TODO foreign keys as constraints, not further attributes
 
 
 

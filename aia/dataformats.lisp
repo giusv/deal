@@ -21,6 +21,11 @@
 (data subscriber-format
       (jsnumber 'sottoscrittore))
 
+;; (data subscription-format
+;;      (jsobject 'formato-sottoscrizione
+;;               (jsprop 'news-id t (jsstring 'id-notizia))
+;;               ))
+
 (data news-format 
     (jsobject 'formato-notizia
               (jsprop 'text t (jsstring 'testo-notizia))
@@ -38,6 +43,14 @@
 				(attribute 'id 'string))
 			       (list (attribute 'code 'string)
 				     (attribute 'start-date 'string))))
+
+(data parameter-entity (entity 'parameter-entity
+			       (primary-key 
+				(attribute 'id 'string))
+			       (list (attribute 'name 'string)
+				     (attribute 'value 'string))
+                               (foreign-key 'indicator-entity 
+                                            (attribute 'indicator-id 'string))))
 
 (data company-entity (entity 'company-entity
                                   (primary-key
