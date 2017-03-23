@@ -47,7 +47,7 @@
 (load "d:/giusv/lisp/extent/gui.lisp")
 
 (load "d:/giusv/lisp/extent/aia/dataformats.lisp")
-(load "d:/giusv/lisp/extent/aia/console/indicators2.lisp")
+(load "d:/giusv/lisp/extent/aia/console/indicators.lisp")
 (load "d:/giusv/lisp/extent/aia/console/companies.lisp")
 (load "d:/giusv/lisp/extent/aia/console/news.lisp")
 (load "d:/giusv/lisp/extent/aia/console/console.lisp")
@@ -57,5 +57,8 @@
 (load "d:/giusv/lisp/extent/aia/server/indicatorcrud.lisp")
 (load "d:/giusv/lisp/extent/aia/server/aia.lisp")
 
+
+(load "d:/giusv/lisp/extent/aia/aia.lisp")
 (load "d:/giusv/lisp/extent/aia/main.lisp")
+
 

@@ -26,7 +26,7 @@
   (to-list () `(attr (:name ,name)))
   (to-string () (textify name))
   (to-req () (text "~a" name))
-  (to-html () (brackets (text "~a" name))))
+  (to-html () (span-color (lower name))))
   ;; (to-html () (span (list :class "label label-danger") (text "~a" name))))
 
 (defprod exp (value ((elem element)))

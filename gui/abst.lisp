@@ -6,7 +6,7 @@
                        (synth to-req element path)))
   (to-html (path) (multitags (h4 nil (text "Input")) 
                              (text "Elemento parametrico caratterizzato dai seguenti parametri:")
-                             (apply #'table nil
+                             (apply #'table (list :style "width: auto;" :class "table table-striped")
                                     (tr nil 
                                         (th nil (text "Parametro"))
                                         (th nil (text "Tipo")))

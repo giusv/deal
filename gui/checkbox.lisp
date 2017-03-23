@@ -5,7 +5,7 @@
                                 :click ,(synth to-list click))))
   (to-html (path) (multitags 
                    (text "Checkbox identificata come")
-                   (strong nil (text "~a" (lower name)))
+                   (span-color (lower name))
                    (dlist init (span nil (text "Valore iniziale")) (synth to-html init)
                           click (span nil (text "Sottoposto a click: ")) (synth to-html click))))
   (to-brief (path) (synth to-html (checkbox name expr :init init :click click) path)) 

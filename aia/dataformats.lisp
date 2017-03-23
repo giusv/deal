@@ -1,3 +1,12 @@
+(data person-search-format 
+      (jsobject 'formato-ricerca-persona
+                (jsprop 'id t (jsstring 'id))))
+
+(data accident-format 
+      (jsobject 'formato-sinistro
+                (jsprop 'id t (jsstring 'id))
+                (jsprop 'data t (jsstring 'data))))
+
 (data parameter-format
       (jsobject 'formato-parametro
                 (jsprop 'name t (jsstring 'nome))
@@ -20,11 +29,6 @@
 
 (data subscriber-format
       (jsnumber 'sottoscrittore))
-
-;; (data subscription-format
-;;      (jsobject 'formato-sottoscrizione
-;;               (jsprop 'news-id t (jsstring 'id-notizia))
-;;               ))
 
 (data news-format 
     (jsobject 'formato-notizia

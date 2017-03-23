@@ -9,7 +9,7 @@
   ;;       	       (synth to-req hover)))
   (to-html (path) (multitags 
 		       (text "Pulsante identificato come ")
-                       (strong nil (text "~a" (lower name)))
+                       (span-color (lower name))
                        (text " e etichettato con la seguente espressione:") 
                        (synth to-html expr)
                        (dlist click (span nil (text "Sottoposto a click: ")) (synth to-html click)

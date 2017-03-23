@@ -6,7 +6,7 @@
   ;; (to-req (path) (text "Pannello composto da????????"))
   (to-html (path) (multitags 
                    (text "Pannello identificato come")
-                   (strong nil (text "~a" (lower name))) 
+                   (span-color (lower name)) 
                    (text "e composto da:")
                    (dlist header (span nil (text "header")) (synth to-html header path)
                           body (span nil (text "body")) (synth to-html body path)

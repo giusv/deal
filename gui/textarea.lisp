@@ -3,7 +3,7 @@
                             &key (init (init expression))))
   (to-list () `(textarea (:name ,name :label ,(synth to-list label) :init ,(synth to-list init))))
   (to-html (path) (multitags (text "Area di testo identificata come")
-                             (strong nil (text "~a" (lower name)))
+                             (span-color (lower name))
                              (text " etichettata con ")
                              (synth to-html label) 
                              (dlist init (span nil (text "Valore iniziale")) (synth to-html init))))

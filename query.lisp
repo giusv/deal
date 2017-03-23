@@ -1,5 +1,5 @@
-(defprod query (table ((name (reference entity))))
-  (to-list () `(table :name ,name))
+(defprod query (relation ((name (reference entity))))
+  (to-list () `(relation :name ,name))
   (schema () (synth attributes (symbol-value name))))
 
 (defprod query (project ((query query)
@@ -12,7 +12,7 @@
   (to-list () `(restrict :expression ,(synth to-list expression) :query ,(synth to-list query)))
   (schema () (synth attributes query)))
 
-(defparameter *query* (project (restrict (table '*people*) (+equal+ (+true+) (+true+))) 'id 'name))
+(defparameter *query* (project (restrict (relation '*people*) (+equal+ (+true+) (+true+))) 'id 'name))
 
 (synth schema *query*)
 

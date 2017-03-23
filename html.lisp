@@ -67,8 +67,156 @@
                                              collecting `(if ,(pop args)
                                                              (list (dt nil ,(pop args))
                                                                    (dl nil ,(pop args))))))))))
+(defun span-color (name)
+  (let ((n (parse-integer (subseq name (- (length name) 3) (length name))))) 
+    (span (list :style (concatenate 'string "background-color:" (lower (nth (mod n (length html-colors)) html-colors)))) (text "~a" name))))
 
-
+(let ((s "012345"))
+  (pprint (parse-integer (subseq s (- (length s) 2) (length s)))))
+(defparameter html-colors 
+  (list 'aliceblue
+        'antiquewhite
+        'aqua
+        'aquamarine
+        'azure
+        'beige
+        'bisque
+        'black
+        'blanchedalmond
+        'blue
+        'blueviolet
+        'brown
+        'burlywood
+        'cadetblue
+        'chartreuse
+        'chocolate
+        'coral
+        'cornflowerblue
+        'cornsilk
+        'crimson
+        'cyan
+        'darkblue
+        'darkcyan
+        'darkgoldenrod
+        'darkgray
+        'darkgreen
+        'darkkhaki
+        'darkmagenta
+        'darkolivegreen
+        'darkorange
+        'darkorchid
+        'darkred
+        'darksalmon
+        'darkseagreen
+        'darkslateblue
+        'darkslategray
+        'darkturquoise
+        'darkviolet
+        'deeppink
+        'deepskyblue
+        'dimgray
+        'dodgerblue
+        'firebrick
+        'floralwhite
+        'forestgreen
+        'fuchsia
+        'gainsboro
+        'ghostwhite
+        'gold
+        'goldenrod
+        'gray
+        'green
+        'greenyellow
+        'honeydew
+        'hotpink
+        'indianred
+        'indigo
+        'ivory
+        'khaki
+        'lavender
+        'lavenderblush
+        'lawngreen
+        'lemonchiffon
+        'lightblue
+        'lightcoral
+        'lightcyan
+        'lightgoldenrodyellow
+        'lightgray
+        'lightgreen
+        'lightpink
+        'lightsalmon
+        'lightsalmon
+        'lightseagreen
+        'lightskyblue
+        'lightslategray
+        'lightsteelblue
+        'lightyellow
+        'lime
+        'limegreen
+        'linen
+        'magenta
+        'maroon
+        'mediumaquamarine
+        'mediumblue
+        'mediumorchid
+        'mediumpurple
+        'mediumseagreen
+        'mediumslateblue
+        'mediumslateblue
+        'mediumspringgreen
+        'mediumturquoise
+        'mediumvioletred
+        'midnightblue
+        'mintcream
+        'mistyrose
+        'moccasin
+        'navajowhite
+        'navy
+        'oldlace
+        'olive
+        'olivedrab
+        'orange
+        'orangered
+        'orchid
+        'palegoldenrod
+        'palegreen
+        'paleturquoise
+        'palevioletred
+        'papayawhip
+        'peachpuff
+        'peru
+        'pink
+        'plum
+        'powderblue
+        'purple
+        'rebeccapurple
+        'red
+        'rosybrown
+        'royalblue
+        'saddlebrown
+        'salmon
+        'sandybrown
+        'seagreen
+        'seashell
+        'sienna
+        'silver
+        'skyblue
+        'slateblue
+        'slategray
+        'snow
+        'springgreen
+        'steelblue
+        'tan
+        'teal
+        'thistle
+        'tomato
+        'turquoise
+        'violet
+        'wheat
+        'white
+        'whitesmoke
+        'yellow
+        'yellowgreen))
 
 ;; (dlist label (span nil "Nome:") (synth to-html label path)
 ;;        input (span nil "input:") (synth to-html input path))
