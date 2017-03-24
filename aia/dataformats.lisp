@@ -7,6 +7,11 @@
                 (jsprop 'id t (jsstring 'id))
                 (jsprop 'data t (jsstring 'data))))
 
+(data vehicle-format 
+      (jsobject 'formato-veicolo
+                (jsprop 'ricorrenze t (jsnumber 'ricorrenze))
+                (jsprop 'indicatori t (jsstring 'indicatori))))
+
 (data parameter-format
       (jsobject 'formato-parametro
                 (jsprop 'name t (jsstring 'nome))
