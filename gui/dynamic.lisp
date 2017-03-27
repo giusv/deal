@@ -2,8 +2,10 @@
 				 (element element)))
   (to-list () `(dynamic (:name ,name :element ,(synth to-list element))))
   (to-brief (path) (let ((newpath (backward-chain (dynamic-chunk name) path)))
-		     (multitags (text "Elemento dinamico di nome ~a " (lower name)) 
-                                (parens (hcat (text "percorso: ") (synth to-url newpath))))))
+		     (multitags (strong nil 
+                                        (text "Elemento dinamico di nome ~a (URL: " (lower name)) 
+                                        (code nil (synth to-url newpath))
+                                        (text ")")))))
   (to-req (path) (let ((newpath (backward-chain (dynamic-chunk name) path)))
 		   (vcat (text "Elemento dinamico di nome ~a" 
 			       name) 

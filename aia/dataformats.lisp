@@ -75,7 +75,7 @@
 
 (data news-entity (entity 'news-entity
                           (primary-key
-                           (attribute 'id 'integer))
+                           (attribute 'news-id 'integer))
                           (list (attribute 'text 'string)
                                 (attribute 'start-date 'string)
                                 (attribute 'end-date 'string))))

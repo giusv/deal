@@ -14,14 +14,14 @@
   ;; (to-req () (text "~a: stringa" (lower name)))
   (to-html () (text "~a (stringa)" (lower name)))
   ;; (instance (val) (jstring val))
-  )
+  (schema () (jsstring name)))
 
 (defprod data (jsnumber ((name symbol)))
   (to-list () `(jsnumber :name ,(lower name)))
   ;; (to-req () (text "~a: numero" (lower name)))
   (to-html () (text "~a (numero)" (lower name)))
   ;; (instance (val) (jnumber val))
-  )
+  (schema () (jsnumber name)))
 
 ;; handle choice in instantiation
 ;; (defprod data (jschoice (&rest (schemas (list jsschema))))
@@ -36,14 +36,16 @@
   (to-html () (multitags 
                (text "~a: oggetto dalle seguenti proprietà:" (lower name))
                (apply #'ul nil 
-                      (synth-all to-html props)))))
+                      (synth-all to-html props))))
+  (schema () (apply #'jsobject name props)))
 
 (defprod jsprop (jsprop ((name string) (required bool) (content jsschema)))
   (to-list () `(jsprop :name ,name :required ,required :content ,(synth to-list content)))
   ;; (to-req () (hcat (text "~a" name) (if required (text " (obbligatoria)") (text " (facoltativa)")) 
   ;;       	   (text ": ") (synth to-req content)))
   (to-html () (li nil  (hcat (text "~a" (lower name)) (if required (text " (obbligatoria)") (text " (facoltativa)")) 
-                             (text ": ")) (synth to-html content))))
+                             (text ": ")) (synth to-html content)))
+  (schema () (jsprop name required content)))
 
 (defprod data (jsarray ((name symbol) (elem jsschema)))
   (to-list () `(jsarray :name ,(lower name) :elem ,(synth to-list elem)))
@@ -51,7 +53,8 @@
   ;;       	   (nest 4 (synth to-req elem))))
   (to-html () (multitags
                (text "array denominato ~a costituito dal seguente elemento:" (lower name))
-               (synth to-html elem))))
+               (synth to-html elem)))
+  (schema () (jsarray name elem)))
 
 (defun get-this ()
   #'(lambda (jsschema)

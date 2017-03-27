@@ -2,18 +2,18 @@
   `(defparameter ,name ,d))
 
 (defprod datasource (remote ((name symbol)
-                             (format format)
+                             (schema jsschema)
                              (url url)))
-  (to-list () `(remote (:name ,name :format ,(synth to-list format) :url ,(synth to-list url))))
+  (to-list () `(remote (:name ,name :schema ,(synth to-list schema) :url ,(synth to-list url))))
   (to-html ()  (multitags
                 (text "Sorgente dati remota identificata come ")
                 (text "~a, " (lower name))
-                (text "istanza del formato dati ~a " (lower (synth name format)))
+                (text "istanza dello schema dati ~a " (lower (synth name schema)))
                 (text "e popolata al caricamento dell'elemento tramite richiesta HTTP GET verso l'URL ")
                 (synth to-url url))))
 
-;; (defmacro remote* (format url)
-;;   `(remote (gensym "REMOTE") format url))
+;; (defmacro remote* (schema url)
+;;   `(remote (gensym "REMOTE") schema url))
 
 (defprod element (with-data ((bindings (list binding))
                              (element element)))

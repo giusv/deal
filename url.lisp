@@ -1,6 +1,6 @@
 (defprod pose (void-url ())
   (to-url () (empty))
-  (to-list () `(empty)))
+  (to-list () `(void-url)))
 
 (defprod chunk (static-chunk ((name string)))
   (to-url () (text "~a" (lower name)))
@@ -28,6 +28,12 @@
   (to-req () (text "~a (query)" (lower name)))
   (type () (text "query"))
   (to-list () `(query-parameter (:name ,name :value ,(synth to-list value)))))
+
+(defprod parameter (login-parameter ((name symbol)))
+  (to-html () (text "~a (login)" (lower name)))
+  (to-req () (text "~a (login)" (lower name)))
+  (type () (text "login"))
+  (to-list () `(login-parameter (:name ,name))))
 
 ;; backward-chain holds reversed path
 (defprod pose (backward-chain ((segment chunk) (pose pose)))
