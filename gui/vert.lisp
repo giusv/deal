@@ -12,8 +12,10 @@
   (req (path) (apply #'append (synth-all req elements path))))
 
 (defmacro vert* (&rest elements)
-  (let ((new-elements (mapcar #'(lambda (element)
-			  (cons (gensym) element)) 
-			      elements)))
+  (let ((new-elements elements 
+          ;; (mapcar #'(lambda (element)
+          ;;     (cons (gensym) element)) 
+          ;;         elements)
+          ))
     `(bindall ,new-elements
       (vert ,@(mapcar #'car new-elements)))))

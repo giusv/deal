@@ -1,7 +1,7 @@
 (defprod query (relation ((name (reference entity))))
   (to-list () `(relation :name ,name))
   (schema () (synth attributes (symbol-value name)))
-  (to-html () (text "relazione ~a" (lower name))))
+  (to-html () (text "relazione ~a" (lower-camel name))))
 
 (defprod query (project ((query query)
 			 &rest (attributes (list attribute)))) 

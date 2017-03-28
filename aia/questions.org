@@ -1,2 +1,7 @@
 ** TODO wizard per ricerca soggetti? Si sceglie all'inizio se persona fisica o giuridica, e compaiono i campi appropriati
 ** TODO modalità visualizzazione risultati ricerca per persona. Tabella che mescola persone e sinistri? Oppure reingegnerizzazione?
+** TODO nella maschera dettagli sinistro, i dati relativi alle persone sono specifici del singolo sinistro? 
+   Se mostrassimo un piccolo grafico nella tabella, in modo da evidenziare i veicoli sospetti?
+** TODO 
+
+

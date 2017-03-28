@@ -23,7 +23,7 @@
   (to-string () (braces 
 		 (nest 4 (apply #'punctuate (comma) t 
 				(synth-plist-merge 
-				 #'(lambda (pair) (hcat (text "\"~a\": " (lower (first pair)))
+				 #'(lambda (pair) (hcat (text "\"~a\": " (lower-camel (first pair)))
 							(synth to-string (second pair)))) 
 				 values)))
 		 :newline t)))

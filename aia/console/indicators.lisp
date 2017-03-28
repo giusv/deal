@@ -118,9 +118,9 @@
 
 (element indicator-list 
   (with-doc "Vista di tutti gli indicatori registrati."
-    (tabular* indicator-format
+    (tabular* indicator-format (ind-row)
         ('seleziona (checkbox*))
-        ('nome (label (filter (prop 'name) it))))))
+        ('nome (label (filter (prop 'name) ind-row))))))
 
 (defun indicator-details (indicator-id)
   (with-description "La sezione con i dettagli di una indicatore"

@@ -78,8 +78,8 @@
 
 (element company-list 
   (with-doc "Vista di tutte le compagnie assicurative registrate."
-    (tabular* company-format
-        ('nome (label it)))))
+    (tabular* company-format (comp-row)
+        ('nome (label (filter (prop 'name) comp-row))))))
 
 
 (defun company-details (company-id)

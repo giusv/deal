@@ -15,7 +15,7 @@
                            :bindings ,(synth-plist-both to-list to-list bindings) 
                            :element ,(synth to-list element))))
   (to-html (path) (multitags 
-  		       (text "Sezione identificata con ~a collegata al seguente formato dati:" (lower name)) 
+  		       (text "Sezione identificata con ~a collegata al seguente formato dati:" (lower-camel name)) 
   		       (p nil (synth to-html schema))
                        (synth to-html element path)
                        (p nil (text "Essa produce il seguente oggetto JSON:")
@@ -43,7 +43,7 @@
                            :max ,(synth to-list max) 
                            :element ,(synth to-list element))))
   (to-html (path) (multitags 
-  		       (text "Sezione identificata con ~a collegata al seguente formato dati:" (lower name)) 
+  		       (text "Sezione identificata con ~a collegata al seguente formato dati:" (lower-camel name)) 
   		       (p nil (synth to-html schema)) 
                        (synth to-html element path)
                        (p nil (text "Essa produce il seguente oggetto JSON:")

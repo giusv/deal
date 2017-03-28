@@ -39,14 +39,14 @@
                           (array format)))
     (to-list () `(map-command (:command ,(synth to-list command) :array ,(synth to-list array))))
   (to-html () (multitags
-               (text "Processo che mappa sull'array ~a" (lower (synth name array))) 
+               (text "Processo che mappa sull'array ~a" (lower-camel (synth name array))) 
                (text " il seguente comando:")
                (p nil (synth to-html command)))))
 
 ;; (defprocess (client (&key (command (command command))))
 ;;     (to-list () `(client :command ,(synth to-list command)))
 ;;   (to-html () (multitags
-;;                (text "Processo client denominato ~a" (lower name)) 
+;;                (text "Processo client denominato ~a" (lower-camel name)) 
 ;;                (text " che esegue i seguenti passi:")
 ;;                (p nil (synth to-html command)))))
 
@@ -54,7 +54,7 @@
                  (command command)))
     (to-list () `(mu (:input ,input :command ,(synth to-list command))))
   (to-html () (multitags
-               (text "Comando parametrico di parametro ~a che esegue:" (lower input))
+               (text "Comando parametrico di parametro ~a che esegue:" (lower-camel input))
                (p nil (synth to-html command)))))
 
 (defmacro mu* (input command)
@@ -68,7 +68,7 @@
     (to-list () `(sync-server :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
                               :command ,(synth to-list command) :output ,(synth to-list output)))
   (to-html () (multitags
-               (text "Processo server sincrono denominato ~a" (lower name))
+               (text "Processo server sincrono denominato ~a" (lower-camel name))
                (if input 
                    (multitags
                     (text " con ingresso una istanza del seguente formato dati:")
@@ -88,7 +88,7 @@
 ;;     (to-list () `(auxiliary :parameters ,(synth-all to-list parameters) :input ,(synth to-list input)
 ;;                               :command ,(synth to-list command) :output ,(synth to-list output)))
 ;;   (to-html () (multitags
-;;                (text "Processo ausiliario denominato ~a" (lower name))
+;;                (text "Processo ausiliario denominato ~a" (lower-camel name))
 ;;                (if input 
 ;;                    (multitags
 ;;                     (text " con ingresso una istanza del seguente formato dati:")

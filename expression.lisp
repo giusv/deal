@@ -2,7 +2,7 @@
   (to-list () `(const (:exp ,exp)))
   (to-req () (text "stringa costante: ~a" exp))
   (to-html () (brackets (text "stringa costante di valore ~a" exp)))
-  (to-url () (textify exp))
+  (to-url () (text "~a" exp))
   (to-chunk () exp)
   (to-string () (double-quotes (text "~a" exp))))
 
@@ -10,23 +10,23 @@
 (defprod exp (argument ((name symbol)))
   (to-list () `(argument (:name ,name)))
   (to-req () (text "~a" name))
-  (to-html () (braces (text "~a" (lower name))))
-  ;; (to-html () (span (list :class "label label-danger") (text "~a!~a" (lower (synth name data)) (lower exp))))
+  (to-html () (braces (text "~a" (lower-camel name))))
+  ;; (to-html () (span (list :class "label label-danger") (text "~a!~a" (lower-camel (synth name data)) (lower-camel exp))))
   )
 
 (defprod exp (attr ((data datasource)
                     (exp symbol)))
   (to-list () `(attr (:data ,data :exp ,exp)))
-  (to-req () (text "~a!~a" (lower (synth name data)) (lower exp)))
-  (to-html () (brackets (text "~a!~a" (lower (synth name data)) (lower exp))))
-  ;; (to-html () (span (list :class "label label-danger") (text "~a!~a" (lower (synth name data)) (lower exp))))
+  (to-req () (text "~a!~a" (lower-camel (synth name data)) (lower-camel exp)))
+  (to-html () (brackets (text "~a!~a" (lower-camel (synth name data)) (lower-camel exp))))
+  ;; (to-html () (span (list :class "label label-danger") (text "~a!~a" (lower-camel (synth name data)) (lower-camel exp))))
   (to-string () (text "~a!~a" data exp)))
 
 (defprod exp (variab ((name string)))
   (to-list () `(attr (:name ,name)))
   (to-string () (textify name))
   (to-req () (text "~a" name))
-  (to-html () (span-color (lower name))))
+  (to-html () (span-color (lower-camel name))))
   ;; (to-html () (span (list :class "label label-danger") (text "~a" name))))
 
 (defprod exp (value ((elem element)))
@@ -34,9 +34,9 @@
   (to-req () (text "valore dell'elemento: ~a" (synth name elem)))
   (to-html () (brackets (text "valore dell'elemento ~a" (synth name elem))))
   ;; (to-html () (span (list :class "label label-default") (text "valore dell'elemento: ~a" (synth name elem))))1
-  (to-url () (brackets (text "val(~a)" (lower (synth name elem)))))
-  (to-chunk () (text "val(~a)" (lower (synth name elem))))
-  (to-string () (text "val(~a)" (lower (synth name elem)))))
+  (to-url () (brackets (text "val(~a)" (lower-camel (synth name elem)))))
+  (to-chunk () (text "val(~a)" (lower-camel (synth name elem))))
+  (to-string () (text "val(~a)" (lower-camel (synth name elem)))))
 
 (defprod exp (payload ((elem element)))
   (to-list () `(payload (:elem ,elem)))
@@ -54,9 +54,9 @@
 
 (defprod exp (cat (&rest (exps exp)))
   (to-list () `(cat (:exps ,(synth-all to-list exps))))
-  (to-html () (brackets (apply #'hcat 
-                               (text "concatenazione delle espressioni:")
-                               (synth-all to-req exps))))
+  (to-html () (brackets (hcat 
+                         (text "concatenazione delle espressioni:")
+                         (apply #'punctuate (comma) t (synth-all to-req exps)))))
   ;; (to-html () (apply #'span (list :class "label label-default") (synth-all to-html exps)))
   (to-string () (text "~{~a~^ ++ ~}" (synth-all to-string exps))))
 
@@ -66,7 +66,7 @@
 		    ,(if (eq arity 'unbounded)
 			 `(&rest (exps bexp))
 			 (loop for i from 1 to arity collect `(,(symb "EXP" i) exp))))
-       (to-html () (brackets (hcat (text "~a " (lower ',name))
+       (to-html () (brackets (hcat (text "~a " (lower-camel ',name))
                                    ,@(if (eq arity 'unbounded)
                                          `((parens (apply #'punctuate (comma) nil (synth-all to-req exps))))
                                          `((punctuate (comma) nil ,@(loop for i from 1 to arity collect `(synth to-req ,(symb "EXP" i)))))))))

@@ -3,7 +3,7 @@
 			 &key (init (init expression))))
   (to-list () `(input (:name ,name :label ,(synth to-list label) :init ,(synth to-list init))))
   (to-html (path) (multitags (text "Campo di input identificato come")
-                             (span-color (lower name))
+                             (span-color (lower-camel name))
                              (text " etichettato con ")
                              (synth to-html label) 
                              (dlist init (span nil (text "Valore iniziale")) (synth to-html init))))

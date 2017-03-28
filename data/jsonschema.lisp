@@ -10,16 +10,16 @@
   `(defparameter ,name ,elem))
 
 (defprod data (jsstring ((name symbol)))
-  (to-list () `(jsstring :name ,(lower name)))
-  ;; (to-req () (text "~a: stringa" (lower name)))
-  (to-html () (text "~a (stringa)" (lower name)))
+  (to-list () `(jsstring :name ,(lower-camel name)))
+  ;; (to-req () (text "~a: stringa" (lower-camel name)))
+  (to-html () (text "~a (stringa)" (lower-camel name)))
   ;; (instance (val) (jstring val))
   (schema () (jsstring name)))
 
 (defprod data (jsnumber ((name symbol)))
-  (to-list () `(jsnumber :name ,(lower name)))
-  ;; (to-req () (text "~a: numero" (lower name)))
-  (to-html () (text "~a (numero)" (lower name)))
+  (to-list () `(jsnumber :name ,(lower-camel name)))
+  ;; (to-req () (text "~a: numero" (lower-camel name)))
+  (to-html () (text "~a (numero)" (lower-camel name)))
   ;; (instance (val) (jnumber val))
   (schema () (jsnumber name)))
 
@@ -30,11 +30,11 @@
 ;; 		   (nest 4 (apply #'vcat (synth-all to-req schemas))))))
 
 (defprod data (jsobject ((name symbol) &rest (props (list jsprop))))
-  (to-list () `(jsobject :name ,(lower name) :props ,(synth-all to-list props)))
-  ;; (to-req () (vcat (text "oggetto denominato ~a dalle seguenti proprietà:" (lower name))
+  (to-list () `(jsobject :name ,(lower-camel name) :props ,(synth-all to-list props)))
+  ;; (to-req () (vcat (text "oggetto denominato ~a dalle seguenti proprietà:" (lower-camel name))
   ;;       	   (nest 4 (apply #'vcat (synth-all to-req props)))))
   (to-html () (multitags 
-               (text "~a: oggetto dalle seguenti proprietà:" (lower name))
+               (text "~a: oggetto dalle seguenti proprietà:" (lower-camel name))
                (apply #'ul nil 
                       (synth-all to-html props))))
   (schema () (apply #'jsobject name props)))
@@ -43,16 +43,16 @@
   (to-list () `(jsprop :name ,name :required ,required :content ,(synth to-list content)))
   ;; (to-req () (hcat (text "~a" name) (if required (text " (obbligatoria)") (text " (facoltativa)")) 
   ;;       	   (text ": ") (synth to-req content)))
-  (to-html () (li nil  (hcat (text "~a" (lower name)) (if required (text " (obbligatoria)") (text " (facoltativa)")) 
+  (to-html () (li nil  (hcat (text "~a" (lower-camel name)) (if required (text " (obbligatoria)") (text " (facoltativa)")) 
                              (text ": ")) (synth to-html content)))
   (schema () (jsprop name required content)))
 
 (defprod data (jsarray ((name symbol) (elem jsschema)))
-  (to-list () `(jsarray :name ,(lower name) :elem ,(synth to-list elem)))
-  ;; (to-req () (vcat (text "array denominato ~a costituito dal seguente elemento:" (lower name))
+  (to-list () `(jsarray :name ,(lower-camel name) :elem ,(synth to-list elem)))
+  ;; (to-req () (vcat (text "array denominato ~a costituito dal seguente elemento:" (lower-camel name))
   ;;       	   (nest 4 (synth to-req elem))))
   (to-html () (multitags
-               (text "array denominato ~a costituito dal seguente elemento:" (lower name))
+               (text "array denominato ~a costituito dal seguente elemento:" (lower-camel name))
                (synth to-html elem)))
   (schema () (jsarray name elem)))
 
@@ -92,8 +92,8 @@
 (defprod filter (prop ((name string)))
   (to-list () `(prop (:name ,name)))
   (to-func () (get-prop name))
-  (to-req () (text "~a" (lower name)))
-  (to-html () (span nil (text "~a" (lower name)))))
+  (to-req () (text "~a" (lower-camel name)))
+  (to-html () (span nil (text "~a" (lower-camel name)))))
 
 (defprod filter (elem ())
   (to-list () `(elem))

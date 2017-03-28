@@ -86,7 +86,7 @@
 (defun equals () 
   (text "="))
 (defun textify (x)
-  (text "~a" (lower x)))
+  (text "~a" (lower-camel x)))
 (defparameter *doc* (vcat (hcat (text "public static main(")
 				(vcat (text "String[] argv,")
 				      (text "int a"))

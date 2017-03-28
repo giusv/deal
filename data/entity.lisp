@@ -9,7 +9,7 @@
 
 (defun annotation (name &optional vals)
   (if (null vals)
-      (text "@~a" (upper name))
+      (text "@~a" (upper-camel name))
       (if (atom vals)
 	  (text "~a(~a)" name vals)
 	  (text "more"))))
@@ -20,7 +20,7 @@
 		     (destructuring-bind (name &optional vals) annotation
 		       (annotation name vals))) 
 		 annotations)
-	 (list (text "private ~a ~a;" (upper type) (lower name)))))
+	 (list (text "private ~a ~a;" (upper-camel type) (lower-camel name)))))
 
 (defun setter (attribute)
   (let ((nm (slot-value 'name attribute))
@@ -40,14 +40,14 @@
 			       (type string)))
   (java (annotations) (field name type annotations)) 
   (to-list () `(attribute :name ,name :type ,type))
-  (to-html () (div nil (text "Attributo ~a (~a)" (lower name) (lower type)))))
+  (to-html () (div nil (text "Attributo ~a (~a)" (lower-camel name) (lower-camel type)))))
 
 (defprod data (foreign-key ((reference string) &rest (attributes (list attribute))))
   (java () (apply #'vcat (synth-all java attributes (list (list reference))))) 
   (to-list () `(foreign-key :attributes ,(synth-all to-list attributes) :reference ,reference))
   (attributes () (synth-all name attributes))
   (to-html () (apply #'div nil 
-                   (text "Foreign key verso ~a costituita dai seguenti attributi:" (lower reference))
+                   (text "Foreign key verso ~a costituita dai seguenti attributi:" (lower-camel reference))
                    (synth-all to-html attributes))))
 
 (defprod data (primary-key (&rest (attributes (list attribute))))
@@ -65,7 +65,7 @@
 			    (primary primary-key)
 			    (fields (list attribute))
 			    &rest (foreigns (list foreign-key))))
-  (java () (klass (upper name) 
+  (java () (klass (upper-camel name) 
 		  (synth java primary)
 		  (synth-all java fields nil)
 		  (synth-all java foreigns)))
@@ -75,7 +75,7 @@
 		       :foreigns ,(synth-all to-list foreigns)))
   (attributes () (apply #'append (synth attributes primary) (synth-all name fields) (synth-all attributes foreigns)))
   (to-html () (apply #'div nil 
-                   (text "Entità di nome ~a costituita da:" (lower name))
+                   (text "Entità di nome ~a costituita da:" (lower-camel name))
                    (synth to-html primary)
                    (apply #'div nil (synth-all to-html fields))
                    (synth-all to-html foreigns))))

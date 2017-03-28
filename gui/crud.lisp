@@ -4,7 +4,7 @@
   ;;          (post () (symb "POST-" ,name)))
   ;;   (progn (defun (post) (payload)
   ;;             (with-doc* ,(cs "Effettua l'upload dei dati inseriti per l'oggetto" 
-  ;;                             (lower name)
+  ;;                             (lower-camel name)
   ;;                             ", verificandone la corretta acquisizione dal server")
   ;;               (concat* (response (http-post* (url `(aia / companies)) payload))
   ;;                        ((fork (+equal+ response (const 201))
@@ -25,7 +25,7 @@
   ;;   `(progn (defattrs (post)) 
   ;;          (defun ,(post) (payload)
   ;;             (with-doc* ,(cs "Effettua l'upload dei dati inseriti per l'oggetto" 
-  ;;                             (lower name)
+  ;;                             (lower-camel name)
   ;;                             ", verificandone la corretta acquisizione dal server")
   ;;               (concat* (response (http-post* (url `(aia / companies)) payload))
   ;;                        ((fork (+equal+ response (const 201))

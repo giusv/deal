@@ -3,10 +3,10 @@
   (to-list () `(void-url)))
 
 (defprod chunk (static-chunk ((name string)))
-  (to-url () (text "~a" (lower name)))
+  (to-url () (text "~a" (lower-camel name)))
   (to-list () `(static-chunk (:name ,name))))
 (defprod chunk (dynamic-chunk ((name string)))
-  (to-url () (braces (text "~a" (lower name))))
+  (to-url () (braces (text "~a" (lower-camel name))))
   (to-list () `(dynamic-chunk (:name ,name))))
 (defprod chunk (expression-chunk ((exp expression)))
   (to-url () (braces (synth to-chunk exp)))
@@ -14,24 +14,24 @@
 
 (defprod parameter (path-parameter ((name string)))
   (to-list () `(path-parameter (:name ,name)))
-  (to-req () (text "~a (path)" (lower name)))
+  (to-req () (text "~a (path)" (lower-camel name)))
   (type () (text "path"))
   (to-html () (synth to-req (path-parameter name)))
   (to-url () (dynamic-chunk name)))
 
 (defprod parameter (query-parameter ((name symbol) &optional (value expression)))
-  (to-url () (hcat (text "~a" (lower name)) 
+  (to-url () (hcat (text "~a" (lower-camel name)) 
 		   (if value 
 		       (hcat (equals) (synth to-url value))
 		       (empty))))
   (to-html () (synth to-req (query-parameter name value)))
-  (to-req () (text "~a (query)" (lower name)))
+  (to-req () (text "~a (query)" (lower-camel name)))
   (type () (text "query"))
   (to-list () `(query-parameter (:name ,name :value ,(synth to-list value)))))
 
 (defprod parameter (login-parameter ((name symbol)))
-  (to-html () (text "~a (login)" (lower name)))
-  (to-req () (text "~a (login)" (lower name)))
+  (to-html () (text "~a (login)" (lower-camel name)))
+  (to-req () (text "~a (login)" (lower-camel name)))
   (type () (text "login"))
   (to-list () `(login-parameter (:name ,name))))
 

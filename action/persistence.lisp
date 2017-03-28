@@ -7,7 +7,7 @@
   (to-html () (multitags 
                (text "Sia ") 
                (synth to-html result) 
-               (text " il risultato della creazione dell'entità ~a" (lower (synth name entity)))
+               (text " il risultato della creazione dell'entità ~a" (lower-camel (synth name entity)))
                (text " con i seguenti valori:")
                (apply #'multitags (synth-plist-merge 
                                    #'(lambda (binding) (p nil (synth to-req (first binding)) 
@@ -42,7 +42,7 @@
   (to-html () (multitags
                (text "Sia ") 
                (synth to-html result) 
-               (text " il risultato della estrazione dell'entità ~a" (lower (synth name entity)))
+               (text " il risultato della estrazione dell'entità ~a" (lower-camel (synth name entity)))
                (if id (multitags (text " usando come chiave primaria il valore della seguente espressione:")
                                  (synth to-html id)))
                (dlist pre (text "Precondizione: ") (synth to-html pre)
@@ -65,7 +65,7 @@
   (to-html () (multitags 
                (text "Sia ") 
                (synth to-html result) 
-               (text " il risultato della rimozione dal database dell'entità ~a" (lower (synth name entity)))
+               (text " il risultato della rimozione dal database dell'entità ~a" (lower-camel (synth name entity)))
                (p nil (text " usando come chiave primaria il valore della seguente espressione:")
                   (synth to-html id))
                (dlist pre (text "Precondizione: ") (synth to-html pre)

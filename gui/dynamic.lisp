@@ -3,7 +3,7 @@
   (to-list () `(dynamic (:name ,name :element ,(synth to-list element))))
   (to-brief (path) (let ((newpath (backward-chain (dynamic-chunk name) path)))
 		     (multitags (strong nil 
-                                        (text "Elemento dinamico di nome ~a (URL: " (lower name)) 
+                                        (text "Elemento dinamico di nome ~a (URL: " (lower-camel name)) 
                                         (code nil (synth to-url newpath))
                                         (text ")")))))
   (to-req (path) (let ((newpath (backward-chain (dynamic-chunk name) path)))
@@ -14,7 +14,7 @@
   (to-html (path) (let ((newpath (backward-chain (dynamic-chunk name) path))) 
                     (multitags 
                      (section nil 
-                              (h3 nil (text "Elemento dinamico ~a (URL: " (lower name)) 
+                              (h3 nil (text "Elemento dinamico ~a (URL: " (lower-camel name)) 
                                   (code nil (synth to-url newpath))
                                   (text ")"))
                               (p nil (synth to-html element newpath))))))

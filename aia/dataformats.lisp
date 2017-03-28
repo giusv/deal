@@ -1,16 +1,75 @@
+(data platform-search-format
+      (jsobject 'formato-ricerca-piattaforma
+                (jsprop 'sinistro nil (jsstring 'sinistro))
+                (jsprop 'veicolo nil (jsstring 'veicolo))
+                (jsprop 'persona nil (jsstring 'persona))
+                (jsprop 'file t (jsstring 'file))))
+
+(data platform-upload-format
+      (jsobject 'formato-invio-piattaforma
+                (jsprop 'sinistro nil (jsstring 'sinistro))
+                (jsprop 'veicolo nil (jsstring 'veicolo))
+                (jsprop 'persona nil (jsstring 'persona))
+                (jsprop 'file t (jsstring 'file))))
+
 (data person-search-format 
-      (jsobject 'formato-ricerca-persona
-                (jsprop 'id t (jsstring 'id))))
+         (jsobject 'formato-ricerca-persona
+                   (jsprop 'id t (jsstring 'id))))
+
+(data role-format
+      (jsstring 'ruolo))
+
+(data person-specific-format 
+      (jsobject 'formato-persona
+                (jsprop 'nome t (jsstring 'nome)) 
+                (jsprop 'cognome t (jsstring 'cognome)) 
+                (jsprop 'codice-fiscale t (jsstring 'codice-fiscale)) 
+                (jsprop 'luogo-nascita t (jsstring 'luogo-nascita))
+                (jsprop 'data-nascita t (jsstring 'data-nascita))  
+                (jsprop 'ruoli t (jsarray 'ruoli role-format))))
+
+(data person-generic-format 
+      (jsobject 'formato-persona
+                (jsprop 'nome t (jsstring 'nome)) 
+                (jsprop 'cognome t (jsstring 'cognome)) 
+                (jsprop 'codice-fiscale t (jsstring 'codice-fiscale)) 
+                (jsprop 'luogo-nascita t (jsstring 'luogo-nascita))
+                (jsprop 'data-nascita t (jsstring 'data-nascita))))
+
+(data vehicle-specific-format 
+      (jsobject 'formato-veicolo-specifico
+                (jsprop 'targa t (jsstring 'targa))
+                (jsprop 'telaio t (jsstring 'telaio))
+                (jsprop 'tipo t (jsstring 'tipo))
+                (jsprop 'conducente t person-generic-format)
+                (jsprop 'proprietario t person-generic-format)
+                (jsprop 'contraente t person-generic-format)))
+
+(data vehicle-generic-format 
+      (jsobject 'formato-veicolo-generico
+                (jsprop 'targa t (jsstring 'targa))
+                (jsprop 'telaio t (jsstring 'telaio))
+                (jsprop 'tipo t (jsstring 'tipo))
+                (jsprop 'ricorrenze t (jsnumber 'ricorrenze))
+                (jsprop 'indicatori t (jsstring 'indicatori))))
+
 
 (data accident-format 
       (jsobject 'formato-sinistro
                 (jsprop 'id t (jsstring 'id))
-                (jsprop 'data t (jsstring 'data))))
-
-(data vehicle-format 
-      (jsobject 'formato-veicolo
-                (jsprop 'ricorrenze t (jsnumber 'ricorrenze))
-                (jsprop 'indicatori t (jsstring 'indicatori))))
+                (jsprop 'data-accadimento t (jsstring 'data-accadimento))
+                (jsprop 'data-denuncia t (jsstring 'data-denuncia))
+                (jsprop 'data-definizione t (jsstring 'data-definizione))
+                (jsprop 'stato t (jsstring 'stato))
+                (jsprop 'luogo t (jsstring 'luogo))
+                (jsprop 'ruolo t (jsstring 'ruolo))
+                (jsprop 'intervento t (jsstring 'intervento))
+                (jsprop 'danni t (jsstring 'danni))
+                (jsprop 'lesioni t (jsstring 'lesioni))
+                (jsprop 'decessi t (jsstring 'decessi))
+                (jsprop 'errore t (jsstring 'errore))
+                (jsprop 'veicoli t (jsarray 'veicoli vehicle-specific-format))
+                (jsprop 'persone t (jsarray 'persone person-specific-format))))
 
 (data parameter-format
       (jsobject 'formato-parametro

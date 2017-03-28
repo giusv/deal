@@ -37,12 +37,22 @@
   (split-str-1 string separator))
 
 
-(defun lower (sym)
-  (let ((words (mapcar #'string-capitalize (split-str (symbol-name sym)))))
+;; (defun lower (sym)
+;;   (let ((words (mapcar #'string-capitalize (split-str (symbol-name sym)))))
+;;     (format nil "~(~a~)~{~a~}" (car words) (cdr words))))
+(defun interleave (lst sep)
+  (if (equal 1 (length lst))
+      lst
+      (cons (car lst) (cons sep (interleave (cdr lst) sep)))))
+
+(defun lower-camel (sym &optional (separator ""))
+  (let ((words (interleave (mapcar #'string-capitalize (split-str (symbol-name sym))) separator)))
     (format nil "~(~a~)~{~a~}" (car words) (cdr words))))
-(defun upper (sym)
-  (let ((words (mapcar #'string-capitalize (split-str (symbol-name sym)))))
+
+(defun upper-camel (sym &optional (separator ""))
+  (let ((words (interleave (mapcar #'string-capitalize (split-str (symbol-name sym))) separator)))
     (format nil "~{~a~}" words)))
+
 (defun flatten (ls &key (test #'atom))
   (labels ((mklist (x) (if (listp x) x (list x))))
     (mapcan #'(lambda (x) (if (funcall test x) (mklist x) (flatten x :test test))) ls)))
@@ -78,6 +88,10 @@
       (let ((binding (car bindings)))
 	`(multiple-value-bind ,(butlast binding) ,@(last binding)
 	   (bindall ,(cdr bindings) ,form)))))
+
+(defun csplice (cond &rest exps)
+  (if cond
+      `(,@exps)))
 
 ;; (pprint (bindall ((x y (values 1 2))
 ;; 		  (z 4)) (+ x y z)))
