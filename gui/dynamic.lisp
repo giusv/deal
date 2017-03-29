@@ -4,7 +4,8 @@
   (to-brief (path) (let ((newpath (backward-chain (dynamic-chunk name) path)))
 		     (multitags (strong nil 
                                         (text "Elemento dinamico di nome ~a (URL: " (lower-camel name)) 
-                                        (code nil (synth to-url newpath))
+                                        (a (list :href (concatenate 'string "#" (synth to-string (synth to-url newpath) 0)))
+                                           (code nil (synth to-url newpath)))
                                         (text ")")))))
   (to-req (path) (let ((newpath (backward-chain (dynamic-chunk name) path)))
 		   (vcat (text "Elemento dinamico di nome ~a" 
@@ -15,7 +16,7 @@
                     (multitags 
                      (section nil 
                               (h3 nil (text "Elemento dinamico ~a (URL: " (lower-camel name)) 
-                                  (code nil (synth to-url newpath))
+                                  (code (list :id (synth to-string (synth to-url newpath) 0)) (synth to-url newpath))
                                   (text ")"))
                               (p nil (synth to-html element newpath))))))
   (toplevel () (list (dynamic name element)))

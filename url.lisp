@@ -82,7 +82,8 @@
 				   (result (apply #'multi poses)))
 				 (parse-chunk))
 			 (sym '/)))) 
-    (result (reduce #'forward-chain segs :from-end t))))
+    ;; (result (reduce #'forward-chain segs :from-end t))
+    (result (forward-chain (void-url) (reduce #'forward-chain segs :from-end t)))))
 
 
 (defmacro url (u)

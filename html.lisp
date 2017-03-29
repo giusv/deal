@@ -37,7 +37,7 @@
 			    (close-tag)))))))
 (deftags html head title meta link body h1 h2 h3 h4 div span li dl dt dd ul ol pre i strong code script
          table tr th td
-         section article aside p)
+         section article aside p a)
 
 ;;(mapcar #'(lambda (pair) (format t "~a: ~a~%" (car pair) (cdr pair))) (pairlis '(a b) '(1 2)))
 (defun listify (elem)
@@ -69,7 +69,7 @@
                                                                    (dl nil ,(pop args))))))))))
 (defun span-color (name)
   (let ((n (parse-integer (subseq name (- (length name) 3) (length name))))) 
-    (span (list :style (concatenate 'string "background-color:" (lower-camel (nth (mod n (length html-colors)) html-colors)))) (text "~a" name))))
+    (span (list :class "label" :style (concatenate 'string "background-color:" (lower-camel (nth (mod n (length html-colors)) html-colors)))) (text "~a" name))))
 
 (let ((s "012345"))
   (pprint (parse-integer (subseq s (- (length s) 2) (length s)))))

@@ -10,14 +10,15 @@
 		     (synth output newpath) 
 		     (strong nil 
                              (text "~a (URL: " (upper-camel name #\Space)) 
-                             (code nil (synth to-url newpath))
+                             (a (list :href (concatenate 'string "#" (synth to-string (synth to-url newpath) 0)))
+                                (code nil (synth to-url newpath)))
                              (text ")"))))
 
   (to-html (path) (let ((newpath (backward-chain (static-chunk name) path)))
 		    (multitags 
                      (section nil 
                               (h3 nil (text "~a (URL: " (upper-camel name #\Space)) 
-                                  (code nil (synth to-url newpath))
+                                  (code (list :id (synth to-string (synth to-url newpath) 0)) (synth to-url newpath))
                                   (text ")"))
                               (p nil (synth to-html element newpath))))))
   (toplevel () (list (static name element)))
