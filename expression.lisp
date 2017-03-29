@@ -4,7 +4,8 @@
   (to-html () (brackets (text "stringa costante di valore ~a" exp)))
   (to-url () (text "~a" exp))
   (to-chunk () exp)
-  (to-string () (double-quotes (text "~a" exp))))
+  (to-string () (double-quotes (text "~a" exp)))
+  (to-ts () (single-quotes (text "~a" exp))))
 
 
 (defprod exp (argument ((name symbol)))

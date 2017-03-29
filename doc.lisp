@@ -66,6 +66,7 @@
 (defwrapper parens "(" ")")
 (defwrapper brackets "[" "]")
 (defwrapper braces "{" "}")
+(defwrapper single-quotes "'" "'")
 (defwrapper double-quotes "\"" "\"")
 
 (defun padding (p)
@@ -73,6 +74,10 @@
 
 (defun comma ()
   (text ","))
+(defun dot ()
+  (text "."))
+(defun semi ()
+  (text ";"))
 (defun forward-slash ()
   (text "/"))
 (defun punctuate (p newline &rest docs)
@@ -81,6 +86,20 @@
 	(t (if newline
 	       (vcat (hcat (car docs) p) (apply #'punctuate p newline (cdr docs)))
 	       (hcat (car docs) p (apply #'punctuate p newline (cdr docs)))))))
+
+(defun postpend (p newline &rest docs)
+  (cond ((null docs) (empty)) 
+	((eq 1 (length docs)) (hcat (car docs) p))
+        (t (if newline
+	       (vcat (hcat (car docs) p) (apply #'postpend p newline (cdr docs)))
+	       (hcat (car docs) p (apply #'postpend newline (cdr docs)))))))
+
+(defun prepend (p newline &rest docs)
+  (cond ((null docs) (empty)) 
+	((eq 1 (length docs)) (hcat p (car docs)))
+        (t (if newline
+               (vcat (hcat p (car docs)) (apply #'prepend p newline (cdr docs)))
+	       (hcat p (car docs) (a\	pply #'prepend newline (cdr docs)))))))
 
 
 (defun equals () 
