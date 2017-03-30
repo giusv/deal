@@ -1,6 +1,6 @@
-(defprod element (button ((name symbol) (expr expression)
+(defprod element (gui-button ((name symbol) (expr expression)
 			  &key (click (click process)) (hover (hover process))))
-  (to-list () `(button (:name ,name :expr ,(synth to-list expr) 
+  (to-list () `(gui-button (:name ,name :expr ,(synth to-list expr) 
 			    :click ,(synth to-list click)
 			    :hover ,(synth to-list hover))))
   ;; (to-req (path) (vcat (hcat (text "Pulsante identificato come ~a e etichettato con la seguente espressione:" (lower-camel name)) 
@@ -14,8 +14,13 @@
                        (synth to-html expr)
                        (dlist click (span nil (text "Sottoposto a click: ")) (synth to-html click)
                               hover (span nil (text "Sottoposto a hover: ")) (synth to-html hover))))
-  (to-brief (path) (synth to-html (button name expr :click click :hover hover) path)) 
-  (req (path) nil))
+  (to-brief (path) (synth to-html (gui-button name expr :click click :hover hover) path)) 
+  (req (path) nil)
+  (template (&optional father) (button (evnames click hover) (synth template expr))))
+
+
 
 (defmacro button* (expr &key click hover)
-  `(button (gensym "BUTTON") ,expr :click ,click :hover ,hover))
+  `(gui-button (gensym "BUTTON") ,expr :click ,click :hover ,hover))
+
+(synth output (synth to-doc (synth template (button* (const "ok") :click t :hover t))) 0)

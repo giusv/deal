@@ -93,6 +93,10 @@
   (if cond
       `(,@exps)))
 
+(defmacro evnames (&rest actions)
+  `(append ,@(mapcar #'(lambda (action) 
+                        `(if ,action (list ,(keyw "(" action ")") (concatenate 'string (lower-camel ',action) (upper-camel name) "()"))))
+                    actions)))
 ;; (pprint (bindall ((x y (values 1 2))
 ;; 		  (z 4)) (+ x y z)))
 ;; (let ((l (pairprop '(a b) '(1 2)))) (pprint (getf l 'a)))

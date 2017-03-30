@@ -1,3 +1,6 @@
+(defpackage :gui
+  (:use :common-lisp))
+
 (defmacro element (name &body elem)
   `(defparameter ,name ,@elem))
 

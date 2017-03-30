@@ -9,7 +9,8 @@
 			      (mapcar #'listify (synth-all to-html elements path)))))
   (to-brief (path) (synth to-html (apply #'vert elements) path))
   (toplevel () (apply #'append (synth-all toplevel elements)))
-  (req (path) (apply #'append (synth-all req elements path))))
+  (req (path) (apply #'append (synth-all req elements path)))
+  (template (&optional father) (apply #'multitags (synth-all template elements father))))
 
 (defmacro vert* (&rest elements)
   (let ((new-elements elements 
@@ -19,3 +20,17 @@
           ))
     `(bindall ,new-elements
       (vert ,@(mapcar #'car new-elements)))))
+
+
+(synth output 
+       (synth to-doc 
+              (synth template (obj* 'ind-data indicator-format 
+                                    ((code code (textarea* (const "Codice indicatore") :model 'code))
+                                     (start-date start-date (input* (const "Data inizio validità") :model 'date)))
+                                    (vert code start-date)))) 0)
+
+;; (vert* (ind (obj* 'ind-data indicator-format 
+;;                                                 ((code code (textarea* (const "Codice indicatore") :model 'code))
+;;                                                  (start-date start-date (input* (const "Data inizio validità") :model 'date)))
+;;                                                 (vert code start-date)))
+;;                                      ((button* (const "Invio") :click (post-indicator-code (payload ind)))))

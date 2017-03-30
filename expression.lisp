@@ -5,7 +5,8 @@
   (to-url () (text "~a" exp))
   (to-chunk () exp)
   (to-string () (double-quotes (text "~a" exp)))
-  (to-ts () (single-quotes (text "~a" exp))))
+  (to-ts () (single-quotes (text "~a" exp)))
+  (template () (text "~a" exp)))
 
 
 (defprod exp (argument ((name symbol)))

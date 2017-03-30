@@ -2,6 +2,7 @@
 ** TODO modalità visualizzazione risultati ricerca per persona. Tabella che mescola persone e sinistri? Oppure reingegnerizzazione?
 ** TODO nella maschera dettagli sinistro, i dati relativi alle persone sono specifici del singolo sinistro? 
    Se mostrassimo un piccolo grafico nella tabella, in modo da evidenziare i veicoli sospetti?
-** TODO 
+** TODO query estrazione dati sinistri, veicoli e soggetti (codice BDS)
+
 
 
