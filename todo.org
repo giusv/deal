@@ -1,5 +1,4 @@
 * Tasks
-* 
 ** DONE Name JSON Schema formats?
    CLOSED: [2017-03-06 lun 10:41]
 ** DONE Server validation (regex? Static or dynamic with DB access)
@@ -16,11 +15,12 @@
 ** TODO abstraction on documentation generation (section, list, etc.) to be compiled in either html or markdown or docx
 ** TODO pandoric macros on productions
 ** TODO list element linked to json array
-** TODO create hyperlinks in output document
+** DONE create hyperlinks in output document
 ** TODO better management of parametric process (synth name not applicable to everything)
-** TODO query implementation
+** DONE query implementation
 ** TODO foreign keys as constraints, not further attributes
-
+** TODO correct vert*
+** TODO deprod productions
 
 
 

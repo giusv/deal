@@ -6,3 +6,41 @@
 
 
 
+consultazione batch e online
+quante chiavi di ricerca non sono presenti nei dati delle imprese?
+codice sinistro -> non ci sono controlli, non viene usato come campo di ricerca
+aggreagazioni per compagnia, userid sinistro date
+
+verificare se infrastruttura banca gestisce sessioni multiple dello stesso utente (forze ordine)
+
+
+white black list
+
+bl : dato errato
+
+
+CRUD classic su black list
+su white : su portale tabella da arricchire per informarci su cambio partita iva e altro
+
+
+bl codice sìfiscale o targa
+
+wl flag su soggetti e targhe
+
+lista in excel e aggiorna in update white 
+sempre insert in black
+
+update massivo con foglio excel, modifica e cancellazione puntuale
+cancellazione con checkbox massiva
+
+stessa cosa con black list
+con auditing su chi ha modificato le liste
+
+compagnia può dare informazioni su codice fiscale, partita iva e messaggio testo naturale
+
+detection white list?
+
+maschera di Maria su risultati interrogazione sinistri
+
+
+piattaforma: vincoli su chi può leggere documento caricato: solo compagnie interessate nel sinistro possono accedere alla documentazione
