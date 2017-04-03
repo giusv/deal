@@ -51,18 +51,29 @@
 (load "d:/giusv/lisp/extent/gui.lisp")
 
 (load "d:/giusv/lisp/extent/aia/dataformats.lisp")
+
 (load "d:/giusv/lisp/extent/aia/console/indicators.lisp")
 (load "d:/giusv/lisp/extent/aia/console/companies.lisp")
 (load "d:/giusv/lisp/extent/aia/console/news.lisp")
+
+(load "d:/giusv/lisp/extent/aia/console/authmanage.lisp") 
+(load "d:/giusv/lisp/extent/aia/console/inquiryaudit.lisp") 
+(load "d:/giusv/lisp/extent/aia/console/platformaudit.lisp") 
+(load "d:/giusv/lisp/extent/aia/console/blackwhite.lisp")
+
 (load "d:/giusv/lisp/extent/aia/console/console.lisp")
 
 (load "d:/giusv/lisp/extent/aia/server/companycrud.lisp")
 (load "d:/giusv/lisp/extent/aia/server/newscrud.lisp")
 (load "d:/giusv/lisp/extent/aia/server/indicatorcrud.lisp")
+(load "d:/giusv/lisp/extent/aia/server/documentcrud.lisp")
 (load "d:/giusv/lisp/extent/aia/server/aia.lisp")
 
 
-(load "d:/giusv/lisp/extent/aia/aia.lisp")
+(load "d:/giusv/lisp/extent/aia/website/plate.lisp")
+(load "d:/giusv/lisp/extent/aia/website/person.lisp")
+(load "d:/giusv/lisp/extent/aia/website/document.lisp")
+
 (load "d:/giusv/lisp/extent/aia/main.lisp")
 
 

@@ -1,4 +1,5 @@
 * Tasks
+* 
 ** DONE Name JSON Schema formats?
    CLOSED: [2017-03-06 lun 10:41]
 ** DONE Server validation (regex? Static or dynamic with DB access)
@@ -21,6 +22,13 @@
 ** TODO foreign keys as constraints, not further attributes
 ** TODO correct vert*
 ** TODO deprod productions
+
+** TODO macrolet for (argument **) in mu* 
+** TODO dynamic lists in forms (array with row binding)
+** TODO anaphor input in sync-server to map commands on arrays
+** TODO audit tables?
+** TODO auth language
+** TODO pivot tables for audit data presentation?
 
 
 

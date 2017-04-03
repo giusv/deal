@@ -29,8 +29,8 @@
                     (target (url `(indicator-creation-error))))))))
 
 (defun put-indicator-parameters (indicator-id payload)
-  (with-doc* "Effettua l'upload del codice di un indicatore, verificandone la corretta acquisizione dal server"
-    (concat* (response (http-put* (url `(aia / indicators / { ,(value indicator-id) })) payload))
+  (with-doc* "Effettua l'upload dei parametri di un indicatore, verificandone la corretta acquisizione dal server"
+    (concat* (response (http-put* (url `(aia / indicators / { ,(value indicator-id) } / parameters)) payload))
              ((fork (+equal+ response (const 200))
                     (target (url `(indicator-parameters-modification-success)))
                     (target (url `(indicator-parameters-modification-error))))))))
@@ -96,13 +96,11 @@
           (button* (const "Indietro") :click (target (url `(indicator-management)))))))
 
 (defun indicator-parameters-modification-form (indicator-id)
-  (with-doc "Il form di modifica del codice di un indicatore esistente, inizializzato con il codice dell'indicatore da modificare"
-    (with-data* ((indicator-data (remote 'indicator-data indicator-format (url `(aia / indicators / { ,(value indicator-id) })))))
-      (vert* (ind (obj* 'ind-data indicator-format 
-                      ((code code (textarea* (const "Codice indicatore") :init (attr indicator-data 'code)))
-                       (start-date start-date (input* (const "Data inizio validità") :init (attr indicator-data 'start-date))))
-                      (vert code start-date)))
-           ((button* (const "Invio") :click (put-indicator-parameters indicator-id (payload ind))))))))
+  (with-doc "Il form di modifica dei parametri di un indicatore esistente, inizializzato con i valori dei parametri dell'indicatore da modificare"
+    (with-data* ((indicator-parameters-data (remote 'indicator-parameters-data indicator-parameter-array-format (url `(aia / indicators / { ,(value indicator-id) }  / parameters)))))
+      (vert* (par-table (tabular* parameter-format (par-row) 
+                    ('parametro (input* (filter (prop 'name) par-row) :init  (filter (prop 'value) par-row)))))
+             ((button* (const "Invio") :click (put-indicator-parameters indicator-id (payload par-table))))))))
 
 (defun modify-indicator-code (indicator-id)
   (with-description "La sezione in cui l'utente può modificare i dati di un indicatore esistente"

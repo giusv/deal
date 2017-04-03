@@ -25,7 +25,7 @@
                       ((text text (textarea* (const "Testo notizia")))
                        (start-date start-date (input* (const "Data inizio validità")))
                        (end-date end-date (input* (const "Data fine validità")))
-                       (subscribers subscribers (arr 'subscribers-data subscriber-format (const 1) (const 4) (input* (const "Sottoscrittore")))))
+                       (subscribers subscribers (replica 'subscribers-data subscriber-format (input* (const "Sottoscrittore")))))
                       (vert text start-date end-date subscribers)))
            ((button* (const "Invio") :click (post-news (payload news)))))))
 
@@ -54,16 +54,6 @@
   (with-doc "Pagina visualizzata in caso di successo nella modifica di una notizia"
     (vert (label (const "Notizia modificata con successo"))
           (button* (const "Indietro") :click (target (url `(news-management)))))))
-;; (element news--form
-;;   (with-doc "Il form di inserimento dei dati di una nuova notizia"
-;;     (vert* (news (obj* 'news-data news-format 
-;;                       ((text text (textarea* (const "Testo notizia")))
-;;                        (start-date start-date (input* (const "Data inizio validità")))
-;;                        (end-date end-date (input* (const "Data fine validità")))
-;;                        ;; (subscribers subscribers (arr 'subscribers-data subscriber-format (const 1) (const 4) (input* (const "Sottoscrittore"))))
-;;                        )
-;;                       (vert text start-date end-date )))
-;;            ((button* (const "Invio") :click (post-news (payload news)))))))
 
 (defun news-modification-form (news-id)
   (with-doc "Il form di modifica di una notizia esistente, inizializzato con i dati della notizia da modificare"

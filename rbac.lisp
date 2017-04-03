@@ -1,0 +1,7 @@
+(defprod primitive (role ((name 'symbol string) &rest (children (list role))))
+  (to-list () `(text (:template ,template :args ,args)))
+  (output (indent) (format t "~v,0t~?" indent template args))
+  (to-string (indent) (with-output-to-string (*standard-output*)
+		      (synth output (apply #'text template args) indent)))
+  (to-doc () (apply #'text template args))
+  (extent () (length (apply #'format nil template args))))

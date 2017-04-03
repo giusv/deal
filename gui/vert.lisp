@@ -22,12 +22,12 @@
       (vert ,@(mapcar #'car new-elements)))))
 
 
-(synth output 
-       (synth to-doc 
-              (synth template (obj* 'ind-data indicator-format 
-                                    ((code code (textarea* (const "Codice indicatore") :model 'code))
-                                     (start-date start-date (input* (const "Data inizio validità") :model 'date)))
-                                    (vert code start-date)))) 0)
+;; (synth output 
+;;        (synth to-doc 
+;;               (synth template (obj* 'ind-data indicator-format 
+;;                                     ((code code (textarea* (const "Codice indicatore") :model 'code))
+;;                                      (start-date start-date (input* (const "Data inizio validità") :model 'date)))
+;;                                     (vert code start-date)))) 0)
 
 ;; (vert* (ind (obj* 'ind-data indicator-format 
 ;;                                                 ((code code (textarea* (const "Codice indicatore") :model 'code))

@@ -94,12 +94,32 @@
                                                 news-format)))
                           ((http-response 201 :payload (value news))))
                          (http-response 403)))))))
+(process read-news
+  (let* ((news (path-parameter 'news)))
+    (sync-server 
+     :name 'read-news
+     :parameters (list news) 
+     :command (concat* (news (fetch2 news-entity :id news)) 
+                       ((http-response 200 :payload news))))))
+(process list-news
+  (let* ((start-date (query-parameter 'start-date))
+         (end-date (query-parameter 'end-date))
+         (company (query-parameter 'company)))
+    (sync-server 
+            :name 'list-news
+            :parameters (list start-date end-date company)
+            :command (concat* (news (query2 (restrict (equijoin (relation 'news-entity) (relation 'subscription-entity)
+                                                         :news-id)
+                                               (+equal+ (prop 'company-id) company )))) 
+                              ((http-response 200 :payload news))))))
 
 (service news-service 
          (rest-service 'news-service 
                        (url `(aia))
                        (rest-post (url `(notizie)) create-news)
                        (rest-delete (url `(notizie / id)) remove-news)
-                       (rest-put (url `(notizie / id)) modify-news)))
+                       (rest-put (url `(notizie / id)) modify-news)
+                       (rest-get (url `(notizie)) list-news)
+                       (rest-get (url `(notizie / id)) read-news)))
 
 

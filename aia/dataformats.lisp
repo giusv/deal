@@ -1,11 +1,11 @@
-(data platform-search-format
+(data document-search-format
       (jsobject 'formato-ricerca-piattaforma
                 (jsprop 'sinistro nil (jsstring 'sinistro))
                 (jsprop 'veicolo nil (jsstring 'veicolo))
                 (jsprop 'persona nil (jsstring 'persona))
                 (jsprop 'file t (jsstring 'file))))
 
-(data platform-upload-format
+(data document-upload-format
       (jsobject 'formato-invio-piattaforma
                 (jsprop 'sinistro nil (jsstring 'sinistro))
                 (jsprop 'veicolo nil (jsstring 'veicolo))
@@ -73,8 +73,12 @@
 
 (data parameter-format
       (jsobject 'formato-parametro
+                (jsprop 'id t (jsstring 'id))
                 (jsprop 'name t (jsstring 'nome))
                 (jsprop 'value t (jsstring 'valore))))
+
+(data indicator-parameter-array-format
+      (jsarray 'formato-vettore-parametri parameter-format))
 
 (data indicator-format 
     (jsobject 'formato-indicatore
@@ -101,6 +105,12 @@
               (jsprop 'end-date t (jsstring 'data-fine))
               (jsprop 'subscribers t (jsarray 'formato-sottoscrittore subscriber-format))))
 
+(data document-format 
+    (jsobject 'formato-documento
+              (jsprop 'type t (jsstring 'tipo))
+              (jsprop 'cue t (jsstring 'cue))
+              (jsprop 'binary t (jsstring 'binario))))
+
 (data auditing-format
       (jsobject 'formato-auditing
                 (jsprop 'name t (jsstring 'nome-compagnia))))
@@ -108,13 +118,13 @@
 
 (data indicator-entity (entity 'indicator-entity
 			       (primary-key 
-				(attribute 'id 'string))
+				(attribute 'indicator-id 'string))
 			       (list (attribute 'code 'string)
 				     (attribute 'start-date 'string))))
 
 (data parameter-entity (entity 'parameter-entity
 			       (primary-key 
-				(attribute 'id 'string))
+				(attribute 'parameter-id 'string))
 			       (list (attribute 'name 'string)
 				     (attribute 'value 'string))
                                (foreign-key 'indicator-entity 
@@ -122,7 +132,7 @@
 
 (data company-entity (entity 'company-entity
                                   (primary-key
-                                   (attribute 'id 'integer))
+                                   (attribute 'company-id 'integer))
                                   (list (attribute 'name 'string)
                                         (attribute 'address 'string))))
 
@@ -138,4 +148,11 @@
                           (list (attribute 'text 'string)
                                 (attribute 'start-date 'string)
                                 (attribute 'end-date 'string))))
+
+(data document-entity (entity 'document-entity
+                              (primary-key
+                               (attribute 'document-id 'integer))
+                              (list (attribute 'type 'string)
+                                    (attribute 'cue 'string)
+                                    (attribute 'binary 'blob))))
 

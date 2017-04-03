@@ -29,7 +29,7 @@
                (reduce #'(lambda (acc attr) (remove attr acc :count 1)) 
                        attributes
                        :initial-value union)))
-  (to-html () (multitags (p nil (text "Equijoin con attributi ~{~a~^, ~} delle seguenti query:" attributes))
+  (to-html () (multitags (p nil (text "Equijoin con attributi ~{~a~^, ~} delle seguenti query:" (mapcar #'lower-camel attributes)))
                          (p nil (synth to-html query1))
                          (p nil (synth to-html query2)))))
 

@@ -31,6 +31,24 @@
                                 post (text "Postcondizione:") (synth to-html post)))))
 
 
+(defaction (query ((query query)
+                   (result variable)))
+    (to-list () `(query :query ,(synth to-list query) :result ,(synth to-list result) :pre ,(synth to-list pre) :post ,(synth to-list post)))
+  (to-req () (hcat (text "Estrae dal database i dati relativi alla query seguente:")
+                   (synth to-req query)))
+  (to-html () (multitags
+               (text "Sia ") 
+               (synth to-html result) 
+               (text " il risultato dell'esecuzione della seguente query:")
+               (synth to-html query)
+               (dlist pre (text "Precondizione: ") (synth to-html pre)
+                      post (text "Postcondizione:") (synth to-html post)))))
+
+
+(defun query2 (query &key pre post)
+  (let ((result (variab (gensym))))
+    (values (query query result :pre pre :post post) result)))
+
 (defaction (fetch ((entity expression)
                    (result variable)
                    &key (id (id expression))))

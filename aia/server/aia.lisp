@@ -2,6 +2,7 @@
          (rest-application 'aia 
                            news-service
                            company-service
+                           document-service
                            indicator-service))
 
 (database aia-db 
