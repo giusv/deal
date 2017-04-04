@@ -44,3 +44,19 @@ maschera di Maria su risultati interrogazione sinistri
 
 
 piattaforma: vincoli su chi può leggere documento caricato: solo compagnie interessate nel sinistro possono accedere alla documentazione
+
+
+impresa richiede apertura fascicolo di collaborazione sinistro, chiede quali documenti servono (flag su lista)
+AIA verifica che score sinistro sia alto e inserisce informazioni fondamentali
+si aprono i termini fino a scadenza temporale
+IVASS chiede a imprese interessate (via email????) di constribuire
+contatto IVASS è funzione centrale antifrode
+solo alcuni documenti (lista predeterminata)
+
+
+
+---
+ponderazione score a livello geografico????
+
+gestione scarti: 4% scarti potrebbe essere causato da operatori collusi
+ 

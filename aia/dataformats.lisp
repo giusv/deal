@@ -115,6 +115,16 @@
       (jsobject 'formato-auditing
                 (jsprop 'name t (jsstring 'nome-compagnia))))
 
+(data black-format
+      (jsobject 'formato-black
+                (jsprop 'value t (jsstring 'value-black))
+                (jsprop 'type t (jsstring 'type-black))))
+
+(data white-format
+      (jsobject 'formato-white
+                (jsprop 'value t (jsstring 'value-white))
+                (jsprop 'type t (jsstring 'type-white))))
+
 
 (data indicator-entity (entity 'indicator-entity
 			       (primary-key 

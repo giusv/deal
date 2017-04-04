@@ -18,7 +18,8 @@
 (load "d:/giusv/lisp/extent/action.lisp")
 (load "d:/giusv/lisp/extent/action/rest.lisp")
 (load "d:/giusv/lisp/extent/action/translate.lisp")
-(load "d:/giusv/lisp/extent/action/persistence.lisp")
+(load "d:/giusv/lisp/extent/action/translate.lisp")
+(load "d:/giusv/lisp/extent/action/conversion.lisp")
 (load "d:/giusv/lisp/extent/action/target.lisp")
 (load "d:/giusv/lisp/extent/action/extraction.lisp")
 (load "d:/giusv/lisp/extent/action/validate.lisp")
@@ -59,6 +60,8 @@
 (load "d:/giusv/lisp/extent/aia/console/authmanage.lisp") 
 (load "d:/giusv/lisp/extent/aia/console/inquiryaudit.lisp") 
 (load "d:/giusv/lisp/extent/aia/console/platformaudit.lisp") 
+(load "d:/giusv/lisp/extent/aia/console/white.lisp")
+(load "d:/giusv/lisp/extent/aia/console/black.lisp")
 (load "d:/giusv/lisp/extent/aia/console/blackwhite.lisp")
 
 (load "d:/giusv/lisp/extent/aia/console/console.lisp")

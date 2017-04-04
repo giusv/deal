@@ -9,6 +9,13 @@
                         ((fork
                           (+and+ document-type-valid document-cue-valid document-binary-valid)
                           (concat*
+                           ;; (audit (create-instance2 document-audit-entity
+                           ;;                             (list (prop 'id) (autokey)
+                           ;;                                   (prop 'type) document-type
+                           ;;                                   (prop 'cue) document-cue
+                           ;;                                   (prop 'binary) document-binary
+                           ;;                                   (prop 'binary) document-binary)))
+                           ;; ((persist audit))
                            (document (create-instance2 document-entity
                                                        (list (prop 'id) (autokey)
                                                              (prop 'type) document-type

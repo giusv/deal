@@ -7,14 +7,15 @@
 
 ;;; main 
 (element main-space 
-  (with-doc "La sezione principale della console. Qui l'utente ha a disposizione un menu di possibili scelte da effettuare, ciascuna delle quali lo reindirizza verso la pagina corrispondente."
-    (hub-spoke ((gestione-indicatori "Gestione iIndicatori" indicator-section)
-                (gestione-compagnie "Gestiione compagnie" company-section)
+  (with-doc "La sezione principale della console. Qui l'utente ha a disposizione un menu di possibili scelte da effettuare, ciascuna delle quali lo reindirizza verso la pagina corrispondente"
+    (hub-spoke ((gestione-indicatori "Gestione Indicatori" indicator-section)
+                (gestione-compagnie "Gestione compagnie" company-section)
                 (gestione-notizie "Gestione notizie" news-section)
                 (gestione-autorizzazioni "Gestione autorizzazioni" authmanage-section)
                 (auditing-inquiry "Auditing accessi per inquiry" inquiry-audit-section)
                 (auditing-piattaforma "Auditing accessi a piattaforma di scambio" platform-audit-section)
-                (gestione-black-white-list "White/Black list" black-white-section))
+                (gestione-black-white-list "White/Black list" black-white-section)
+                (gestione-batch "Gestione batch" batch-section))
                :aia
                (with-doc "Sequenza di pannelli di scelta"
                  (vert (with-doc "Riga 1" (horz gestione-indicatori gestione-compagnie gestione-notizie)) 

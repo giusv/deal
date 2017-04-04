@@ -11,3 +11,6 @@
 (defaction (test ((req1 expression))) 
     (to-list () `(test (:req1 ,(synth to-list req1) :pre ,(synth to-list pre) :post ,(synth to-list post)))))
 
+(defaction (void-action ())
+    (to-list () `(void-action))
+  (to-html () (text "azione vuota")))
