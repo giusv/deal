@@ -20,7 +20,6 @@
                        (with-doc "Riga 2" (horz gestione-autorizzazioni auditing-inquiry auditing-piattaforma)))))))
 (element console
   (with-description "La console di amministrazione consente all'utente di specificare nuovi indicatori e variarne i parametri, gestire le autorizzazioni verso le compagnie esterne, visualizzare i dati di auditing degli accessi in ricerca dati e scambio documenti, gestire white list e black list etc."
-    (with-roles (list admin)
-      (vert navbar main-space))))
+    (vert navbar main-space)))
 
 

@@ -54,7 +54,7 @@
                 (piattaforma-scambio "Piattaforma di scambio" document-section))
                :home
                (with-doc "Il menu principale di scelta"
-                 (horz ricerca-per-targa ricerca-per-persona)))))
+                 (horz ricerca-per-targa ricerca-per-persona piattaforma-scambio)))))
 
 (element website
   (with-doc "L'applicazione web destinata alla visualizzazione dei dati dei sinistri e dei soggetti/veicoli coinvolti, insieme ai relativi indicatori di rischio"
