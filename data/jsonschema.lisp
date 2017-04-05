@@ -9,6 +9,13 @@
 (defmacro json-schema (name elem)
   `(defparameter ,name ,elem))
 
+(defprod data (jsbool ((name symbol)))
+  (to-list () `(jsbool :name ,(lower-camel name)))
+  ;; (to-req () (text "~a: bool" (lower-camel name)))
+  (to-html () (text "~a (bool)" (lower-camel name)))
+  ;; (instance (val) (jsbool val))
+  (schema () (jsbool name)))
+
 (defprod data (jsstring ((name symbol)))
   (to-list () `(jsstring :name ,(lower-camel name)))
   ;; (to-req () (text "~a: stringa" (lower-camel name)))

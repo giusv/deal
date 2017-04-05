@@ -4,11 +4,11 @@
 
 (defprod json (jbool ((value bool)))
   (to-list () `(jbool (:value ,(synth to-list value))))
-  (to-string () (text "\"~a\"" value)))
+  (to-string () (synth to-string value)))
 
 (defprod json (jnumber ((value number)))
   (to-list () `(jnumber (:value ,(synth to-list value))))
-  (to-string () (text "~a" value)))
+  (to-string () (synth to-string value)))
 
 (defprod json (jstring ((value expression)))
   (to-list () `(jstring (:value ,(synth to-list value))))

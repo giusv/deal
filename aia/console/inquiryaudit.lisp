@@ -1,23 +1,34 @@
 (element inquiry-audit-form
   (with-doc "Il form di inserimento dati relativi alla ricerca sui log degli accessi per inquiry da parte delle compagnie"
-    (vert* (compagnia (input* (const "Compagnia")))
-           (utente (input* (const "Utente")))
-           (sinistro (input* (const "Sinistro")))
+    (vert* (targa (input* (const "Targa")))
+           (compagnia (input* (const "Compagnia")))
+           (userid (input* (const "Utente")))
+           (cue (input* (const "Cue")))
            (inizio (input* (const "Data inizio")))
            (fine (input* (const "Data fine")))
            ((button* (const "Invio") 
                      :click (target (url `(home / ricerca-inquiry-audit
-                                                ? compagnia =  { ,(value compagnia) }
-                                                & utente =  { ,(value utente) }
-                                                & sinistro =  { ,(value sinistro) }
-                                                & inizio =  { ,(value inizio) }
-                                                & fine =  { ,(value fine) }
-                                                & pagina =  { ,(const 1) }
-                                                ))))))))
+                                                ? targa = { ,(value targa) }
+                                                & compagnia = { ,(value compagnia) }
+                                                & userid = { ,(value userid) }
+                                                & cue = { ,(value cue) }
+                                                & inizio = { ,(value inizio) }
+                                                & fine = { ,(value fine) }
+                                                & pagina = { ,(const 1) }))))))))
 
-(defun inquiry-audit-search-results (targa inizio fine pagina)
+(defun inquiry-audit-search-results (targa userid compagnia cue inizio fine pagina)
   (with-doc "La pagina di risultati della ricerca sui log degli accessi per inquiry da parte delle compagnie"
-    (label (const "TBD"))
+    (with-data* ((inquiry-data (remote 'inquiry-data inquiry-format 
+                                       (url `(aia / inquiries 
+                                                  ? targa = { ,(value targa) }
+                                                  & compagnia = { ,(value compagnia) }
+                                                  & userid = { ,(value userid) }
+                                                  & cue = { ,(value cue) }
+                                                  & inizio = { ,(value inizio) }
+                                                  & fine = { ,(value fine) }
+                                                  & pagina = { ,(const 1) })))))
+      (pivot* inquiry-data 'targa 'compagnia))
+
     ;; (with-data* ((vehicle (remote 'vehicle-data vehicle-generic-format
     ;;                                (url `(aia / veicoli
     ;;                                           ? targa =  { ,(value targa) }))))
@@ -44,4 +55,4 @@
 (element inquiry-audit-section
   (with-description "La sezione di audit sulle inquiry effettuate dalle compagnie. Qui l'utente può visualizzare i dati relativi agli accessi, aggregati in base a una compagnia, a un singolo utente, a un determinato sinistro e relativamente a un periodo di tempo specificato"
     (alt inquiry-audit-form
-         (static2 :ricerca-inquiry-audit (targa inizio fine pagina) (inquiry-audit-search-results targa inizio fine pagina)))))
+         (static2 :ricerca-inquiry-audit (targa compagnia userid cue inizio fine pagina) (inquiry-audit-search-results targa compagnia userid cue inizio fine pagina)))))

@@ -11,24 +11,25 @@
              ((map-command (mu* white 
                                 (concat*
                                  (response (http-post* (url `(aia / white-list)) (argument white))) 
-                                 ((fork (+not+ (+equal+ response (const 201)))
-                                        (target (url `(white-creation-error)))
-                                        (void-action)))))
-                           json)))))
+                                 ((fork (+equal+ response (const 201))
+                                        (void-action)
+                                        (target (url `(gestione-liste / white-list / create-white / white-creation-error)))))))
+                           json))
+             ((target (url `(gestione-liste / white-list / create-white / white-creation-success)))))))
 
 (defun put-white (white-id payload)
     (with-doc* "Effettua l'upload di un nuovo elemento della white list, verificandone la corretta acquisizione dal server"
       (concat* (response (http-put* (url `(aia / white-list / { ,(value white-id) })) payload))
                ((fork (+equal+ response (const 200))
-                      (target (url `(white-modification-success)))
-                      (target (url `(white-modification-error))))))))
+                      (target (url `(gestione-liste / white-list / create-white / white-modification-success)))
+                      (target (url `(gestione-liste / white-list / create-white / white-modification-error))))))))
 
 (defun delete-white (white-id)
   (with-doc* "Effettua la cancellazione di un elemento della white list, identificata dall'identificativo fornito"
     (concat* (response (http-delete* (url `(aia / white-list / { ,(value white-id) }))))
              ((fork (+equal+ response (const 200))
-                    (target (url `(white-deletion-success)))
-                    (target (url `(white-deletion-error))))))))
+                    (target (url `(gestione-liste / white-list / create-white / white-deletion-success)))
+                    (target (url `(gestione-liste / white-list / create-white / white-deletion-error))))))))
 
 (element white-creation-form
   (with-doc "Il form di inserimento di un elemento della white list"
@@ -46,42 +47,52 @@
 (element white-creation-error 
   (with-doc "Pagina visualizzata in presenza di errori nella creazione di un nuovo elemento della white list"
     (vert (label (const "Errore nella specifica dell'elemento della white list"))
-          (button* (const "Indietro") :click (target (url `(white-management)))))))
+          (button* (const "Indietro") :click (target (url `(aia / gestione-liste / white-list)))))))
 
 (element white-creation-success 
   (with-doc "Pagina visualizzata in caso di successo nella creazione di un nuovo elemento della white list"
     (vert (label (const "Elemento di white list creato con successo"))
-          (button* (const "Indietro") :click (target (url `(white-management)))))))
+          (button* (const "Indietro") :click (target (url `(aia / gestione-liste / white-list)))))))
 
 (element create-white 
   (with-doc "La sezione in cui l'utente può specificare i dati di un nuovo elemento della white list"
-    (alt white-massive-creation-form
-         (static2 :white-creation-error nil white-creation-error)
-         (static2 :white-creation-success nil white-creation-success))))
-
-(element create-massive-white 
-  (with-doc "La sezione in cui l'utente può specificare in modo massivo i dati di nuovi elementi della white list"
     (alt white-creation-form
          (static2 :white-creation-error nil white-creation-error)
          (static2 :white-creation-success nil white-creation-success))))
 
+(element white-massive-creation-error 
+  (with-doc "Pagina visualizzata in presenza di errori nella creazione massiva di nuovi elementi della white list"
+    (vert (label (const "Errore nel file con i nuovi elementi della white list"))
+          (button* (const "Indietro") :click (target (url `(aia / gestione-liste / white-list)))))))
+
+(element white-massive-creation-success 
+  (with-doc "Pagina visualizzata in caso di successo nella creazione massiva di nuovi elementi della white list"
+    (vert (label (const "Elementi di white list creati con successo"))
+          (button* (const "Indietro") :click (target (url `(aia / gestione-liste / white-list)))))))
+
+(element create-massive-white 
+  (with-doc "La sezione in cui l'utente può specificare in modo massivo i dati di nuovi elementi della white list"
+    (alt white-creation-form
+         (static2 :white-massive-creation-error nil white-massive-creation-error)
+         (static2 :white-massive-creation-success nil white-massive-creation-success))))
+
 (element white-modification-error 
   (with-doc "Pagina visualizzata in presenza di errori nella modifica di un elemento della white list"
     (vert (label (const "Errore nella specifica dell'elemento della white list"))
-          (button* (const "Indietro") :click (target (url `(white-management)))))))
+          (button* (const "Indietro") :click (target (url `(aia / gestione-liste / white-list)))))))
 
 (element white-modification-success 
   (with-doc "Pagina visualizzata in caso di successo nella modifica di un elemento della white list"
     (vert (label (const "Elemento di white list modificato con successo"))
-          (button* (const "Indietro") :click (target (url `(white-management)))))))
+          (button* (const "Indietro") :click (target (url `(aia / gestione-liste / white-list)))))))
 
 (defun white-modification-form (white-id)
   (with-doc "Il form di modifica di un elemento della white list esistente, inizializzato con i dati dell'elemento della white list da modificare"
     (with-data* ((white-data (remote 'white-data white-format (url `(aia / white-list / { ,(value white-id) })))))
       (vert* (white (obj* 'white-data white-format 
-                      ((name name (input* (const "Nome") :init (attr white-data 'name)))
-                       (address address (input* (const "Indirizzo") :init (attr white-data 'address))))
-                      (vert name address)))
+                        ((value value (input* (const "Valore") :init (attr white-data 'value)))
+                         (type type (input* (const "Tipo") :init (attr white-data 'type))))
+                        (vert value type))) 
            ((button* (const "Invio") :click (put-white white-id (payload white))))))))
 
 (defun modify-white (white-id)
@@ -93,13 +104,18 @@
 (element white-list 
   (with-doc "Vista della white list"
     (tabular* white-format (white-row)
-        ('nome (label (filter (prop 'name) white-row))))))
+        ('valore (label (filter (prop 'value) white-row)))
+        ('tipo (label (filter (prop 'type) white-row)))
+        ('elimina (button* (const "Elimina") :click (delete-white (filter (prop 'white-id) white-row))))
+        ('modifica (button* (const "Modifica") 
+                            :click (target (url `(aia / gestione-liste / white-list / modify-white 
+                                                      ? white = ,(value (filter (prop 'white-id) white-row))))))))))
 
 (element white-section
   (with-doc "La sezione di gestione della white list. Qui l'utente può visualizzare, modificare in inserimento e cancellazione la white list" 
     (alt white-list 
          (static2 :create-white nil create-white)
-         (static2 :create-white nil create-massive-white)
+         (static2 :create-massive-white nil create-massive-white)
          (static2 :modify-white (white) (modify-white white)))))
 
 

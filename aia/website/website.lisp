@@ -1,4 +1,3 @@
-
 (defun accident-details (id)
   (with-doc "La pagina che riporta i dettagli di un singolo sinistro"
     (with-data* ((accident (remote 'accident-data accident-format (url `(aia / sinistri / { ,(value id) })))))
@@ -52,7 +51,7 @@
   (with-doc "La sezione principale da cui l'utente può scegliere la funzione desiderata e visualizzarla nella stessa area di schermo"
     (hub-spoke ((ricerca-per-targa "Ricerca per targa" plate-section)
                 (ricerca-per-persona "Ricerca per persona" person-section)
-                (piattaforma-scambio "Piattaforma di scambio" platform-section))
+                (piattaforma-scambio "Piattaforma di scambio" document-section))
                :home
                (with-doc "Il menu principale di scelta"
                  (horz ricerca-per-targa ricerca-per-persona)))))
@@ -68,6 +67,7 @@
                  (vert navbar
                        news-table
                        hs-main
-                       (dynamic2 accident-id (accident-details accident-id)))))))
+                       ;; (dynamic2 accident-id (accident-details accident-id))
+                       )))))
 
 

@@ -7,6 +7,7 @@
 (load "d:/giusv/lisp/extent/documentation.lisp")
 (load "d:/giusv/lisp/extent/expression.lisp")
 (load "d:/giusv/lisp/extent/url.lisp")
+(load "d:/giusv/lisp/extent/rbac.lisp")
 
 (load "d:/giusv/lisp/extent/data.lisp")
 (load "d:/giusv/lisp/extent/data/json.lisp")
@@ -41,7 +42,7 @@
 (load "d:/giusv/lisp/extent/gui/static.lisp")
 (load "d:/giusv/lisp/extent/gui/dynamic.lisp")
 (load "d:/giusv/lisp/extent/gui/tabular.lisp")
-(load "d:/giusv/lisp/extent/gui/tabular.lisp")
+(load "d:/giusv/lisp/extent/gui/pivot.lisp")
 (load "d:/giusv/lisp/extent/gui/chart.lisp")
 (load "d:/giusv/lisp/extent/gui/description.lisp")
 (load "d:/giusv/lisp/extent/gui/listing.lisp")
@@ -52,6 +53,7 @@
 (load "d:/giusv/lisp/extent/gui.lisp")
 
 (load "d:/giusv/lisp/extent/aia/dataformats.lisp")
+(load "d:/giusv/lisp/extent/aia/roles.lisp")
 
 (load "d:/giusv/lisp/extent/aia/console/indicators.lisp")
 (load "d:/giusv/lisp/extent/aia/console/companies.lisp")
@@ -70,12 +72,14 @@
 (load "d:/giusv/lisp/extent/aia/server/newscrud.lisp")
 (load "d:/giusv/lisp/extent/aia/server/indicatorcrud.lisp")
 (load "d:/giusv/lisp/extent/aia/server/documentcrud.lisp")
+(load "d:/giusv/lisp/extent/aia/server/inquiry.lisp")
 (load "d:/giusv/lisp/extent/aia/server/aia.lisp")
 
 
 (load "d:/giusv/lisp/extent/aia/website/plate.lisp")
 (load "d:/giusv/lisp/extent/aia/website/person.lisp")
 (load "d:/giusv/lisp/extent/aia/website/document.lisp")
+(load "d:/giusv/lisp/extent/aia/website/website.lisp")
 
 (load "d:/giusv/lisp/extent/aia/main.lisp")
 

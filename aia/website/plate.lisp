@@ -4,7 +4,7 @@
            (inizio (input* (const "Data inizio")))
            (fine (input* (const "Data fine")))
            ((button* (value targa);; (const "Invio") 
-                     :click (target (url `(home / plate-search-results 
+                     :click (target (url `(home / ricerca-per-targa 
                                                 ? targa =  { ,(value targa ) }
                                                 & inizio =  { ,(value inizio) }
                                                 & fine =  { ,(value fine) }
@@ -38,4 +38,4 @@
 (element plate-section
   (with-doc "La sezione di ricerca basata su identificativi relativi a veicoli (targa)"
     (alt plate-form
-         (static2 :plate-search-results (targa inizio fine pagina) (plate-search-results targa inizio fine pagina)))))
+         (static2 :ricerca-per-targa (targa inizio fine pagina) (plate-search-results targa inizio fine pagina)))))

@@ -57,13 +57,13 @@
   (labels ((mklist (x) (if (listp x) x (list x))))
     (mapcan #'(lambda (x) (if (funcall test x) (mklist x) (flatten x :test test))) ls)))
 
-(defun flat (ls &optional (test #'atom))
-  (if (or (null ls)
-	  (funcall test ls))
-      ls
-      (if (funcall test (car ls))
-	  (cons (car ls) (flat (cdr ls) test))
-	  (concatenate 'list (flat (car ls) test) (flat (cdr ls) test)))))
+;; (defun flat (ls &optional (test #'atom))
+;;   (if (or (null ls)
+;; 	  (funcall test ls))
+;;       ls
+;;       (if (funcall test (car ls))
+;; 	  (cons (car ls) (flat (cdr ls) test))
+;; 	  (concatenate 'list (flat (car ls) test) (flat (cdr ls) test)))))
 
 (defun mkstr (&rest args)
   (with-output-to-string (s)

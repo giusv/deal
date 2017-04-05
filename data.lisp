@@ -1,5 +1,5 @@
-(defmacro data (name d)
-  `(defparameter ,name ,d))
+(defmacro data (name &body d)
+  `(defparameter ,name ,@d))
 
 (defprod datasource (remote ((name symbol)
                              (schema jsschema)

@@ -87,7 +87,8 @@
             (label (attr news-data 'end-date))
             (label (attr news-data 'subscribers))
             (button* (const "Elimina") :click (delete-news news-id))
-            (button* (const "Modifica") :click (target (url `(news-management / modify-news ? ,(value news-id)))))))))
+            (button* (const "Modifica") :click (target (url `(news-management / modify-news 
+                                                                              ? news = { ,(value news-id) }))))))))
 
 (element news-section
   (with-doc "La sezione di gestione delle notizie da fornire alle compagnie assicurative tramite il portale. L'utente può aggiungere, modificare o eliminare i dati relativi a una notizia, nonché i destinatari della stessa" 
