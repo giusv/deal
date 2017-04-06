@@ -95,7 +95,7 @@
             (jsprop 'name t (jsstring 'nome))
             (jsprop 'value t (jsstring 'valore))))
 
-(data indicator-parameter-array-format
+(data parameter-array-format
   (jsarray 'formato-vettore-parametri parameter-format))
 
 (data indicator-format 
