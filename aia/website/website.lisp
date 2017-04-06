@@ -51,10 +51,10 @@
   (with-doc "La sezione principale da cui l'utente può scegliere la funzione desiderata e visualizzarla nella stessa area di schermo"
     (hub-spoke ((ricerca-per-targa "Ricerca per targa" plate-section)
                 (ricerca-per-persona "Ricerca per persona" person-section)
-                (piattaforma-scambio "Piattaforma di scambio" document-section))
+                (piattaforma "Piattaforma di scambio" document-section))
                :home
                (with-doc "Il menu principale di scelta"
-                 (horz ricerca-per-targa ricerca-per-persona piattaforma-scambio)))))
+                 (horz ricerca-per-targa ricerca-per-persona)))))
 
 (element website
   (with-doc "L'applicazione web destinata alla visualizzazione dei dati dei sinistri e dei soggetti/veicoli coinvolti, insieme ai relativi indicatori di rischio"

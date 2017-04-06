@@ -66,7 +66,7 @@
     (sync-server 
      :name 'modify-indicator
      :parameters (list indicator-id) 
-     :input parameter-array-format
+     :input indicator-parameter-array-format
      :command (concat*
                (indicator-valid (validate2 indicator-id (list (regex "[0..9]+"))))
                ((map-command (mu* parameter 
@@ -76,7 +76,7 @@
                                                                    (prop 'name) (attr (argument parameter) 'name)
                                                                    (prop 'value) (attr (argument parameter) 'value))))
                                ((persist par-record))))
-                             parameter-array-format
+                             indicator-parameter-array-format
                              ))
                ((http-response 200))))))
 

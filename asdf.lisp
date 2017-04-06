@@ -18,8 +18,8 @@
 
 (load "d:/giusv/lisp/extent/action.lisp")
 (load "d:/giusv/lisp/extent/action/rest.lisp")
-(load "d:/giusv/lisp/extent/action/persistence.lisp")
 (load "d:/giusv/lisp/extent/action/translate.lisp")
+(load "d:/giusv/lisp/extent/action/persistence.lisp")
 (load "d:/giusv/lisp/extent/action/conversion.lisp")
 (load "d:/giusv/lisp/extent/action/target.lisp")
 (load "d:/giusv/lisp/extent/action/extraction.lisp")
@@ -50,6 +50,8 @@
 (load "d:/giusv/lisp/extent/gui/anchor.lisp")
 (load "d:/giusv/lisp/extent/gui/navbar.lisp")
 (load "d:/giusv/lisp/extent/gui/panel.lisp")
+(load "d:/giusv/lisp/extent/gui/conditional.lisp")
+(load "d:/giusv/lisp/extent/gui/modal.lisp")
 (load "d:/giusv/lisp/extent/gui.lisp")
 
 (load "d:/giusv/lisp/extent/aia/dataformats.lisp")
@@ -72,6 +74,7 @@
 (load "d:/giusv/lisp/extent/aia/server/newscrud.lisp")
 (load "d:/giusv/lisp/extent/aia/server/indicatorcrud.lisp")
 (load "d:/giusv/lisp/extent/aia/server/documentcrud.lisp")
+;; (load "d:/giusv/lisp/extent/aia/server/platform.lisp")
 (load "d:/giusv/lisp/extent/aia/server/inquiry.lisp")
 (load "d:/giusv/lisp/extent/aia/server/aia.lisp")
 

@@ -1,4 +1,4 @@
-(defmacro defaction ((name lambda-list) &rest attrs)
+(defmacro defaction ((name lambda-list) &body attrs)
   (let* ((new-lambda-list (add-parameters lambda-list 'key '(pre (pre bexp)) '(post (post bexp))))) 
     `(defprod action (,name ,new-lambda-list) ,@attrs)))
 

@@ -95,7 +95,7 @@
             (jsprop 'name t (jsstring 'nome))
             (jsprop 'value t (jsstring 'valore))))
 
-(data parameter-array-format
+(data indicator-parameter-array-format
   (jsarray 'formato-vettore-parametri parameter-format))
 
 (data indicator-format 
@@ -198,11 +198,33 @@
   (entity 'document-entity
           (primary-key
            (attribute 'document-id 'integer))
-          (list (attribute 'type 'string)
-                (attribute 'cue 'string)
-                (attribute 'binary 'blob))))
+          (list (attribute 'dossier-id 'string)
+                (attribute 'type 'string)
+                (attribute 'binary 'blob)
+                (attribute 'state 'string))
+          (foreign-key 'dossier-entity
+                       (attribute 'dossier-id 'number))))
+
+(data dossier-entity
+  (entity 'dossier-entity
+          (primary-key
+           (attribute 'dossier-id 'integer))
+          (list (attribute 'cue 'string) 
+                (attribute 'perizia 'integer)
+                (attribute 'cid 'integer)
+                (attribute 'proprietario 'integer))
+          (foreign-key 'operator-entity
+                       (attribute 'proprietario 'integer))
+          (foreign-key 'document-entity
+                       (attribute 'perizia 'integer))))
 
 
+(data dossier-processor-entity
+  (entity 'dossier-processor-entity
+          (primary-key
+           (attribute 'dossier-id 'integer)
+           (attribute 'company-id 'integer))
+          nil))
 
 (data accident-entity 
   (entity 'accident-entity

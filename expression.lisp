@@ -33,8 +33,8 @@
 
 (defprod exp (value ((elem element)))
   (to-list () `(value (:elem ,elem)))
-  (to-req () (text "valore dell'elemento: ~a" (synth name elem)))
-  (to-html () (brackets (text "valore dell'elemento ~a" (synth name elem))))
+  (to-req () (text "valore dell'elemento: ~a" (lower-camel (synth name elem))))
+  (to-html () (brackets (text "valore dell'elemento ~a" (lower-camel (synth name elem)))))
   ;; (to-html () (span (list :class "label label-default") (text "valore dell'elemento: ~a" (synth name elem))))1
   (to-url () (brackets (text "val(~a)" (lower-camel (synth name elem)))))
   (to-chunk () (text "val(~a)" (lower-camel (synth name elem))))
@@ -70,8 +70,11 @@
 			 (loop for i from 1 to arity collect `(,(symb "EXP" i) exp))))
        (to-html () (brackets (hcat (text "~a " (lower-camel ',name))
                                    ,@(if (eq arity 'unbounded)
-                                         `((parens (apply #'punctuate (comma) nil (synth-all to-req exps))))
-                                         `((punctuate (comma) nil ,@(loop for i from 1 to arity collect `(synth to-req ,(symb "EXP" i)))))))))
+                                         `((parens (apply #'punctuate (comma) nil 
+                                                          (synth-all to-doc 
+                                                                     (synth-all to-html exps)))))
+                                         `((punctuate (comma) nil ,@(loop for i from 1 to arity collect 
+                                                                         `(synth to-doc (synth to-html ,(symb "EXP" i))))))))))
 
        (to-list () (list ',name 
 			 ,(if (eq arity 'unbounded)
@@ -82,7 +85,7 @@
        ;; 					 `(apply #',name exps)
        ;; 					 `(,name ,@(loop for i from 1 to arity collect (symb "EXP" i)))))))
        )))
-(def-bexp and 2)
+;; (def-bexp and 2)
 (defmacro def-bexps (&rest bexps)
   `(progn
      ,@(mapcar #'(lambda (bexp)
@@ -92,5 +95,5 @@
 ;;(def-bexp true)
 ;; (def-bexp equal 2)
 
-(def-bexps (true) (false) (and unbounded) (or unbounded) (not 1) (equal 2) (less-than 2) (greater-than 2))
+(def-bexps (true) (false) (and unbounded) (or unbounded) (not 1) (equal 2) (less-than 2) (greater-than 2) (null 1))
 

@@ -33,5 +33,5 @@
 (element person-section
   (with-doc "La sezione di ricerca basata su identificativi relativi a persone fisiche e/o giuridiche"
     (alt person-form
-        (static2 :person-search-results (cognome nome datanasc ragsoc codfisc partiva inizio fine) 
+        (static2 :ricerca (cognome nome datanasc ragsoc codfisc partiva inizio fine) 
                  (person-search-results cognome nome datanasc ragsoc codfisc partiva inizio fine)))))

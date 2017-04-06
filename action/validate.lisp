@@ -5,7 +5,7 @@
   (to-req () (hcat (text "TODO ")))
   (to-html () (multitags 
                (text "Sia ") 
-               (textify (synth name result)) 
+               (synth to-html result) 
                (text " il risultato della validazione dell'espressione ")
                (synth to-html expr)
                (apply #' multitags (p nil (text "con i seguenti validatori:"))

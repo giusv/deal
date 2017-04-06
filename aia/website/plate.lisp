@@ -38,4 +38,4 @@
 (element plate-section
   (with-doc "La sezione di ricerca basata su identificativi relativi a veicoli (targa)"
     (alt plate-form
-         (static2 :ricerca-per-targa (targa inizio fine pagina) (plate-search-results targa inizio fine pagina)))))
+         (static2 :ricerca (targa inizio fine pagina) (plate-search-results targa inizio fine pagina)))))
