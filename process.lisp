@@ -39,7 +39,8 @@
                           (array format)))
     (to-list () `(map-command (:command ,(synth to-list command) :array ,(synth to-list array))))
   (to-html () (multitags
-               (text "Processo che mappa sull'array ~a" (lower-camel (synth name array))) 
+               (text "Processo che mappa sull'array ") 
+               (synth to-html array) 
                (text " il seguente comando:")
                (p nil (synth to-html command)))))
 
@@ -54,7 +55,9 @@
                  (command command)))
     (to-list () `(mu (:input ,input :command ,(synth to-list command))))
   (to-html () (multitags
-               (text "Comando parametrico di parametro ~a che esegue:" (lower-camel input))
+               (text "Comando parametrico di parametro ")
+               (span-color (lower-camel input)) 
+               (text " che esegue:" )
                (p nil (synth to-html command)))))
 
 (defmacro mu* (input command)

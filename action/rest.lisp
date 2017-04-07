@@ -44,8 +44,10 @@
     (to-list () `(http-response :code ,code :payload ,(synth to-html payload) :pre ,(synth to-list pre) :post ,(synth to-list post)))
   (to-html () (multitags (text "Restituzione risposta HTTP ~a" code)
                          (if payload 
-                             (multitags (text " con il seguente payload:")
-                                        (synth to-html payload)))
+                             (multitags (text " con il seguente payload: ")
+                                        ;; (code nil (text "~a" (synth to-string (synth to-string payload) 0)))
+                                        (synth to-html payload)
+                                        ))
                          (dlist pre (text "Precondizione: ") (synth to-html pre)
                                 post (text "Postcondizione:") (synth to-html post)))))
 ;; (pprint (synth to-list (http-get (void-url) (gensym "GET"))))

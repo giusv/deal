@@ -23,14 +23,63 @@
   (let ((result (variab (gensym))))
     (values (create-instance entity result bindings :pre pre :post post) result)))
 
-(defaction (persist ((entity expression)))
-  (to-list () `(persist :entity ,(synth to-list entity) :pre ,(synth to-list pre) :post ,(synth to-list post)))
-  (to-req () (hcat (text "Memorizza nel database l'entità ")
-                   (synth to-req entity)))
-  (to-html () (multitags (text "Memorizza nel database l'entità ")
-                         (synth to-html entity)
-                         (dlist pre (text "Precondizione: ") (synth to-html pre)
-                                post (text "Postcondizione:") (synth to-html post)))))
+
+;; (defmacro create-instance2 (entity (&rest bindings) &key pre post)
+;;   (let ((result (variab (gensym))))
+;;     `(values (create-instance ,entity 
+;;                               ,result 
+;;                               (list ,@(apply #'append 
+;;                                             (mapcar (lambda (binding)
+;;                                                       (list `(prop ',(symb (symbol-name (car binding))))
+;;                                                             (cadr binding)))
+;;                                                     (group bindings 2)))) 
+;;                               :pre ,pre :post ,post) 
+;;              ,result)))
+
+;; (create-instance2 document-entity
+;;                   (:id (autokey)
+;;                    :type type
+;;                    :cue cue
+;;                    :binary binary))
+
+(defaction (update-instance ((entity entity)
+                             (source variable)
+                             (result variable)
+                             (bindings (plist filter expression))))
+  (to-list () `(update-instance :entity ,(synth to-list entity) :source ,(synth to-list source) :result ,(synth to-list result) :bindings ,(synth-all to-list bindings) :pre ,(synth to-list pre) :post ,(synth to-list post)))
+  ;; (to-req () (hcat (text "Creazione di un'istanza dell'entità ")
+  ;;                  (synth to-req entity)))
+  (to-html () (multitags 
+               (text "Sia ") 
+               (synth to-html result) 
+               (text " il risultato dell'aggiornamento creazione dell'entità ")
+               (synth to-html source)
+               (text " (~a)" (lower-camel (synth name entity)))
+               (text " con i seguenti valori:")
+               (apply #'multitags (synth-plist-merge 
+                                   #'(lambda (binding) (p nil (synth to-req (first binding)) 
+                                                          (text " <- ") 
+                                                          (synth to-html (second binding)))) 
+                                   bindings))
+               (dlist pre (text "Precondizione: ") (synth to-html pre)
+                      post (text "Postcondizione:") (synth to-html post)))))
+
+
+(defun update-instance2 (entity source bindings &key pre post)
+  (let ((result (variab (gensym))))
+    (values (update-instance entity source result bindings :pre pre :post post) result)))
+
+
+;; (defaction (persist ((entity entity)
+;;                      (content expression)))
+;;   (to-list () `(persist :entity ,(synth to-list entity) :content ,(synth to-list content) :pre ,(synth to-list pre) :post ,(synth to-list post)))
+;;   (to-req () (hcat (text "Memorizza nel database l'entità ")
+;;                    (synth to-req entity)))
+;;   (to-html () (multitags (text "M nel database l'entità ")
+;;                          (synth to-html entity)
+;;                          (text " con il c")
+;;                          (dlist pre (text "Precondizione: ") (synth to-html pre)
+;;                                 post (text "Postcondizione:") (synth to-html post)))))
 
 
 (defaction (query ((query query)
@@ -96,3 +145,32 @@
 (defun erase2 (entity id &key pre post)
   (let ((result (variab (gensym))))
     (values (erase entity result id :pre pre :post post) result)))
+
+(defaction (update ((entity expression)
+                    (id expression)))
+  (to-list () `(update :entity ,(synth to-list entity) :id ,(synth to-list id) :pre ,(synth to-list pre) :post ,(synth to-list post)))
+  (to-req () (hcat (text "Aggiorna nel database l'entità corrispondente alla seguente chiave primaria:" )
+                   (synth to-req id)
+                   (text "con il contenuto di") 
+                   (synth to-req entity)))
+  (to-html () (multitags (text "Aggiorna nel database l'entità corrispondente alla chiave primaria ")
+                         (synth to-html id)
+                         (text " con il contenuto di ")
+                         (synth to-html entity)
+                         (dlist pre (text "Precondizione: ") (synth to-html pre)
+                                post (text "Postcondizione:") (synth to-html post)))
+
+           ;; (multitags 
+           ;;     (text "Sia ") 
+           ;;     (synth to-html result) 
+           ;;     (text " il risultato dell'aggiornamento nel database dell'entità ~a" (lower-camel (synth name entity)))
+           ;;     (p nil (text " corrispondente alla seguente chiave primaria:")
+           ;;        (synth to-html id))
+           ;;     (dlist pre (text "Precondizione: ") (synth to-html pre)
+           ;;            post (text "Postcondizione:") (synth to-html post)))
+           ))
+
+
+;; (defun update2 (entity id &key pre post)
+;;   (let ((result (variab (gensym))))
+;;     (values (update entity id result :pre pre :post post) result)))

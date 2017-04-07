@@ -10,9 +10,11 @@
   (to-list () `(jnumber (:value ,(synth to-list value))))
   (to-string () (synth to-string value)))
 
+
 (defprod json (jstring ((value expression)))
   (to-list () `(jstring (:value ,(synth to-list value))))
   (to-string () (synth to-string value)))
+
 
 (defprod json (jarray (&rest (values (list json))))
   (to-list () `(jarray (:values ,(synth-all to-list values))))
@@ -31,11 +33,11 @@
 ;; (defprod json (jobject2 (&rest (values (plist json))))
 ;;   (to-list () `(alt (:elements ,(synth-plist to-list elements)))))
 
-(defparameter *json* (jobject :name (jstring (const "john"))
-			      :age (jnumber 31)
-			      :numbers (jarray (jnumber 98) (jnumber 234))
-			      :address (jobject :city (jstring (const "rome"))
-						:state (jstring (const "usa")))))
+;; (defparameter *json* (jobject :name (jstring (const "john"))
+;; 			      :age (jnumber 31)
+;; 			      :numbers (jarray (jnumber 98) (jnumber 234))
+;; 			      :address (jobject :city (jstring (const "rome"))
+;; 						:state (jstring (const "usa")))))
 
 ;; (synth to-string *json*)
 ;; (synth output (synth to-string (jstring (const "ss"))) 0)

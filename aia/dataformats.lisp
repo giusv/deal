@@ -160,14 +160,17 @@
   (entity 'indicator-entity
           (primary-key 
            (attribute 'indicator-id 'string))
-          (list (attribute 'code 'string)
+          (list (attribute 'name 'string)
+                (attribute 'source-code 'string)
+                (attribute 'target-code 'string)
                 (attribute 'start-date 'string))))
 
 (data parameter-entity
   (entity 'parameter-entity
           (primary-key 
            (attribute 'parameter-id 'string))
-          (list (attribute 'name 'string)
+          (list (attribute 'indicator-id 'string)
+                (attribute 'name 'string)
                 (attribute 'value 'string))
           (foreign-key 'indicator-entity 
                        (attribute 'indicator-id 'string))))

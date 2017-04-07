@@ -23,7 +23,7 @@
 (load "d:/giusv/lisp/extent/action/conversion.lisp")
 (load "d:/giusv/lisp/extent/action/target.lisp")
 (load "d:/giusv/lisp/extent/action/extraction.lisp")
-(load "d:/giusv/lisp/extent/action/validate.lisp")
+;; (load "d:/giusv/lisp/extent/action/validate.lisp")
 
 (load "d:/giusv/lisp/extent/process.lisp")
 (load "d:/giusv/lisp/extent/service.lisp")

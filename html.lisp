@@ -69,7 +69,9 @@
                                                              (list (dt nil ,(pop args))
                                                                    (dl nil ,(pop args))))))))))
 (defun span-color (name)
-  (let ((n (parse-integer (subseq name (- (length name) 3) (length name))))) 
+  (let ((n (if (parse-integer (subseq name (- (length name) 3) (length name)) :junk-allowed t)
+               (parse-integer (subseq name (- (length name) 3) (length name)) :junk-allowed t)
+               10))) 
     (span (list :class "label" :style (concatenate 'string "background-color:" (lower-camel (nth (mod n (length html-colors)) html-colors)))) (text "~a" name))))
 
 ;; (let ((s "012345"))

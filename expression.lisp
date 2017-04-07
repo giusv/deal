@@ -12,17 +12,19 @@
 (defprod exp (argument ((name symbol)))
   (to-list () `(argument (:name ,name)))
   (to-req () (text "~a" name))
-  (to-html () (braces (text "~a" (lower-camel name))))
+  (to-html () (span-color (lower-camel name));; (braces (text "~a" (lower-camel name)))
+           )
   ;; (to-html () (span (list :class "label label-danger") (text "~a!~a" (lower-camel (synth name data)) (lower-camel exp))))
   )
 
-(defprod exp (attr ((data datasource)
+(defprod exp (attr ((name datasource)
                     (exp symbol)))
-  (to-list () `(attr (:data ,data :exp ,exp)))
-  (to-req () (text "~a!~a" (lower-camel (synth name data)) (lower-camel exp)))
-  (to-html () (brackets (text "~a!~a" (lower-camel (synth name data)) (lower-camel exp))))
-  ;; (to-html () (span (list :class "label label-danger") (text "~a!~a" (lower-camel (synth name data)) (lower-camel exp))))
-  (to-string () (text "~a!~a" data exp)))
+  (to-list () `(attr (:name ,name :exp ,exp)))
+  (to-req () (text "~a!~a" (lower-camel (synth name name)) (lower-camel exp)))
+  (to-html () (multitags (span-color (lower-camel (synth name name))) 
+                         (text "!~a"  (lower-camel exp))))
+  ;; (to-html () (span (list :class "label label-danger") (text "~a!~a" (lower-camel (synth name name)) (lower-camel exp))))
+  (to-string () (text "~a!~a" (lower-camel (synth name name)) (lower-camel exp))))
 
 (defprod exp (variab ((name string)))
   (to-list () `(attr (:name ,name)))
@@ -33,8 +35,9 @@
 
 (defprod exp (value ((elem element)))
   (to-list () `(value (:elem ,elem)))
-  (to-req () (text "valore dell'elemento: ~a" (lower-camel (synth name elem))))
-  (to-html () (brackets (text "valore dell'elemento ~a" (lower-camel (synth name elem)))))
+  ;; (to-req () (text "valore dell'elemento:" (lower-camel (synth name elem))))
+  (to-html () (multitags (text "valore di ")
+                         (span-color (lower-camel (synth name elem)))))
   ;; (to-html () (span (list :class "label label-default") (text "valore dell'elemento: ~a" (synth name elem))))1
   (to-url () (brackets (text "val(~a)" (lower-camel (synth name elem)))))
   (to-chunk () (text "val(~a)" (lower-camel (synth name elem))))
@@ -52,6 +55,10 @@
 (defprod exp (autokey ())
   (to-list () `(autokey))
   (to-html () (text "Chiave generata automaticamente")))
+
+(defprod exp (current-date ())
+  (to-list () `(current-date))
+  (to-html () (text "Data odierna")))
 
 
 (defprod exp (cat (&rest (exps exp)))
