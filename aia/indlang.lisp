@@ -135,9 +135,7 @@
              (uguale "uguale al") 
              (diverso "diverso dal"))
 
-
-(synth output (synth to-doc (synth to-production 
-                                   (linguaggio (indicatore nil nil nil nil)
+(defparameter linguaggio (linguaggio (indicatore nil nil nil nil)
                                                (parametro nil nil)
                                                (argomento nil)
                                                (sinistri nil)
@@ -157,15 +155,18 @@
                                                (testimone nil nil)
                                                (responsabile nil nil)
                                                (conducente nil nil)
-                                               (patente-invalida nil nil)))) 0)
+                                               (patente-invalida nil nil)))
+;; (synth output (synth to-doc (synth to-production linguaggio
+;;                                    )) 0)
 
-(indicatore* 
-    sco1 
-    (soggetto) 
-    ((mesi numero) (occorrenze numero))
-  (maggiore (numero (sinistri (or (coinvolto soggetto sinistro)
-                                  (proprietario soggetto sinistro)))
-                    (periodo mesi))
-            occorrenze))
+
+;; (indicatore* 
+;;     sco1 
+;;     (soggetto) 
+;;     ((mesi numero) (occorrenze numero))
+;;   (maggiore (numero (sinistri (or (coinvolto soggetto sinistro)
+;;                                   (proprietario soggetto sinistro)))
+;;                     (periodo mesi))
+;;             occorrenze))
 
 

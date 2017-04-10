@@ -17,7 +17,7 @@
   (to-html (path) (let ((newpath (backward-chain (static-chunk name) path)))
 		    (multitags 
                      (section nil 
-                              (h3 nil (text "~a (URL: " (upper-camel name #\Space)) 
+                              (h4 nil (text "~a (URL: " (upper-camel name #\Space)) 
                                   (code (list :id (synth to-string (synth to-url newpath) 0)) (synth to-url newpath))
                                   (text ")"))
                               (p nil (synth to-html element newpath))))))

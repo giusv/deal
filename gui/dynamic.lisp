@@ -15,7 +15,7 @@
   (to-html (path) (let ((newpath (backward-chain (dynamic-chunk name) path))) 
                     (multitags 
                      (section nil 
-                              (h3 nil (text "Elemento dinamico ~a (URL: " (lower-camel name)) 
+                              (h4 nil (text "Elemento dinamico ~a (URL: " (lower-camel name)) 
                                   (code (list :id (synth to-string (synth to-url newpath) 0)) (synth to-url newpath))
                                   (text ")"))
                               (p nil (synth to-html element newpath))))))

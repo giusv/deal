@@ -57,6 +57,7 @@
 
 (load "d:/giusv/lisp/extent/aia/dataformats.lisp")
 (load "d:/giusv/lisp/extent/aia/roles.lisp")
+(load "d:/giusv/lisp/extent/aia/indlang.lisp")
 
 (load "d:/giusv/lisp/extent/aia/console/indicators.lisp")
 (load "d:/giusv/lisp/extent/aia/console/companies.lisp")
