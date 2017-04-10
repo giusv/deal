@@ -249,10 +249,35 @@
   (entity 'inquiry-entity
           (primary-key
            (attribute 'inquiry-id 'integer))
-          (list (attribute 'plate 'string)
+          (list (attribute 'type 'string)
+                (attribute 'plate 'string)
+                (attribute 'person 'string)
                 (attribute 'userid 'string)
                 (attribute 'company 'string)
                 (attribute 'cue 'string)
                 (attribute 'start-date 'string)
                 (attribute 'end-date 'string))))
 
+(data black-entity
+  (entity 'black-entity
+          (primary-key
+           (attribute 'black-id 'string))
+          (list (attribute 'value 'string)
+                (attribute 'type 'string))))
+
+(data white-entity
+  (entity 'white-entity
+          (primary-key
+           (attribute 'white-id 'string))
+          (list (attribute 'value 'string)
+                (attribute 'type 'string))))
+(data person-entity 
+  (entity 'person-entity
+          (primary-key 
+           (attribute 'id-sogg 'string))
+          (list (attribute 'nome 'string) 
+                (attribute 'cognome 'string) 
+                (attribute 'codice-fiscale 'string) 
+                (attribute 'partitva-iva 'string) 
+                (attribute 'luogo-nascita 'string)
+                (attribute 'data-nascita 'string))))

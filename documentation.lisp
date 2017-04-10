@@ -35,3 +35,15 @@
   (to-brief (path) (synth to-brief element path))
   (toplevel () (list (synth toplevel element)))
   (req (path) (synth req element path)))
+
+(defprod element (with-description* ((description string)
+                                    (element element)))
+  (to-list () `(with-description* (:description (synth to-list description) :element (synth to-list element))))
+  (to-html () (multitags 
+                   (h4 nil (text "Descrizione"))
+                   (text "~a" description) 
+                   (h4 nil (text "Controlli e logica elaborativa"))
+                   (synth to-html element )))
+  (to-brief () (synth to-brief element ))
+  (toplevel () (list (synth toplevel element)))
+  (req () (synth req element )))

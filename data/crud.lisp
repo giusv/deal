@@ -1,0 +1,2 @@
+(defprod crud (crud-create ())
+)

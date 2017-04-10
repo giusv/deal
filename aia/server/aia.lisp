@@ -4,6 +4,8 @@
                            company-service
                            document-service
                            indicator-service
+                           black-service
+                           white-service
                            inquiry-service))
 
 (database aia-db 

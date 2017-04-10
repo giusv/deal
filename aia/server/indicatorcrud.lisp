@@ -51,125 +51,130 @@
 ;;   )
 
 (process create-indicator 
-  (sync-server :name 'create-indicator :input indicator-format :command
-               (with-extraction-and-validation indicator-format 
-                   ((code (required) (minlen 2))
-                    (start-date (required)))
-                 (result (translate2 code))
-                 ((fork (+not+ (+null+ result))
-                        (concat* (indicator (create-instance2 
-                                                    indicator-entity 
-                                                    (list (prop 'name) (attr result 'name)
-                                                          (prop 'source-code) code
-                                                          (prop 'target-code) (attr result 'code)
-                                                          (prop 'start-date) start-date))) 
-                                 ((map-command (mu* parameter 
-                                                    (concat*
-                                                     (parameter (create-instance2 
+  (with-description* "Endpoint REST utilizzato per la creazione di un nuovo indicatore e dei suoi relativi parametri." 
+    (sync-server :name 'create-indicator :input indicator-format :command
+                (with-extraction-and-validation indicator-format 
+                    ((code (required) (minlen 2))
+                     (start-date (required)))
+                  (result (translate2 code))
+                  ((fork (+not+ (+null+ result))
+                         (concat* (indicator (create-instance2 
+                                              indicator-entity 
+                                              (list (prop 'name) (attr result 'name)
+                                                    (prop 'source-code) code
+                                                    (prop 'target-code) (attr result 'code)
+                                                    (prop 'start-date) start-date))) 
+                                  ((map-command (mu* parameter 
+                                                     (concat*
+                                                      (parameter (create-instance2 
                                                                   parameter-entity
                                                                   (list (prop 'indicator-id) (attr indicator 'indicator-id)
                                                                         (prop 'name) (attr (argument parameter) 'name)
                                                                         (prop 'value) (attr (argument parameter) 'value))))))
-                                               (attr result 'parameters)))
-                                 ((http-response 201)))
-                        (http-response 403))))))
+                                                (attr result 'parameters)))
+                                  ((http-response 201)))
+                         (http-response 403)))))))
 
 (process remove-indicator
   (let ((indicator-id (path-parameter 'indicator-id)))
-    (sync-server :name 'remove-indicator :parameters (list indicator-id) :command
-                 (concat*
-                  (indicator-valid
-                   (validate2 indicator-id (list (regex "[0..9]+"))))
-                  ((fork indicator-valid
-                         (concat* ((erase2 indicator-entity indicator-id))
-                                  ((http-response 204)))
-                         (http-response 400)))))))
+    (with-description* "Endpoint REST utilizzato per la cancellazione di un indicatore e dei suoi relativi parametri." 
+      (sync-server :name 'remove-indicator :parameters (list indicator-id) :command
+                  (concat*
+                   (indicator-valid
+                    (validate2 indicator-id (list (regex "[0..9]+"))))
+                   ((fork indicator-valid
+                          (concat* ((erase2 indicator-entity indicator-id))
+                                   ((http-response 204)))
+                          (http-response 400))))))))
 
 (process update-indicator
   (let* ((indicator-id (path-parameter 'indicator-id)))
-    (sync-server 
-     :name 'update-indicator
-     :parameters (list indicator-id) 
-     :input indicator-format
-     :command (concat*
-               (indicator-valid (validate2 indicator-id (list (regex "[0..9]+"))))
-               ((fork indicator-valid
-                      (concat*
-                       (result (query2 (project (restrict (equijoin (relation 'parameter-entity) (relation 'indicator-entity) :indicator-id)
-                                                          (+equal+ (prop 'indicator-id) (value indicator-id)))
-                                                'parameter-id))) 
-                       ((map-command (mu* parameter 
-                                          (erase2 parameter-entity (argument parameter)))
-                                     result))
-                       ((with-extraction-and-validation indicator-format 
-                            ((code (required) (minlen 2))
-                             (start-date (required)))
-                          (result (translate2 code))
-                          ((fork (+null+ result)
-                                 (http-response 403) 
-                                 (concat* 
-                                  (old-indicator (fetch2 indicator-entity :id company-id))
-                                  (new-indicator (update-instance2 
-                                                  indicator-entity 
-                                                  old-indicator
-                                                  (list (prop 'name) (attr result 'name)
-                                                        (prop 'source-code) code
-                                                        (prop 'target-code) (attr result 'code)
-                                                        (prop 'start-date) start-date))) 
-                                  ((map-command (mu* parameter 
-                                                     (concat*
-                                                      (parameter (create-instance2 
+    (with-description* "Endpoint REST utilizzato per la modifica di un indicatore e dei suoi relativi parametri." 
+      (sync-server 
+      :name 'update-indicator
+      :parameters (list indicator-id) 
+      :input indicator-format
+      :command (concat*
+                (indicator-valid (validate2 indicator-id (list (regex "[0..9]+"))))
+                ((fork indicator-valid
+                       (concat*
+                        (result (query2 (project (restrict (equijoin (relation 'parameter-entity) (relation 'indicator-entity) :indicator-id)
+                                                           (+equal+ (prop 'indicator-id) (value indicator-id)))
+                                                 'parameter-id))) 
+                        ((map-command (mu* parameter 
+                                           (erase2 parameter-entity (argument parameter)))
+                                      result))
+                        ((with-extraction-and-validation indicator-format 
+                             ((code (required) (minlen 2))
+                              (start-date (required)))
+                           (result (translate2 code))
+                           ((fork (+null+ result)
+                                  (http-response 403) 
+                                  (concat* 
+                                   (old-indicator (fetch2 indicator-entity :id indicator-id))
+                                   (new-indicator (update-instance2 
+                                                   indicator-entity 
+                                                   old-indicator
+                                                   (list (prop 'name) (attr result 'name)
+                                                         (prop 'source-code) code
+                                                         (prop 'target-code) (attr result 'code)
+                                                         (prop 'start-date) start-date))) 
+                                   ((map-command (mu* parameter 
+                                                      (concat*
+                                                       (parameter (create-instance2 
                                                                    parameter-entity
                                                                    (list (prop 'indicator-id) (attr new-indicator 'indicator-id)
                                                                          (prop 'name) (attr (argument parameter) 'name)
                                                                          (prop 'value) (attr (argument parameter) 'value))))))
-                                                (attr result 'parameters)))
-                                  ((http-response 201))))))))
-                      (http-response 400)))))))
+                                                 (attr result 'parameters)))
+                                   ((http-response 201))))))))
+                       (http-response 400))))))))
 
 (process update-indicator-parameters
   (let* ((indicator-id (path-parameter 'indicator-id)))
-    (sync-server 
-     :name 'update-indicator
-     :parameters (list indicator-id) 
-     :input indicator-parameter-array-format
-     :command (concat*
-               (indicator-valid (validate2 indicator-id (list (regex "[0..9]+"))))
-               ((map-command (mu* parameter 
-                                  (with-extraction-and-validation parameter-format 
-                                      ((name (required) (minlen 2))
-                                       (value (required)))
-                                    (parameter (create-instance2 
-                                                parameter-entity
-                                                (list (prop 'indicator-id) indicator-id
-                                                      (prop 'name) (attr (argument parameter) 'name)
-                                                      (prop 'value) (attr (argument parameter) 'value))))))
-                             indicator-parameter-array-format))
-               ((http-response 200))))))
+    (with-description* "Endpoint REST utilizzato per la modifica dei parametri di un indicatore." 
+(sync-server 
+      :name 'update-indicator
+      :parameters (list indicator-id) 
+      :input indicator-parameter-array-format
+      :command (concat*
+                (indicator-valid (validate2 indicator-id (list (regex "[0..9]+"))))
+                ((map-command (mu* parameter 
+                                   (with-extraction-and-validation parameter-format 
+                                       ((name (required) (minlen 2))
+                                        (value (required)))
+                                     (parameter (create-instance2 
+                                                 parameter-entity
+                                                 (list (prop 'indicator-id) indicator-id
+                                                       (prop 'name) (attr (argument parameter) 'name)
+                                                       (prop 'value) (attr (argument parameter) 'value))))))
+                              indicator-parameter-array-format))
+                ((http-response 200)))))))
 
 (process read-indicator
   (let* ((ind (path-parameter 'indicator)))
-    (sync-server 
-     :name 'read-indicator
-     :parameters (list ind) 
-     :command (concat* (indicator (query2 (restrict (equijoin (relation 'indicator-entity) 
-                                                              (relation 'parameter-entity)
-                                                     :indicator-id)
-                                                    (+equal+ (prop 'indicator-id) ind))))
-                       (json (rel-to-json2 indicator 
-                                           (list 'source-code 'start-date)
-                                           :group (list 'name 'value))) 
-                       ((http-response 200 :payload json))))))
+    (with-description* "Endpoint REST utilizzato per ottenere informazioni su uno specifico indicatore." (sync-server 
+      :name 'read-indicator
+      :parameters (list ind) 
+      :command (concat* (indicator (query2 (restrict (equijoin (relation 'indicator-entity) 
+                                                               (relation 'parameter-entity)
+                                                               :indicator-id)
+                                                     (+equal+ (prop 'indicator-id) ind))))
+                        (json (rel-to-json2 indicator 
+                                            (list 'source-code 'start-date)
+                                            :group (list 'name 'value))) 
+                        ((http-response 200 :payload json)))))))
 (process list-indicators
-  (sync-server 
-   :name 'list-indicators
-   :command (concat* (indicators (query2 (equijoin (relation 'indicator-entity) 
-                                                   (relation 'parameter-entity)
-                                                   :indicator-id)))
-                       (json (rel-to-json2 indicators 
-                                           (list 'source-code 'start-date)
-                                           :group (list 'name 'value)))
-                       ((http-response 200 :payload json)))))
+  (with-description* "Endpoint REST utilizzato per ottenere la lista di tutti gli indicatori specificati."
+    (sync-server 
+    :name 'list-indicators
+    :command (concat* (indicators (query2 (equijoin (relation 'indicator-entity) 
+                                                    (relation 'parameter-entity)
+                                                    :indicator-id)))
+                      (json (rel-to-json2 indicators 
+                                          (list 'source-code 'start-date)
+                                          :group (list 'name 'value)))
+                      ((http-response 200 :payload json))))))
 
 (service indicator-service 
          (rest-service 'indicator-service 

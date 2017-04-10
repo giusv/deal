@@ -34,3 +34,11 @@
 			 (duration ))) 
   (to-list () `(restrict :expression ,(synth to-list expression) :query ,(synth to-list query)))
   (schema () (synth attributes query)))
+
+
+(defprod indicatore (indicatore ((name symbol)
+                                 (args (list symbol))
+                                 (parameters (list symbol))
+                                 (expression expression)))
+  (to-list () `(indicatore (:name ,name :args ,args :parameters ,parameters :expression (synth to-list expression))))
+  (to-html () (multitags (text "Indicatore denominato ~a avente "))))
