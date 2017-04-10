@@ -5,9 +5,11 @@
 (defprod chunk (static-chunk ((name string)))
   (to-url () (text "~a" (lower-camel name)))
   (to-list () `(static-chunk (:name ,name))))
+
 (defprod chunk (dynamic-chunk ((name string)))
   (to-url () (braces (text "~a" (lower-camel name))))
   (to-list () `(dynamic-chunk (:name ,name))))
+
 (defprod chunk (expression-chunk ((exp expression)))
   (to-url () (braces (synth to-chunk exp)))
   (to-list () `(expression-chunk (:exp ,exp))))
@@ -85,7 +87,17 @@
     ;; (result (reduce #'forward-chain segs :from-end t))
     (result (forward-chain (void-url) (reduce #'forward-chain segs :from-end t)))))
 
+(defmacro merge-urls (head tail)
+  ;; (reduce #'forward-chain head :from-end t :initial-value (url tail))
+  (labels ((listify (x)
+             (if (consp x)
+                 x
+                 (list x))))
+    `(parse (parse-url) `(,@',(listify head)  / ,@',(listify tail)))))
 
+;; (merge-urls (seg1 / seg2) (seg3 / seg4))
+
+(merge-urls :seg1 (seg3 / seg4))
 (defmacro url (u)
   `(parse (parse-url) ,u))
 ;;(synth output (synth to-url (chain 'a (multi (chain 'b) (chain 'c)))) 0)

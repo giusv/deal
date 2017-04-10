@@ -51,23 +51,33 @@
   (with-doc "La sezione principale da cui l'utente può scegliere la funzione desiderata e visualizzarla nella stessa area di schermo"
     (hub-spoke ((ricerca-per-targa "Ricerca per targa" plate-section)
                 (ricerca-per-persona "Ricerca per persona" person-section)
-                (piattaforma "Piattaforma di scambio" document-section))
-               :home
+                (piattaforma "Piattaforma di scambio" document-section)
+                ;; (data-quality "Data quality" quality-section)
+                )
+               home
                (with-doc "Il menu principale di scelta"
                  (horz ricerca-per-targa ricerca-per-persona)))))
 
+(defun authenticate-user (userid password)
+  (concat* (auth-result (authenticate2 userid password))
+           ((fork auth-result
+                  (target (url `(home)))
+                  (target (url `(errore-login)))))))
 (element website
   (with-doc "L'applicazione web destinata alla visualizzazione dei dati dei sinistri e dei soggetti/veicoli coinvolti, insieme ai relativi indicatori di rischio"
-    (alt nil 
-        (static2 :login nil  
-                 (vert* (userid (input* (const "User id") :init (const "nome.cognome@mail.com")))
-                        (passwd (input* (const "Password")))
-                        (ok (button* (const "Login") :click (target (url `(home)))))))
-        (static2 :home nil 
-                 (vert navbar
-                       news-table
-                       hs-main
-                       ;; (dynamic2 accident-id (accident-details accident-id))
-                       )))))
+    (alt (with-doc "Il form di login"
+           (vert* (userid (gui-input 'login-userid (const "User id")))
+                  (passwd (gui-input 'login-password (const "Password")))
+                  (ok (gui-button 'login-submit (const "Login") :click (authenticate-user (value userid) (value passwd))))))
+         (static2 :home nil 
+                  (with-description "La pagina iniziale a cui l'utente accede dopo aver effettuato il login."
+                    (vert navbar
+                          news-table
+                          hs-main
+                          ;; (dynamic2 id-sinistro (accident-details id-sinistro))
+                          )))
+         (static2 :errore-login nil 
+                  (vert (label (const "Errore nei dati di login") )
+                        (button 'indietro (const "Indietro") :click (target (void-url))))))))
 
 

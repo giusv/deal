@@ -12,9 +12,11 @@
   `(let* ,(mapcar #'(lambda (triple)
 		      (let ((name (first triple))
 			    (label (second triple)))
-			`(,name (option-panel ,label ,(if base 
-                                                          (url `(,base / ,name))
-                                                          (url `(,name)))))))
+			`(,name (option-panel ,label ,(merge-urls base name)
+                                              ;; (if base 
+                                              ;;     (url `(,base / ,name))
+                                              ;;     (url `(,name)))
+                                              ))))
 		  triples)
      (alt ,layout ,@(mapcar #'(lambda (triple) 
 			(let ((name (first triple))

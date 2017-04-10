@@ -28,9 +28,9 @@
                                     (element element)))
   (to-list () `(with-description (:description (synth to-list description) :element (synth to-list element))))
   (to-html (path) (multitags 
-                   (h4 nil (text "Descrizione"))
+                   (h5 nil (text "Descrizione"))
                    (text "~a" description) 
-                   (h4 nil (text "Controlli e logica elaborativa"))
+                   (h5 nil (text "Controlli e logica elaborativa"))
                    (synth to-html element path)))
   (to-brief (path) (synth to-brief element path))
   (toplevel () (list (synth toplevel element)))
@@ -40,9 +40,9 @@
                                     (element element)))
   (to-list () `(with-description* (:description (synth to-list description) :element (synth to-list element))))
   (to-html () (multitags 
-                   (h4 nil (text "Descrizione"))
+                   (h5 nil (text "Descrizione"))
                    (text "~a" description) 
-                   (h4 nil (text "Controlli e logica elaborativa"))
+                   (h5 nil (text "Controlli e logica elaborativa"))
                    (synth to-html element )))
   (to-brief () (synth to-brief element ))
   (toplevel () (list (synth toplevel element)))

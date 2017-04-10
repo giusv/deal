@@ -19,12 +19,12 @@
 
 (load "d:/giusv/lisp/extent/action.lisp")
 (load "d:/giusv/lisp/extent/action/rest.lisp")
+(load "d:/giusv/lisp/extent/action/authenticate.lisp") 
 (load "d:/giusv/lisp/extent/action/translate.lisp")
 (load "d:/giusv/lisp/extent/action/persistence.lisp")
 (load "d:/giusv/lisp/extent/action/conversion.lisp")
 (load "d:/giusv/lisp/extent/action/target.lisp")
 (load "d:/giusv/lisp/extent/action/extraction.lisp")
-;; (load "d:/giusv/lisp/extent/action/validate.lisp")
 
 (load "d:/giusv/lisp/extent/process.lisp")
 (load "d:/giusv/lisp/extent/service.lisp")
