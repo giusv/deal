@@ -3,7 +3,7 @@
 
 (data dossier-upload-format 
   (jsobject 'formato-upload-dossier
-            (jsprop 'sinistro t (jsstring 'sinistro))
+            (jsprop 'id-sinistro t (jsstring 'sinistro))
             (jsprop 'perizia t (jsbool 'perizia))
             (jsprop 'cid t (jsbool 'cid))
             (jsprop 'compagnie t (jsarray 'compagnie company-id-format))))
@@ -11,7 +11,7 @@
 (data dossier-format 
   (jsobject 'formato-dossier
             (jsprop 'id-dossier t (jsstring 'id-dossier))
-            (jsprop 'sinistro t (jsstring 'sinistro))
+            (jsprop 'id-sinistro t (jsstring 'sinistro))
             (jsprop 'perizia t (jsbool 'perizia))
             (jsprop 'cid t (jsbool 'cid))
             (jsprop 'compagnie t (jsarray 'compagnie company-id-format))))

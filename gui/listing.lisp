@@ -1,4 +1,4 @@
-(defprod element (listing ((name symbol)
+(defprod element (listing% ((name symbol)
                            (source datasource)
                            (element element)))
   (to-list () `(listing (:name ,name 
@@ -13,8 +13,13 @@
   (req (path) nil))
 
 
+(defmacro listing (name source (rowname &optional index) &body element)
+  `(listing% ,name
+            ,source
+            (lambda (,rowname ,@(csplice index index)) (declare (ignorable ,rowname ,@(csplice index index))) ,@element)))
+
 (defmacro listing* (source (rowname &optional index) &body element)
-  `(listing (gensym "LISTING") 
+  `(listing% (gensym "LISTING") 
             ,source
             (lambda (,rowname ,@(csplice index index)) (declare (ignorable ,rowname ,@(csplice index index))) ,@element)))
 

@@ -21,9 +21,9 @@
                                                & data-inizio =  { ,(value data-inizio) }
                                                & data-fine =  { ,(value data-fine) }
                                                & pagina =  { ,(value pagina) })))))
-      (panel* (label (cat (const "Ricerca per targa") (value targa) (value data-inizio) (value data-fine)))
-              (vert (chart* vehicle)
-                    (tabular* accidents (acc-row)
+      (panel 'risultati-ricerca-per-targa (label (cat (const "Ricerca per targa") (value targa) (value data-inizio) (value data-fine)))
+              (vert (chart 'indicatori-veicolo vehicle)
+                    (tabular 'sinistri accidents (acc-row)
                       ('data-accadimento (label (filter (prop 'data-accadimento) acc-row)))
                       ('stato (label (value (filter (prop 'stato) acc-row))))
                       ('luogo (label (value (filter (prop 'luogo) acc-row))))
@@ -32,7 +32,7 @@
                       ('danni-/-lesioni-/-decessi (label (cat (value (filter (prop 'danni) acc-row)) (const "/")
                                                               (value (filter (prop 'lesioni) acc-row)) (const "/")
                                                               (value (filter (prop 'decessi) acc-row)))))
-                      ('dettagli (button* (const "Dettagli") :click (target (url `(home / { ,(value (filter (prop 'id) acc-row)) })))))))))))
+                      ('dettagli (button 'dettagli (const "Dettagli") :click (target (url `(home / { ,(value (filter (prop 'id) acc-row)) })))))))))))
 
 (element plate-section
   (with-doc "La sezione di ricerca basata su identificativi relativi a veicoli (targa)"

@@ -1,7 +1,13 @@
 (element navbar 
   (with-doc "La barra di navigazione principale: essa consente all'utente di navigare tra tutte le funzionalità della console"
-    (navbar* (anchor* (const "Amministrazione") :click (target (url `(admin))))
-             (anchor* (const "Specifica indicatori") :click (target (url `(ind-spec)))))))
+    (navbar 'barra-navigazione 
+            (anchor 'gestione-indicatori (const "Gestione Indicatori") :click (target (url `(gestione-indicatori))))
+            (anchor 'gestione-compagnie (const "Gestione compagnie") :click (target (url `(gestione-compagnie))))
+            (anchor 'gestione-notizie (const "Gestione notizie") :click (target (url `(gestione-notizie))))
+            (anchor 'gestione-autorizzazioni (const "Gestione autorizzazioni") :click (target (url `(gestione-autorizzazioni))))
+            (anchor 'auditing-inquiry (const "Auditing accessi per inquiry") :click (target (url `(auditing-inquiry))))
+            (anchor 'auditing-piattaforma (const "Auditing accessi a piattaforma di scambio") :click (target (url `(auditing-piattaforma))))
+            (anchor 'gestione-liste (const "White/Black list") :click (target (url `(gestione-liste)))))))
 ;;; main 
 (element main-space 
   (with-doc "La sezione principale della console. Qui l'utente ha a disposizione un menu di possibili scelte da effettuare, ciascuna delle quali lo reindirizza verso la pagina corrispondente"
@@ -14,7 +20,7 @@
                 (gestione-liste "White/Black list" black-white-section)
                 ;(gestione-batch "Gestione batch" batch-section)
                 )
-               :aia
+               nil
                (with-doc "Sequenza di pannelli di scelta"
                  (vert (with-doc "Riga 1" (horz gestione-indicatori gestione-compagnie gestione-notizie)) 
                        (with-doc "Riga 2" (horz gestione-autorizzazioni auditing-inquiry auditing-piattaforma)))))))

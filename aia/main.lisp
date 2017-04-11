@@ -9,24 +9,22 @@
                                                 (link (list :rel "stylesheet" :href "style.css")))
                                           (body nil
                                                 (section nil 
-                                                         (h1 nil (text "Archivio Integrato Antifrode"))
+                                                         (h2 nil (text "Portale")) 
+                                                         (apply #'section nil 
+                                                                (h3 nil (text "Sito Web"))
+                                                                (synth to-html website (void-url))
+                                                                (synth req website (void-url)))
+                                                         (apply #'section nil 
+                                                                (h3 nil (text "Console di gestione"))
+                                                                (synth to-html console (void-url))
+                                                                (synth req console (void-url)))
                                                          (section nil 
-                                                                  (h2 nil (text "Requisiti funzionali portale")) 
-                                                                  (apply #'section nil 
-                                                                         (h3 nil (text "Sito Web"))
-                                                                         (synth to-html website (void-url))
-                                                                         (synth req website (void-url)))
-                                                                  (apply #'section nil 
-                                                                         (h3 nil (text "Console di gestione"))
-                                                                         (synth to-html console (void-url))
-                                                                         (synth req console (void-url)))
-                                                                  (section nil 
-                                                                           (h3 nil (text "Backend"))
-                                                                           (synth to-html aia))
-                                                                  (section nil 
-                                                                           (h3 nil (text "Indicatori"))
-                                                                           (synth to-production linguaggio))
-                                                                  (section nil 
-                                                                           (h3 nil (text "Dizionario dati"))
-                                                                           (synth to-html aia-db))))))) 0))
+                                                                  (h3 nil (text "Backend"))
+                                                                  (synth to-html aia))
+                                                         (section nil 
+                                                                  (h3 nil (text "Indicatori"))
+                                                                  (synth to-production linguaggio))
+                                                         (section nil 
+                                                                  (h3 nil (text "Dizionario dati"))
+                                                                  (synth to-html aia-db)))))) 0))
 

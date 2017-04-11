@@ -1,4 +1,4 @@
-(defprod element (tabular ((name symbol)
+(defprod element (tabular% ((name symbol)
                             (source datasource)
                             &rest (bindings (list binding))))
   (to-list () `(tabular (:name ,name 
@@ -26,8 +26,15 @@
   (req (path) nil))
 
 
+(defmacro tabular (name source (rowname &optional index) &body bindings)
+  `(tabular% ,name
+             ,source
+             ,@(apply #'append (mapcar (lambda (binding)
+                                         (list (first binding) `(lambda (,rowname ,@(csplice index index)) (declare (ignorable ,rowname ,@(csplice index index))) ,(second binding))))
+                                       bindings))))
+
 (defmacro tabular* (source (rowname &optional index) &body bindings)
-  `(tabular (gensym "TABULAR") 
+  `(tabular% (gensym "TABULAR") 
           ,source
           ,@(apply #'append (mapcar (lambda (binding)
                                       (list (first binding) `(lambda (,rowname ,@(csplice index index)) (declare (ignorable ,rowname ,@(csplice index index))) ,(second binding))))

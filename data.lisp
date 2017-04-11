@@ -7,8 +7,8 @@
   (to-list () `(remote (:name ,name :schema ,(synth to-list schema) :url ,(synth to-list url))))
   (to-html ()  (multitags
                 (text "Sorgente dati remota identificata come ")
-                (text "~a, " (lower-camel name))
-                (text "istanza dello schema dati ~a " (lower-camel (synth name schema)))
+                (span-color (lower-camel name))
+                (text ", istanza dello schema dati ~a " (lower-camel (synth name schema)))
                 (text "e popolata al caricamento dell'elemento tramite richiesta HTTP GET verso l'URL ")
                 (synth to-url url))))
 

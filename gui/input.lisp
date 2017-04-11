@@ -7,7 +7,8 @@
                              (span-color (lower-camel name))
                              (text " etichettato con ")
                              (synth to-html label) 
-                             (dlist init (span nil (text "Valore iniziale")) (synth to-html init))))
+                             (if init
+                                 (dlist init (span nil (text "Valore iniziale")) (synth to-html init)))))
   (to-brief (path) (synth to-html (gui-input name label :init init :model model) path))
   (to-model () (jstring (value (gui-input name label :init init :model model))))
   ;; (to-model () (jstring (value (gui-input name label :init init :model model))))

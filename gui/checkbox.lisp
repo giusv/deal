@@ -12,8 +12,9 @@
                    (if label 
                        (multitags (text " etichettata con ")
                                   (synth to-html label)))
-                   (dlist init (span nil (text "Valore iniziale")) (synth to-html init)
-                          click (span nil (text "Sottoposto a click: ")) (synth to-html click))))
+                   (if (or init click)
+                       (dlist init (span nil (text "Valore iniziale")) (synth to-html init)
+                              click (span nil (text "Sottoposto a click: ")) (synth to-html click)))))
   (to-brief (path) (synth to-html (checkbox name label expr :init init :click click) path)) 
   (to-model () (jbool (value (checkbox name :label label :init init :click click))))
   (req (path) nil))

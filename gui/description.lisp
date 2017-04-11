@@ -1,4 +1,4 @@
-(defprod element (description ((name symbol)
+(defprod element (description% ((name symbol)
                                (source datasource)
                                &rest (bindings (list binding))))
   (to-list () `(description (:name ,name 
@@ -26,8 +26,15 @@
   (req (path) nil))
 
 
+(defmacro description (name source (rowname &optional index) &body bindings)
+  `(description% ,name 
+          ,source
+          ,@(apply #'append (mapcar (lambda (binding)
+                                      (list (first binding) `(lambda (,rowname ,@(csplice index index)) (declare (ignorable ,rowname ,@(csplice index index))) ,(second binding))))
+                                   bindings))))
+
 (defmacro description* (source (rowname &optional index) &body bindings)
-  `(description (gensym "DESCRIPTION") 
+  `(description% (gensym "DESCRIPTION") 
           ,source
           ,@(apply #'append (mapcar (lambda (binding)
                                       (list (first binding) `(lambda (,rowname ,@(csplice index index)) (declare (ignorable ,rowname ,@(csplice index index))) ,(second binding))))
