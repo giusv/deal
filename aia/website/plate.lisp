@@ -1,17 +1,16 @@
 (element plate-form
   (with-doc "Il form di inserimento dati relativi alla ricerca per targa"
-    (vert* (targa (input* (const "Targa")))
-           (inizio (input* (const "Data inizio")))
-           (fine (input* (const "Data fine")))
-           ((button* (value targa);; (const "Invio") 
-                     :click (target (url `(home / ricerca-per-targa 
-                                                ? targa =  { ,(value targa ) }
-                                                & inizio =  { ,(value inizio) }
-                                                & fine =  { ,(value fine) }
-                                                & pagina =  { ,(const 1) }
-                                                ))))))))
+    (vert* (targa (gui-input 'targa (const "Targa")))
+           (data-inizio (gui-input 'data-inizio (const "Data inizio")))
+           (data-fine (gui-input 'data-fine (const "Data fine")))
+           ((gui-button 'invio (const "Invio") 
+                        :click (target (url `(home / ricerca-per-targa 
+                                                   ? targa =  { ,(value targa ) }
+                                                   & data-inizio =  { ,(value data-inizio) }
+                                                   & data-fine =  { ,(value data-fine) }
+                                                   & pagina =  { ,(const 1) }))))))))
 
-(defun plate-search-results (targa inizio fine pagina)
+(defun plate-search-results (targa data-inizio data-fine pagina)
   (with-doc "La pagina di risultati della ricerca per targa"
     (with-data* ((vehicle (remote 'vehicle-data vehicle-generic-format
                                    (url `(aia / veicoli
@@ -19,10 +18,10 @@
                  (accidents (remote 'accident-data accident-format 
                                     (url `(aia / sinistri
                                                ? targa =  { ,(value targa) }
-                                               & inizio =  { ,(value inizio) }
-                                               & fine =  { ,(value fine) }
+                                               & data-inizio =  { ,(value data-inizio) }
+                                               & data-fine =  { ,(value data-fine) }
                                                & pagina =  { ,(value pagina) })))))
-      (panel* (label (cat (const "Ricerca per targa") (value targa) (value inizio) (value fine)))  
+      (panel* (label (cat (const "Ricerca per targa") (value targa) (value data-inizio) (value data-fine)))
               (vert (chart* vehicle)
                     (tabular* accidents (acc-row)
                       ('data-accadimento (label (filter (prop 'data-accadimento) acc-row)))
@@ -38,4 +37,4 @@
 (element plate-section
   (with-doc "La sezione di ricerca basata su identificativi relativi a veicoli (targa)"
     (alt plate-form
-         (static2 :ricerca (targa inizio fine pagina) (plate-search-results targa inizio fine pagina)))))
+         (static2 :ricerca (targa data-inizio data-fine pagina) (plate-search-results targa data-inizio data-fine pagina)))))

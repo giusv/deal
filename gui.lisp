@@ -4,19 +4,19 @@
 (defmacro element (name &body elem)
   `(defparameter ,name ,@elem))
 
-(defun option-panel (label target)
-  (panel* (label (const label))
-          (anchor* (const "Vai alla pagina") :click (target target))))
+(defun option-panel (name label target)
+  (panel (symb "PANNELLO-" name) (label (const label))
+          (anchor name (const "Vai alla pagina") :click (target target))))
 
 (defmacro hub-spoke (triples base layout)
   `(let* ,(mapcar #'(lambda (triple)
 		      (let ((name (first triple))
 			    (label (second triple)))
-			`(,name (option-panel ,label ,(merge-urls base name)
-                                              ;; (if base 
-                                              ;;     (url `(,base / ,name))
-                                              ;;     (url `(,name)))
-                                              ))))
+			`(,name (option-panel ',name 
+                                              ,label
+                                              ,(cond ((null base) (url `(,name)))
+                                                     ((atom base) (url `(,base / ,name)))
+                                                     ((consp base) (url `(,@base / ,name))))))))
 		  triples)
      (alt ,layout ,@(mapcar #'(lambda (triple) 
 			(let ((name (first triple))
