@@ -9,24 +9,24 @@
 (defmacro json-schema (name elem)
   `(defparameter ,name ,elem))
 
-(defprod data (jsbool ((name symbol)))
-  (to-list () `(jsbool :name ,(lower-camel name)))
+(defprod data (jsbool ((name symbol) (desc string)))
+  (to-list () `(jsbool :name ,(lower-camel name) :desc ,desc))
   ;; (to-req () (text "~a: bool" (lower-camel name)))
-  (to-html () (text "~a (bool)" (lower-camel name)))
+  (to-html () (text "~a (bool) (~a)" (lower-camel name) desc))
   ;; (instance (val) (jsbool val))
   (schema () (jsbool name)))
 
-(defprod data (jsstring ((name symbol)))
-  (to-list () `(jsstring :name ,(lower-camel name)))
+(defprod data (jsstring ((name symbol) (desc string)))
+  (to-list () `(jsstring :name ,(lower-camel name)) :desc ,desc)
   ;; (to-req () (text "~a: stringa" (lower-camel name)))
-  (to-html () (text "~a (stringa)" (lower-camel name)))
+  (to-html () (text "~a (stringa) (~a)" (lower-camel name) desc))
   ;; (instance (val) (jstring val))
   (schema () (jsstring name)))
 
-(defprod data (jsnumber ((name symbol)))
-  (to-list () `(jsnumber :name ,(lower-camel name)))
+(defprod data (jsnumber ((name symbol) (desc string)))
+  (to-list () `(jsnumber :name ,(lower-camel name) :desc ,desc))
   ;; (to-req () (text "~a: numero" (lower-camel name)))
-  (to-html () (text "~a (numero)" (lower-camel name)))
+  (to-html () (text "~a (numero) (~a)" (lower-camel name) desc))
   ;; (instance (val) (jnumber val))
   (schema () (jsnumber name)))
 
@@ -36,12 +36,12 @@
 ;;   (to-req () (vcat (text "scelta tra i seguenti schemi:")
 ;; 		   (nest 4 (apply #'vcat (synth-all to-req schemas))))))
 
-(defprod data (jsobject ((name symbol) &rest (props (list jsprop))))
-  (to-list () `(jsobject :name ,(lower-camel name) :props ,(synth-all to-list props)))
-  ;; (to-req () (vcat (text "oggetto denominato ~a dalle seguenti proprietà:" (lower-camel name))
+(defprod data (jsobject ((name symbol) (desc string) &rest (props (list jsprop))))
+  (to-list () `(jsobject :name ,(lower-camel name) :desc ,desc :props ,(synth-all to-list props)))
+  ;; (to-req () (vcat (text "oggetto denominato ~a dalle seguenti proprietà:" (lower-camel name) desc)
   ;;       	   (nest 4 (apply #'vcat (synth-all to-req props)))))
   (to-html () (multitags 
-               (text "~a: oggetto dalle seguenti proprietà:" (lower-camel name))
+               (text "~a:  (~a) Esso è costituito dalle seguenti proprietà:" (lower-camel name) desc)
                (apply #'ul nil 
                       (synth-all to-html props))))
   (schema () (apply #'jsobject name props)))
@@ -54,12 +54,12 @@
                              (text ": ")) (synth to-html content)))
   (schema () (jsprop name required content)))
 
-(defprod data (jsarray ((name symbol) (elem jsschema)))
-  (to-list () `(jsarray :name ,(lower-camel name) :elem ,(synth to-list elem)))
+(defprod data (jsarray ((name symbol) (desc string) (elem jsschema)))
+  (to-list () `(jsarray :name ,(lower-camel name) :desc ,desc :elem ,(synth to-list elem)))
   ;; (to-req () (vcat (text "array denominato ~a costituito dal seguente elemento:" (lower-camel name))
   ;;       	   (nest 4 (synth to-req elem))))
   (to-html () (multitags
-               (text "array denominato ~a costituito dal seguente elemento:" (lower-camel name))
+               (text "array (~a) denominato ~a costituito dal seguente elemento:" desc (lower-camel name))
                (synth to-html elem)))
   (schema () (jsarray name elem)))
 

@@ -2,16 +2,16 @@
   (jsstring 'id-compagnia))
 
 (data dossier-upload-format 
-  (jsobject 'formato-upload-dossier
-            (jsprop 'id-sinistro t (jsstring 'sinistro))
-            (jsprop 'perizia t (jsbool 'perizia))
-            (jsprop 'cid t (jsbool 'cid))
-            (jsprop 'compagnie t (jsarray 'compagnie company-id-format))))
+  (jsobject 'formato-upload-dossier "Formato JSON del messaggio inviato dal client per la creazione di un nuovo dossier sulla piattaforma interaziedale di scambio dati."
+            (jsprop 'id-sinistro t (jsstring 'id-sinistro "ID univoco del sinistro sul quale il dossier viene creato"))
+            ;; (jsprop 'perizia t (jsbool 'perizia))
+            ;; (jsprop 'cid t (jsbool 'cid))
+            (jsprop 'compagnie t (jsarray 'compagnie "Lista delle compagnie destinatarie della richiesta di evasione del dossier" company-id-format))))
 
 (data dossier-format 
   (jsobject 'formato-dossier
             (jsprop 'id-dossier t (jsstring 'id-dossier))
-            (jsprop 'id-sinistro t (jsstring 'sinistro))
+            (jsprop 'sinistro t (jsstring 'sinistro))
             (jsprop 'perizia t (jsbool 'perizia))
             (jsprop 'cid t (jsbool 'cid))
             (jsprop 'compagnie t (jsarray 'compagnie company-id-format))))
