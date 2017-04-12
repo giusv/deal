@@ -6,10 +6,16 @@
                              :selectors ,selectors)))
   (to-html (path)
 	   (multitags
-                (text "Tabella pivot denominata ")
-                (span-color (lower-camel name))
-                (text " associata al formato dati ~a con i seguenti selettori/aggregatori: ~{~a~^, ~}." 
-                      (lower-camel (synth name source)) (mapcar #'lower-camel selectors))))
+            (text "Tabella pivot denominata ")
+            (span-color (lower-camel name))
+            (text " associata a ")
+            (span-color (lower-camel (synth name source)))
+            (text "(istanza del formato dati ") 
+            (a (list :href (concatenate 'string "#" (synth to-string (synth to-brief (synth schema source)) 0)))
+               (code nil (synth to-brief (synth schema source ))))
+            (text "), con i seguenti selettori/aggregatori: ~{~a~^, ~}." 
+                   (mapcar #'lower-camel selectors))))
+
   (to-brief (path) (synth to-html (apply #'pivot name source selectors)))
   (toplevel () nil)
   (req (path) nil))

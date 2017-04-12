@@ -75,7 +75,8 @@
                (if input 
                    (multitags
                     (text " con ingresso una istanza del seguente formato dati:")
-                    (p nil (synth to-html input))))
+                    (a (list :href (concatenate 'string "#" (synth to-string (synth to-brief input) 0)))
+                   (code nil (synth to-brief input)))))
                (if parameters 
                    (p nil (apply #'multitags 
                                  (text " con parametri:")
@@ -106,48 +107,48 @@
 
 
 
-(defmacro create* (name format autogen fields additions &optional finally)
-  (labels ((generate-extractor (field)
-             (destructuring-bind (fname getter setter validators) field
-               (declare (ignorable validators setter))
-               (let* ((extracted (symb name "-" fname))
-                      (valid (symb extracted "-VALID")))
-                 `((,extracted (extract2 ,getter ,format))
-                   (,valid (validate2 ,extracted (list ,@validators)))))))
-           (generate-persistor (field)
-             (destructuring-bind (fname getter setter validators) field
-               (declare (ignorable getter validators))
-               `(,setter ,(symb name "-" fname)))))
-    `(sync-server 
-      :name ',(symb "CREATE-" name)
-      ,@(if format `(:input ,(symb name "-FORMAT")))
-      :command (concat* ,@(apply #'append (mapcar #'generate-extractor fields)) 
-                        ((fork (+and+ ,@(append (mapcar #'(lambda (arg) (symb name "-" arg "-VALID"))
-                                                        (mapcar #'car fields)))) 
-                               (concat* 
-                                (,name (create-instance2 ,(symb name "-ENTITY") 
-                                                         (list 
-                                                          ,@(if autogen `(,autogen (autokey)))
-                                                          ,@additions
-                                                          ,@(apply #'append (mapcar #'generate-persistor fields))))) 
-                                ((persist ,name))
-                                ,@(if finally (list `(,finally)) nil)
-                                ((http-response 201 :payload (value ,name))))
-                               (http-response 403)))))))
+;; (defmacro create* (name format autogen fields additions &optional finally)
+;;   (labels ((generate-extractor (field)
+;;              (destructuring-bind (fname getter setter validators) field
+;;                (declare (ignorable validators setter))
+;;                (let* ((extracted (symb name "-" fname))
+;;                       (valid (symb extracted "-VALID")))
+;;                  `((,extracted (extract2 ,getter ,format))
+;;                    (,valid (validate2 ,extracted (list ,@validators)))))))
+;;            (generate-persistor (field)
+;;              (destructuring-bind (fname getter setter validators) field
+;;                (declare (ignorable getter validators))
+;;                `(,setter ,(symb name "-" fname)))))
+;;     `(sync-server 
+;;       :name ',(symb "CREATE-" name)
+;;       ,@(if format `(:input ,(symb name "-FORMAT")))
+;;       :command (concat* ,@(apply #'append (mapcar #'generate-extractor fields)) 
+;;                         ((fork (+and+ ,@(append (mapcar #'(lambda (arg) (symb name "-" arg "-VALID"))
+;;                                                         (mapcar #'car fields)))) 
+;;                                (concat* 
+;;                                 (,name (create-instance2 ,(symb name "-ENTITY") 
+;;                                                          (list 
+;;                                                           ,@(if autogen `(,autogen (autokey)))
+;;                                                           ,@additions
+;;                                                           ,@(apply #'append (mapcar #'generate-persistor fields))))) 
+;;                                 ((persist ,name))
+;;                                 ,@(if finally (list `(,finally)) nil)
+;;                                 ((http-response 201 :payload (value ,name))))
+;;                                (http-response 403)))))))
 
-(defmacro remove* (name format validators &optional finally)
-  (let* ((valid (symb name "-VALID")))
-    `(let ((,name (path-parameter ',name)))
-       (sync-server 
-        :name ',(symb "REMOVE-" name)
-        :parameters (list ,name) 
-        :command (concat* (,valid (validate2 ,name (list ,@validators)))
-                          ((fork ,valid
-                                 (concat* 
-                                  ((erase2 ,format ,name)) 
-                                  ,@(if finally (list `(,finally)) nil)
-                                  ((http-response 204)))
-                                 (http-response 400))))))))
+;; (defmacro remove* (name format validators &optional finally)
+;;   (let* ((valid (symb name "-VALID")))
+;;     `(let ((,name (path-parameter ',name)))
+;;        (sync-server 
+;;         :name ',(symb "REMOVE-" name)
+;;         :parameters (list ,name) 
+;;         :command (concat* (,valid (validate2 ,name (list ,@validators)))
+;;                           ((fork ,valid
+;;                                  (concat* 
+;;                                   ((erase2 ,format ,name)) 
+;;                                   ,@(if finally (list `(,finally)) nil)
+;;                                   ((http-response 204)))
+;;                                  (http-response 400))))))))
 
 
 

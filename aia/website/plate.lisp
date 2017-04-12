@@ -4,7 +4,7 @@
            (data-inizio (gui-input 'data-inizio (const "Data inizio")))
            (data-fine (gui-input 'data-fine (const "Data fine")))
            ((gui-button 'invio (const "Invio") 
-                        :click (target (url `(home / ricerca-per-targa 
+                        :click (target (url `(home / ricerca-per-targa / veicoli
                                                    ? targa =  { ,(value targa ) }
                                                    & data-inizio =  { ,(value data-inizio) }
                                                    & data-fine =  { ,(value data-fine) }
@@ -24,15 +24,15 @@
       (panel 'risultati-ricerca-per-targa (label (cat (const "Ricerca per targa") (value targa) (value data-inizio) (value data-fine)))
               (vert (chart 'indicatori-veicolo vehicle)
                     (tabular 'sinistri accidents (acc-row)
-                      ('data-accadimento (label (filter (prop 'data-accadimento) acc-row)))
-                      ('stato (label (value (filter (prop 'stato) acc-row))))
-                      ('luogo (label (value (filter (prop 'luogo) acc-row))))
-                      ('ruolo (label (value (filter (prop 'ruolo) acc-row))))
-                      ('intervento (label (value (filter (prop 'intervento) acc-row))))
-                      ('danni-/-lesioni-/-decessi (label (cat (value (filter (prop 'danni) acc-row)) (const "/")
-                                                              (value (filter (prop 'lesioni) acc-row)) (const "/")
-                                                              (value (filter (prop 'decessi) acc-row)))))
-                      ('dettagli (button 'dettagli (const "Dettagli") :click (target (url `(home / { ,(value (filter (prop 'id) acc-row)) })))))))))))
+                      ('data-accadimento (label (attr acc-row 'data-accadimento)))
+                      ('stato (label (attr acc-row 'stato)))
+                      ('luogo (label (attr acc-row 'luogo)))
+                      ;; ('ruolo (label (attr acc-row 'ruolo)))
+                      ('intervento (label (attr acc-row 'intervento)))
+                      ('danni-/-lesioni-/-decessi (label (cat (attr acc-row 'danni) (const "/")
+                                                              (attr acc-row 'lesioni) (const "/")
+                                                              (attr acc-row 'decessi))))
+                      ('dettagli (gui-button 'dettagli (const "Dettagli") :click (target (url `(home / { ,(value (filter (prop 'id-sinistro) acc-row)) })))))))))))
 
 (element plate-section
   (with-doc "La sezione di ricerca basata su identificativi relativi a veicoli (targa)"

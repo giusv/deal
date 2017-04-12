@@ -62,12 +62,17 @@
                                     pairs)))))
 
 (defmacro dlist (&rest args)
-  `(apply #'dl nil (apply #'append
-                          (remove nil 
-                                  (list ,@(loop while args
-                                             collecting `(if ,(pop args)
-                                                             (list (dt nil ,(pop args))
-                                                                   (dl nil ,(pop args))))))))))
+  `(if (every #'null (list ,@(mapcar #'car (group args 3))))
+       nil
+       (apply #'dl nil (apply #'append
+                              (remove nil 
+                                      (list ,@(loop while args
+                                                 collecting `(if ,(pop args)
+                                                                 (list (dt nil ;; (list :class "col-sm-2")
+                                                                           ,(pop args))
+                                                                       (dl nil 
+;; (list :class "col-sm-10")
+                                                                           ,(pop args)))))))))))
 (defun span-color (name)
   (let ((n (mod (reduce #'+ (mapcar #'char-code (coerce name 'list))) 100))) 
     (span (list :class "label" :style (concatenate 'string "background-color:" (lower-camel (nth (mod n (length html-colors)) html-colors)))) (text "~a" name))))

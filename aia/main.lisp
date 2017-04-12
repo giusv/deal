@@ -26,5 +26,6 @@
                                                                   (synth to-production linguaggio))
                                                          (section nil 
                                                                   (h3 nil (text "Dizionario dati"))
-                                                                  (synth to-html aia-db)))))) 0))
+                                                                  (synth to-html aia-db)
+                                                                  (synth to-html aia-interface)))))) 0))
 

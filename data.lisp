@@ -10,7 +10,7 @@
                 (span-color (lower-camel name))
                 (text ", istanza dello schema dati ~a " (lower-camel (synth name schema)))
                 (text "e popolata al caricamento dell'elemento tramite richiesta HTTP GET verso l'URL ")
-                (synth to-url url))))
+                (p nil (code nil (synth to-url url))))))
 
 ;; (defmacro remote* (schema url)
 ;;   `(remote (gensym "REMOTE") schema url))

@@ -5,7 +5,7 @@
                (text "Sia ") 
                (synth to-html result) 
                (text " il risultato della traduzione in JSON di")
-               (synth to-req source)
+               (synth to-html source)
                (dlist pre (text "Precondizione: ") (synth to-html pre)
                       post (text "Postcondizione:") (synth to-html post)))))
 

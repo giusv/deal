@@ -12,23 +12,26 @@
 (defprod data (jsbool ((name symbol) (desc string)))
   (to-list () `(jsbool :name ,(lower-camel name) :desc ,desc))
   ;; (to-req () (text "~a: bool" (lower-camel name)))
-  (to-html () (text "~a (bool) (~a)" (lower-camel name) desc))
+  (to-html () (text "booleano. ~a" desc))
+  (to-brief () (text "booleano. ~a" desc))
   ;; (instance (val) (jsbool val))
-  (schema () (jsbool name)))
+  (schema () (jsbool name desc)))
 
 (defprod data (jsstring ((name symbol) (desc string)))
-  (to-list () `(jsstring :name ,(lower-camel name)) :desc ,desc)
+  (to-list () `(jsstring :name ,(lower-camel name) :desc ,desc))
   ;; (to-req () (text "~a: stringa" (lower-camel name)))
-  (to-html () (text "~a (stringa) (~a)" (lower-camel name) desc))
+  (to-html () (text "stringa. ~a" desc))
+  (to-brief () (text "stringa. ~a" desc))
   ;; (instance (val) (jstring val))
-  (schema () (jsstring name)))
+  (schema () (jsstring name desc)))
 
 (defprod data (jsnumber ((name symbol) (desc string)))
   (to-list () `(jsnumber :name ,(lower-camel name) :desc ,desc))
   ;; (to-req () (text "~a: numero" (lower-camel name)))
-  (to-html () (text "~a (numero) (~a)" (lower-camel name) desc))
+  (to-html () (text "numero. ~a" desc))
+  (to-brief () (text "numero. ~a" desc))
   ;; (instance (val) (jnumber val))
-  (schema () (jsnumber name)))
+  (schema () (jsnumber name desc)))
 
 ;; handle choice in instantiation
 ;; (defprod data (jschoice (&rest (schemas (list jsschema))))
@@ -41,17 +44,19 @@
   ;; (to-req () (vcat (text "oggetto denominato ~a dalle seguenti proprietà:" (lower-camel name) desc)
   ;;       	   (nest 4 (apply #'vcat (synth-all to-req props)))))
   (to-html () (multitags 
-               (text "~a:  (~a) Esso è costituito dalle seguenti proprietà:" (lower-camel name) desc)
+               (text "~a:  ~a." (lower-camel name) desc)
+               (p nil (text" Esso è costituito dalle seguenti proprietà:"))
                (apply #'ul nil 
                       (synth-all to-html props))))
-  (schema () (apply #'jsobject name props)))
+  (to-brief () (text "~a" (upper-camel name)))
+  (schema () (apply #'jsobject name desc props)))
 
 (defprod jsprop (jsprop ((name string) (required bool) (content jsschema)))
   (to-list () `(jsprop :name ,name :required ,required :content ,(synth to-list content)))
   ;; (to-req () (hcat (text "~a" name) (if required (text " (obbligatoria)") (text " (facoltativa)")) 
   ;;       	   (text ": ") (synth to-req content)))
   (to-html () (li nil  (hcat (text "~a" (lower-camel name)) (if required (text " (obbligatoria)") (text " (facoltativa)")) 
-                             (text ": ")) (synth to-html content)))
+                             (text ": ")) (synth to-brief content)))
   (schema () (jsprop name required content)))
 
 (defprod data (jsarray ((name symbol) (desc string) (elem jsschema)))
@@ -61,7 +66,8 @@
   (to-html () (multitags
                (text "array (~a) denominato ~a costituito dal seguente elemento:" desc (lower-camel name))
                (synth to-html elem)))
-  (schema () (jsarray name elem)))
+  (to-brief () (text "~a" (upper-camel name)))
+  (schema () (jsarray name desc elem)))
 
 (defun get-this ()
   #'(lambda (jsschema)
@@ -118,23 +124,24 @@
   (do-with ((filters (sepby (item) (sym '>>>))))
     (result (apply #'comp (mapcar #'eval filters)))))
 
+(defun filter (filt obj) 
+  (car (funcall (synth to-func filt) obj)))
 
 ;; (pprint (synth to-list (car (funcall (get-prop 'addresses) *user*))))
 ;; (pprint (synth to-list (car (funcall (get-elem) *addresses*))))
 
 ;; (pprint (synth to-list (car (funcall (comp (comp (get-prop 'addresses) (get-elem)) (get-prop 'city)) *user*))))
-(defparameter *address*
-  (jsobject (jsprop 'city t (jsstring 'city-string))
-            (jsprop 'state t (jsstring 'state-string))))
-(defparameter *addresses* (jsarray 'address-array *address*))
-(defparameter *user* 
-  (jsobject 'user-object 
-            (jsprop 'name t (jsstring 'name-string))
-	    (jsprop 'addresses t *addresses*)
-	    (jsprop 'numbers t (jsarray 'numbers-array (jsnumber 'number-number)))))
+;; (defparameter *address*
+;;   (jsobject (jsprop 'city t (jsstring 'city-string))
+;;             (jsprop 'state t (jsstring 'state-string))))
+;; (defparameter *addresses* (jsarray 'address-array *address*))
+;; (defparameter *user* 
+;;   (jsobject 'user-object 
+;;             (jsprop 'name t (jsstring 'name-string))
+;; 	    (jsprop 'addresses t *addresses*)
+;; 	    (jsprop 'numbers t (jsarray 'numbers-array (jsnumber 'number-number)))))
 
-(defun filter (filt obj) 
-  (car (funcall (synth to-func filt) obj)))
+
 
 ;; (pprint (synth to-list (car (funcall (compose-filters (get-prop 'addresses) (get-elem) (get-prop 'city)) *user*))))
 ;; (pprint (synth to-list (car (funcall (synth to-func (comp (prop 'addresses) (elem) (prop 'city))) *user*))))

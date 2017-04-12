@@ -70,7 +70,7 @@
 
 (element outbound-form 
   (with-doc "Il form per la creazione di un nuovo dossier"
-    (vert* (pform (obj* 'upload-data dossier-upload-format 
+    (vert* (pform (obj* 'upload-data dossier-format 
                         ((id-sinistro id-sinistro (gui-input 'id-sinistro (const "Sinistro")))
                          ;; (perizia perizia (checkbox* :label (const "Perizia")))
                          ;; (cid cid (checkbox* :label (const "CID")))

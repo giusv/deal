@@ -8,7 +8,7 @@
                          ('data-definizione (label (attr row 'data-definizione)))
                          ('stato (label (attr row 'stato)))
                          ('luogo (label (attr row 'luogo)))
-                         ('ruolo (label (attr row 'ruolo)))
+                         ;; ('ruolo (label (attr row 'ruolo)))
                          ('intervento (label (attr row 'intervento)))
                          ('danni (label (attr row 'danni)))
                          ('lesioni (label (attr row 'lesioni)))

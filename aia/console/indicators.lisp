@@ -122,9 +122,13 @@
 
 (element indicator-list 
   (with-doc "Vista di tutti gli indicatori registrati."
-    (tabular 'indicatori indicator-format (ind-row)
-      ('seleziona (checkbox 'seleziona))
-      ('nome (label (filter (prop 'name) ind-row))))))
+    (with-data* ((indicator-data (remote 'indicator-data indicator-format (url `(aia / indicatori)))))
+      (tabular 'indicatori indicator-data (ind-row)
+        ;; ('seleziona (checkbox 'seleziona))
+        ('nome (label (attr ind-row 'nome)))
+        ('codice (label (attr ind-row 'codice)))
+        ('data-inizio (label (attr ind-row 'data-inizio)))
+        ('dettagli (gui-button 'dettagli (const "Dettagli") :click (target (url `(gestione-indicatori / indicatori / { ,(value (filter (prop 'id-indicatore) ind-row)) })))))))))
 
 (defun indicator-details (indicator-id)
   (with-description "La sezione con i dettagli di una indicatore"
@@ -133,7 +137,7 @@
             (label (attr indicator-data 'code))
             (label (attr indicator-data 'start-date))
             (gui-button 'elimina (const "Elimina") :click (delete-indicator indicator-id))
-            (gui-button 'modifica (const "Modifica codice") :click (target (url `(gestione-indicatori / modifica-codice-indicatori ? ,(value indicator-id)))))
+            (gui-button 'modifica (const "Modifica codice") :click (target (url `(gestione-indicatori / modifica-codice-indicatore ? ,(value indicator-id)))))
             (gui-button 'modifica-parametri (const "Modifica parametri") :click (target (url `(gestione-indicatori / modifica-parametri-indicatore ? ,(value indicator-id)))))))))
 
 (element indicator-section

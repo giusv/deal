@@ -30,6 +30,7 @@
 (load "d:/giusv/lisp/extent/service.lisp")
 (load "d:/giusv/lisp/extent/application.lisp")
 (load "d:/giusv/lisp/extent/database.lisp")
+(load "d:/giusv/lisp/extent/interface.lisp")
 
 (load "d:/giusv/lisp/extent/gui/button.lisp")
 (load "d:/giusv/lisp/extent/gui/checkbox.lisp")
