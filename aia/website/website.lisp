@@ -53,8 +53,8 @@
          (hub-spoke ((ricerca-per-targa "Ricerca per targa" plate-section)
                      (ricerca-per-persona "Ricerca per persona" person-section)
                      (piattaforma "Piattaforma di scambio" document-section)
-                     ;; (data-quality "Data quality" quality-section)
-                     )
+                     (data-quality "Data quality" quality-section)
+                     (network-analysis "Network analysis" (label (const "TBD"))))
                     home
                     (with-doc "Il menu principale di scelta"
                       (horz ricerca-per-targa ricerca-per-persona))))

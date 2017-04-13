@@ -1,3 +1,10 @@
+(data report-format 
+  (jsobject 'formato-report "Formato JSON del messaggio contenente i dati di un data quality report"
+            (jsprop 'id-report nil (jsstring 'id-report "Identificativo univoco del report"))
+            (jsprop 'data t (jsstring 'data "Data di produzione del report"))
+            (jsprop 'descrizione t (jsstring 'descrizione "Descrizione"))
+            (jsprop 'link t (jsstring 'link "link al quale il report può essere scaricato"))))
+
 (data company-id-format
   (jsstring 'id-compagnia "Identificativo univoco di una compagnia"))
 
@@ -133,7 +140,7 @@
 (data company-format 
   (jsobject 'formato-compagnia "Formato JSON dei dati di una compagnia"
             (jsprop 'nome t (jsstring 'nome "Nome"))
-            (jsprop 'indirizzi t (jsarray 'indirizzi "Lista di indirizzi di una compagnia" company-address))))
+            (jsprop 'indirizzi t (jsarray 'indirizzi "Lista di indirizzi di una compagnia" company-address-format))))
 
 (data subscriber-format
   (jsnumber 'sottoscrittore "Identificativo univoco del sottoscrittore"))

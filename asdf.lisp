@@ -87,6 +87,7 @@
 (load "d:/giusv/lisp/extent/aia/website/plate.lisp")
 (load "d:/giusv/lisp/extent/aia/website/person.lisp")
 (load "d:/giusv/lisp/extent/aia/website/document.lisp")
+(load "d:/giusv/lisp/extent/aia/website/quality.lisp")
 (load "d:/giusv/lisp/extent/aia/website/website.lisp")
 
 (load "d:/giusv/lisp/extent/aia/main.lisp")

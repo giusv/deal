@@ -15,4 +15,4 @@
 (database aia-interface
   (db 'interfaccia company-id-format dossier-format role-format person-format indicator-value-format vehicle-format
              accident-format parameter-format indicator-parameter-array-format indicator-format inquiry-format 
-             company-address company-format subscriber-format news-format document-format black-format white-format))
+             company-address-format company-format subscriber-format news-format document-format black-format white-format))

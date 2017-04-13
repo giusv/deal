@@ -12,7 +12,7 @@
 
 (defun plate-search-results (targa data-inizio data-fine pagina)
   (with-doc "La pagina di risultati della ricerca per targa"
-    (with-data* ((vehicle (remote 'vehicle-data vehicle-generic-format
+    (with-data* ((vehicle (remote 'vehicle-data vehicle-format
                                    (url `(aia / veicoli
                                               ? targa =  { ,(value targa) }))))
                  (accidents (remote 'accident-data accident-format 
