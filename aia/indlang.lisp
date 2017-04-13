@@ -1,7 +1,7 @@
 (defprod prim (linguaggio (&rest (prims (list prim))))
   (to-list () (list 'linguaggio (list :primitives (synth-all to-list prims))))
   (to-production () (multitags 
-                     (text "La sintassi astratta del linguaggio di specifica degli indicatori. Di seguito viene descritto ciascun costrutto utilizzato nella sua definizione. Lo schema di utilizzo di un costrutto è ricorrente: ogni costrutto è delimitato da parentesi tonde, e contiene una sequenza di simboli. Il primo di essi denota il costrutto, mentre i restanti rappresentano gli argomenti del costrutto stesso.")
+                     (text "La sintassi astratta del linguaggio di specifica degli indicatori. Di seguito viene descritto ciascun costrutto utilizzato nella sua definizione. Lo schema di utilizzo di un costrutto &egrave; ricorrente: ogni costrutto &egrave; delimitato da parentesi tonde, e contiene una sequenza di simboli. Il primo di essi denota il costrutto, mentre i restanti rappresentano gli argomenti del costrutto stesso.")
                      (apply #'dl nil (apply #'append 
                                             (mapcar #'(lambda (prim)
                                                         (list (dt nil (synth to-syntax prim))
@@ -43,7 +43,7 @@
 (defmacro tabella (name anaph) 
   `(progn (defprod prim (,(symb name "%") ((predicate predicate)))
       (to-list () (list ',name (list :predicato (synth to-list predicate))))
-      (to-production () (multitags (text "Costrutto che prende in ingresso un predicato e restituisce la tabella dei ~a che soddisfano il predicato stesso. Nella definizione del predicato si può far uso dell'anafora \"~a\" che identifica il ~a di volta in volta sotto esame." ,(string-downcase (symbol-name name)) ,(string-downcase (symbol-name anaph)) ,(string-downcase (symbol-name anaph)))))
+      (to-production () (multitags (text "Costrutto che prende in ingresso un predicato e restituisce la tabella dei ~a che soddisfano il predicato stesso. Nella definizione del predicato si pu&ograve; far uso dell'anafora \"~a\" che identifica il ~a di volta in volta sotto esame." ,(string-downcase (symbol-name name)) ,(string-downcase (symbol-name anaph)) ,(string-downcase (symbol-name anaph)))))
       (to-syntax () (text "(~a predicato)" ,(string-downcase name))))
           (defmacro ,name (predicate)
             `(let ((,',anaph (indice ',',anaph)))
@@ -86,7 +86,7 @@
   `(defprod prim (,name ((person symbol)
                          (accident symbol)))
     (to-list () (list ',name (list :soggetto person :sinistro accident)))
-    (to-production () (multitags (text "Predicato che prende in ingresso i riferimenti a un soggetto e a un sinistro e restituisce vero se il soggetto è ~a nel sinistro" ,(string-downcase (symbol-name name)))))
+    (to-production () (multitags (text "Predicato che prende in ingresso i riferimenti a un soggetto e a un sinistro e restituisce vero se il soggetto &egrave; ~a nel sinistro" ,(string-downcase (symbol-name name)))))
     (to-syntax () (text "(~a persona sinistro)" ,(string-downcase (symbol-name name))))))
 
 (defmacro ruoli (&rest names)
@@ -120,7 +120,7 @@
   `(defprod prim (,name ((num1 number) 
                          (num2 number)))
     (to-list () (list ',name (list :num1 (synth to-list num1) :num2 (synth to-list num2))))
-    (to-production () (multitags (text "Predicato che prende in ingresso due numeri e restituisce vero se il primo numero è ~a secondo." ,prep)))
+    (to-production () (multitags (text "Predicato che prende in ingresso due numeri e restituisce vero se il primo numero &egrave; ~a secondo." ,prep)))
     (to-syntax () (text "(~a num1 num2)" ,(string-downcase (symbol-name name))))))
 
 (defmacro espressioni (&rest exps)

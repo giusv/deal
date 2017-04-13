@@ -48,7 +48,7 @@
   (with-doc "Il form di inserimento del codice di un nuovo indicatore"
     (vert* (ind (obj* 'ind-data indicator-format 
                       ((code code (gui-textarea 'codice-indicatore (const "Codice indicatore")))
-                       (start-date start-date (gui-input 'data-inizio (const "Data inizio validità"))))
+                       (start-date start-date (gui-input 'data-inizio (const "Data inizio validit&agrave;"))))
                       (vert code start-date)))
            ((gui-button 'invio (const "Invio") :click (post-indicator-code (payload ind)))))))
 
@@ -63,7 +63,7 @@
 ;;           (button* (const "Indietro") :click (target (url `(gestione-indicatori)))))))
 
 (element create-indicator 
-  (with-description "La sezione in cui l'utente può specificare i dati di un nuovo indicatore"
+  (with-description "La sezione in cui l'utente pu&ograve; specificare i dati di un nuovo indicatore"
     indicator-creation-form
     ;; (static2 :indicator-creation-error nil indicator-creation-error)
     ;; (static2 :indicator-creation-success nil indicator-creation-success)
@@ -85,7 +85,7 @@
     (with-data* ((indicator-data (remote 'indicator-data indicator-format (url `(aia / indicatori / { ,(value indicator-id) })))))
       (vert* (ind (obj* 'ind-data indicator-format 
                       ((code code (gui-textarea 'codice-indicatore (const "Codice indicatore") :init (attr indicator-data 'code)))
-                       (start-date start-date (gui-input 'data-inizio (const "Data inizio validità") :init (attr indicator-data 'start-date))))
+                       (start-date start-date (gui-input 'data-inizio (const "Data inizio validit&agrave;") :init (attr indicator-data 'start-date))))
                       (vert code start-date)))
            ((gui-button 'invio (const "Invio") :click (put-indicator-code indicator-id (payload ind))))))))
 
@@ -107,14 +107,14 @@
              ((gui-button 'invio (const "Invio") :click (put-indicator-parameters indicator-id (payload par-table))))))))
 
 (defun modify-indicator-code (indicator-id)
-  (with-description "La sezione in cui l'utente può modificare i dati di un indicatore esistente"
+  (with-description "La sezione in cui l'utente pu&ograve; modificare i dati di un indicatore esistente"
     (indicator-code-modification-form indicator-id)
     ;; (static2 :indicator-code-modification-error nil indicator-code-modification-error)
     ;; (static2 :indicator-code-modification-success nil indicator-code-modification-success)
     ))
 
 (defun modify-indicator-parameters (indicator-id)
-  (with-description "La sezione in cui l'utente può modificare i parametri di un indicatore esistente"
+  (with-description "La sezione in cui l'utente pu&ograve; modificare i parametri di un indicatore esistente"
     (indicator-parameters-modification-form indicator-id)
     ;; (static2 :indicator-modification-error nil indicator-parameters-modification-error)
     ;; (static2 :indicator-modification-success nil indicator-parameters-modification-success)
@@ -141,7 +141,7 @@
             (gui-button 'modifica-parametri (const "Modifica parametri") :click (target (url `(gestione-indicatori / modifica-parametri-indicatore ? ,(value indicator-id)))))))))
 
 (element indicator-section
-  (with-doc "La sezione di gestione degli indicatori. L'utente può aggiungere, modificare o eliminare indicatori, nonché specificarne i suoi parametri" 
+  (with-doc "La sezione di gestione degli indicatori. L'utente pu&ograve; aggiungere, modificare o eliminare indicatori, nonché specificarne i suoi parametri" 
     (alt indicator-list
          (dynamic2 indicatore (indicator-details indicatore))
          (static2 :crea-indicatore nil create-indicator)

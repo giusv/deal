@@ -23,8 +23,8 @@
   (with-doc "Il form di inserimento dei dati di una nuova notizia"
     (vert* (news (obj* 'news-data news-format 
                       ((text text (gui-textarea 'testo (const "Testo notizia")))
-                       (start-date start-date (gui-input 'data-inizio (const "Data inizio validità")))
-                       (end-date end-date (gui-input 'data-fine (const "Data fine validità")))
+                       (start-date start-date (gui-input 'data-inizio (const "Data inizio validit&agrave;")))
+                       (end-date end-date (gui-input 'data-fine (const "Data fine validit&agrave;")))
                        (subscribers subscribers (replica 'sottoscrittori subscriber-format (gui-input 'sottoscrittore (const "Sottoscrittore")))))
                       (vert text start-date end-date subscribers)))
            ((gui-button 'invio (const "Invio") :click (post-news (payload news)))))))
@@ -40,7 +40,7 @@
 ;;           (gui-button ' (const "Indietro") :click (target (url `(gestione-notizie)))))))
 
 (element create-news 
-  (with-doc "La sezione in cui l'utente può specificare i dati di una nuova notizia"
+  (with-doc "La sezione in cui l'utente pu&ograve; specificare i dati di una nuova notizia"
     news-creation-form
          ;; (static2 :news-creation-error nil news-creation-error)
          ;; (static2 :news-creation-success nil news-creation-success)
@@ -61,14 +61,14 @@
     (with-data* ((news-data (remote 'news-data news-format (url `(aia / notizie / { ,(value news-id) })))))
       (vert* (news (obj* 'news-data news-format
                          ((text text (gui-textarea 'testo (const "Testo notizia") :init (attr news-data 'testo)))
-                          (start-date end-date (gui-input 'data-inizio (const "Data inizio validità") :init (attr news-data 'data-inizio)))
-                          (end-date end-date (gui-input 'data-fine (const "Data fine validità") :init (attr news-data 'data-fine))))
+                          (start-date end-date (gui-input 'data-inizio (const "Data inizio validit&agrave;") :init (attr news-data 'data-inizio)))
+                          (end-date end-date (gui-input 'data-fine (const "Data fine validit&agrave;") :init (attr news-data 'data-fine))))
                          (vert text start-date end-date)))
              ((gui-button 'invio (const "Invio") :click (put-news news-id (payload news))))))))
 
 
 (defun modify-news (news-id)
-  (with-doc "La sezione in cui l'utente può modificare i dati di una notizia esistente"
+  (with-doc "La sezione in cui l'utente pu&ograve; modificare i dati di una notizia esistente"
     (news-modification-form news-id)
          ;; (static2 :news-modification-error nil news-modification-error)
          ;; (static2 :news-modification-success nil news-modification-success)
@@ -98,7 +98,7 @@
                                                                               ? news = { ,(value news-id) }))))))))
 
 (element news-section
-  (with-doc "La sezione di gestione delle notizie da fornire alle compagnie assicurative tramite il portale. L'utente può aggiungere, modificare o eliminare i dati relativi a una notizia, nonché i destinatari della stessa" 
+  (with-doc "La sezione di gestione delle notizie da fornire alle compagnie assicurative tramite il portale. L'utente pu&ograve; aggiungere, modificare o eliminare i dati relativi a una notizia, nonché i destinatari della stessa" 
     (alt news-list
          (dynamic2 news (news-details news))
          (static2 :create-news nil create-news)

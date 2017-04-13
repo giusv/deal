@@ -53,6 +53,6 @@
     ))
 
 (element inquiry-audit-section
-  (with-description "La sezione di audit sulle inquiry effettuate dalle compagnie. Qui l'utente può visualizzare i dati relativi agli accessi, aggregati in base a una compagnia, a un singolo utente, a un determinato sinistro e relativamente a un periodo di tempo specificato"
+  (with-description "La sezione di audit sulle inquiry effettuate dalle compagnie. Qui l'utente pu&ograve; visualizzare i dati relativi agli accessi, aggregati in base a una compagnia, a un singolo utente, a un determinato sinistro e relativamente a un periodo di tempo specificato"
     (alt inquiry-audit-form
          (static2 :ricerca-inquiry-audit (targa compagnia userid cue inizio fine pagina) (inquiry-audit-search-results targa compagnia userid cue inizio fine pagina)))))

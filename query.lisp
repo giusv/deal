@@ -34,12 +34,12 @@
                          (p nil (synth to-html query2)))))
 
 
-(defparameter *query* (restrict (equijoin (relation 'news-entity)
-                                          (relation 'subscription-entity) 
-                                          'news-id) 
-                                (+equal+ (+true+) (+true+))))
+;; (defparameter *query* (restrict (equijoin (relation 'news-entity)
+;;                                           (relation 'subscription-entity) 
+;;                                           'news-id) 
+;;                                 (+equal+ (+true+) (+true+))))
 
-(pprint (synth output (synth to-doc (synth to-html *query*)) 0))
+;; (pprint (synth output (synth to-doc (synth to-html *query*)) 0))
 
 
 ;;(synth attributes *people*)

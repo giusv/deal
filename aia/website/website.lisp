@@ -45,23 +45,23 @@
       (tabular 'notizie results (news-row)
         ('testo (label (filter (prop 'text) news-row)))
         ('sottoscrittori (tabular 'sottoscrittori (filter (comp (prop 'subscribers) (elem)) news-row) (subscriber-row)
-                           ('sottoscrittore (label (filter (this) subscriber-row)))
-                           ('test (label (filter (prop 'text) news-row)))))))))
+                           ('sottoscrittore (label (filter (this) subscriber-row)))))))))
 
 (element hs-main
-  (alt (with-doc "La sezione principale da cui l'utente può scegliere la funzione desiderata e visualizzarla nella stessa area di schermo"
-         (hub-spoke ((ricerca-per-targa "Ricerca per targa" plate-section)
-                     (ricerca-per-persona "Ricerca per persona" person-section)
-                     (ricerca-per-cue "Ricerca per cue" cue-section)
-                     (piattaforma "Piattaforma di scambio" document-section)
-                     (data-quality "Data quality" quality-section)
-                     (network-analysis "Network analysis" (label (const "TBD"))))
-                    home
-                    (with-doc "Il menu principale di scelta"
-                      (vert (horz ricerca-per-targa ricerca-per-persona ricerca-per-cue)
-                            (horz piattaforma data-quality network-analysis)))))
-       (static2 :sinistri nil (alt nil 
-                                   (dynamic2 id-sinistro (accident-details id-sinistro))))))
+  (with-doc "L'area principale di lavoro. A seconda dello stato dell'applicazione, mostra all'utente il men&ugrave; principale di scelta o i dettagli relativi a un sinistro (pagina, questa, indirizzata da molte delle funzionalit&agrave; offerte)"
+    (alt (with-doc "La sezione principale da cui l'utente pu&ograve; scegliere la funzione desiderata e visualizzarla nella stessa area di schermo" 
+           (hub-spoke ((ricerca-per-targa "Ricerca per targa" plate-section)
+                      (ricerca-per-persona "Ricerca per persona" person-section)
+                      (ricerca-per-cue "Ricerca per cue" cue-section)
+                      (piattaforma "Piattaforma di scambio" document-section)
+                      (data-quality "Data quality" quality-section)
+                      (network-analysis "Network analysis" (label (const "TBD"))))
+                     home
+                     (with-doc "Il menu principale di scelta"
+                       (vert (horz ricerca-per-targa ricerca-per-persona ricerca-per-cue)
+                             (horz piattaforma data-quality network-analysis)))))
+         (static2 :sinistri nil (alt nil 
+                                     (dynamic2 id-sinistro (accident-details id-sinistro)))))))
 
 (defun authenticate-user (userid password)
   (concat* (auth-result (authenticate2 userid password))

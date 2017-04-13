@@ -55,7 +55,7 @@
 ;;           (gui-button ' (const "Indietro") :click (target (url `(aia / gestione-liste / white-list)))))))
 
 (element create-white 
-  (with-doc "La sezione in cui l'utente può specificare i dati di un nuovo elemento della white list"
+  (with-doc "La sezione in cui l'utente pu&ograve; specificare i dati di un nuovo elemento della white list"
     white-creation-form
          ;; (static2 :white-creation-error nil white-creation-error)
          ;; (static2 :white-creation-success nil white-creation-success)
@@ -72,7 +72,7 @@
 ;;           (gui-button ' (const "Indietro") :click (target (url `(aia / gestione-liste / white-list)))))))
 
 (element create-massive-white 
-  (with-doc "La sezione in cui l'utente può specificare in modo massivo i dati di nuovi elementi della white list"
+  (with-doc "La sezione in cui l'utente pu&ograve; specificare in modo massivo i dati di nuovi elementi della white list"
     white-massive-creation-form
          ;; (static2 :white-massive-creation-error nil white-massive-creation-error)
          ;; (static2 :white-massive-creation-success nil white-massive-creation-success)
@@ -98,7 +98,7 @@
            ((gui-button 'invio (const "Invio") :click (put-white white-id (payload white))))))))
 
 (defun modify-white (white-id)
-  (with-doc "La sezione in cui l'utente può modificare i dati di un elemento della white list esistente"
+  (with-doc "La sezione in cui l'utente pu&ograve; modificare i dati di un elemento della white list esistente"
     (white-modification-form white-id)
          ;; (static2 :white-modification-error nil white-modification-error)
          ;; (static2 :white-modification-success nil white-modification-success)
@@ -115,7 +115,7 @@
                                                       ? white = { ,(value (filter (prop 'white-id) white-row)) }))))))))
 
 (element white-section
-  (with-doc "La sezione di gestione della white list. Qui l'utente può visualizzare, modificare in inserimento e cancellazione la white list" 
+  (with-doc "La sezione di gestione della white list. Qui l'utente pu&ograve; visualizzare, modificare in inserimento e cancellazione la white list" 
     (alt white-list 
          (static2 :crea-white nil create-white)
          (static2 :crea-white-massiva nil create-massive-white)

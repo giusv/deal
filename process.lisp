@@ -76,7 +76,21 @@
                    (multitags
                     (text " con ingresso una istanza del seguente formato dati:")
                     (a (list :href (concatenate 'string "#" (synth to-string (synth to-brief input) 0)))
-                   (code nil (synth to-brief input)))))
+                       (code nil (synth to-brief input)))))
+               (if parameters 
+                   (p nil (apply #'multitags 
+                                 (text " con parametri:")
+                                 (synth-all to-html parameters))))
+               
+               (text "che esegue i seguenti passi:")
+               (p nil (synth to-html command)))))
+
+(defprocess (batch (&key (command (command command))
+                         (parameters (parameters (list expression)))))
+    (to-list () `(batch :parameters ,(synth-all to-list parameters)
+                        :command ,(synth to-list command)))
+  (to-html () (multitags
+               (text "Processo batch denominato ~a" (lower-camel name)) 
                (if parameters 
                    (p nil (apply #'multitags 
                                  (text " con parametri:")

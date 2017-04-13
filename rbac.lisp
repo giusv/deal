@@ -12,7 +12,7 @@
 (defprod element (with-roles ((roles (list roles))
                               (element element)))
   (to-list () `(with-roles (:roles ,(synth-all to-list roles) :element ,(synth to-list element))))
-  (to-html (path) (multitags (text "Tale elemento è accessibile ai seguenti ruoli:")
+  (to-html (path) (multitags (text "Tale elemento &egrave; accessibile ai seguenti ruoli:")
                              (apply #'ul nil (mapcar #'listify (synth-all to-html roles))) 
                              (synth to-html element path)))
   (to-brief (path) (synth to-brief element path))

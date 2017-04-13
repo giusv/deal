@@ -12,11 +12,34 @@
   (to-doc () (nest amount doc))
   (extent () (+ amount (synth extent doc))))
 
+(defun replace-all (string part replacement &key (test #'char=))
+"Returns a new string in which all the occurences of the part 
+is replaced with replacement."
+    (with-output-to-string (out)
+      (loop with part-length = (length part)
+            for old-pos = 0 then (+ pos part-length)
+            for pos = (search part string
+                              :start2 old-pos
+                              :test test)
+            do (write-string string out
+                             :start old-pos
+                             :end (or pos (length string)))
+            when pos do (write-string replacement out)
+            while pos))) 
+
+(defun escape (string)
+  (let* ((string1 (replace-all string "&agrave;" "&agrave;" ))
+         (string2 (replace-all string1 "&egrave;" "&egrave;" ))
+         (string3 (replace-all string2 "ì" "&igrave;" ))
+         (string4 (replace-all string3 "&ograve;" "&ograve;" ))
+         (string5 (replace-all string4 "ù" "&ugrave;" )))
+    string5))
+
 (defprod doc (text ((template string) &rest (args (list doc))))
   (to-list () `(text (:template ,template :args ,args)))
   (output (indent) (format t "~v,0t~?" indent template args))
-  (to-string (indent) (with-output-to-string (*standard-output*)
-		      (synth output (apply #'text template args) indent)))
+  (to-string (indent) (escape (with-output-to-string (*standard-output*)
+                         (synth output (apply #'text template args) indent))))
   (to-doc () (apply #'text template args))
   (extent () (length (apply #'format nil template args))))
 

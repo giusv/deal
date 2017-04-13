@@ -94,7 +94,7 @@
               :click (target (url `(home / piattaforma / outbound / apertura)))))))
 
 (element outbound-section 
-  (with-doc "La sezione dei fascicoli aperti dall'impresa. Qui l'utente può visualizzarne la lista, i dettagli di ciascun dossier aperto, nonché aprirne di nuovi"
+  (with-doc "La sezione dei fascicoli aperti dall'impresa. Qui l'utente pu&ograve; visualizzarne la lista, i dettagli di ciascun dossier aperto, nonché aprirne di nuovi"
     (alt outbound-list
          (static2 :apertura nil outbound-form)
          ;; (static2 :errore-apertura nil dossier-creation-error)
@@ -176,7 +176,7 @@
       ('dettagli (gui-button 'evasione (const "Dettagli/Evasione") :click (target (url `(home / piattaforma / inbound / evasione ? dossier = { ,(value (filter (prop 'id-dossier) dossier-row)) }))))))))
 
 (defun process-dossier (id-dossier)
-  (with-doc "La pagina che riporta i dettagli di un singolo dossier di richiesta informazioni alla compagnia. Qui l'utente può effettuare l'upload dei documenti richiesti" 
+  (with-doc "La pagina che riporta i dettagli di un singolo dossier di richiesta informazioni alla compagnia. Qui l'utente pu&ograve; effettuare l'upload dei documenti richiesti" 
     (with-data* ((dossier (remote 'dossier-data dossier-format (url `(aia / dossier / { ,(value id-dossier) })))))
       (vert (description 'dossier-outbound  dossier (row)
               ('id-dossier (label (value (filter (prop 'id-dossier) row))))
@@ -203,7 +203,7 @@
          )))
 
 (element document-section
-  (with-doc "La piattaforma di interscambio dati fra le compagnie. L'utente può inviare dati o effettuare una ricerca"
+  (with-doc "La piattaforma di interscambio dati fra le compagnie. L'utente pu&ograve; inviare dati o effettuare una ricerca"
     (alt (hub-spoke ((outbound "Dossier di richiesta informazioni a altre compagnie" outbound-section)
                      (inbound "Dossier provenienti da altre compagnie " inbound-section) 
                      ;; (ricerca-dossier "Ricerca informazioni" dossier-search-section)

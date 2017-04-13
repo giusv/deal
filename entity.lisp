@@ -75,7 +75,7 @@
 		       :foreigns ,(synth-all to-list foreigns)))
   (attributes () (apply #'append (synth attributes primary) (synth-all name fields) (synth-all attributes foreigns)))
   (to-html () (apply #'div nil 
-                   (text "Entità di nome ~a costituita da:" (lower-camel name))
+                   (text "Entit&agrave; di nome ~a costituita da:" (lower-camel name))
                    (synth to-html primary)
                    (apply #'div nil (synth-all to-html fields))
                    (synth-all to-html foreigns))))

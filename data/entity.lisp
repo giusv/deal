@@ -80,7 +80,7 @@
   (to-html () (section nil 
                        ;; (h5 nil (text "~a" (upper-camel name)))
                        
-                       (text "~a. Essa è costituita da:" desc)
+                       (text "~a. Essa &egrave; costituita da:" desc)
                        (apply #'ul nil
                               (mapcar #'listify (synth-all to-html (append (list primary) fields foreigns))))
                        ;; (p nil (synth to-html primary))

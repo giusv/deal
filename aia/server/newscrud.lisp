@@ -108,12 +108,12 @@
                         ((http-response 200 :payload json)))))))
 
 (service news-service 
-         (rest-service 'servizio-news 
-                       (url `(aia))
-                       (rest-post (url `(notizie)) create-news)
-                       (rest-delete (url `(notizie / id)) remove-news)
-                       (rest-put (url `(notizie / id)) update-news)
-                       (rest-get (url `(notizie)) list-news)
-                       (rest-get (url `(notizie / id)) read-news)))
+  (rest-service 'servizio-news 
+                (url `(aia))
+                (rest-post (url `(notizie)) create-news)
+                (rest-delete (url `(notizie / id)) remove-news)
+                (rest-put (url `(notizie / id)) update-news)
+                (rest-get (url `(notizie)) list-news)
+                (rest-get (url `(notizie / id)) read-news)))
 
 

@@ -3,7 +3,7 @@
             (jsprop 'id-report nil (jsstring 'id-report "Identificativo univoco del report"))
             (jsprop 'data t (jsstring 'data "Data di produzione del report"))
             (jsprop 'descrizione t (jsstring 'descrizione "Descrizione"))
-            (jsprop 'link t (jsstring 'link "link al quale il report può essere scaricato"))))
+            (jsprop 'link t (jsstring 'link "link al quale il report pu&ograve; essere scaricato"))))
 
 (data company-id-format
   (jsstring 'id-compagnia "Identificativo univoco di una compagnia"))
@@ -98,7 +98,7 @@
             (jsprop 'stato t (jsstring 'stato "Stato del sinistro"))
             (jsprop 'luogo t (jsstring 'luogo "Luogo di accadimento del sinistro"))
             ;; (jsprop 'ruolo t (jsstring 'ruolo) "")
-            (jsprop 'intervento t (jsbool 'intervento "Intervento autorità"))
+            (jsprop 'intervento t (jsbool 'intervento "Intervento autorit&agrave;"))
             (jsprop 'danni t (jsbool 'danni "Danni a cose"))
             (jsprop 'lesioni t (jsbool 'lesioni "Lesioni a persone"))
             (jsprop 'decessi t (jsbool 'decessi "Decessi"))
@@ -119,7 +119,7 @@
   (jsobject 'formato-indicatore "Formato JSON di un indicatore dinamico"
             (jsprop 'nome t (jsstring 'nome "Nome indicatore"))
             (jsprop 'codice t (jsstring 'codice "Codice sorgente"))
-            (jsprop 'data-inizio t (jsstring 'data-inizio "Data inizio validità"))
+            (jsprop 'data-inizio t (jsstring 'data-inizio "Data inizio validit&agrave;"))
             (jsprop 'parametri t indicator-parameter-array-format)))
 
 (data inquiry-format 
@@ -177,16 +177,16 @@
 
 
 (data indicator-entity
-  (entity 'indicatore "Entità relativa a un indicatore dinamico"
+  (entity 'indicatore "Entit&agrave; relativa a un indicatore dinamico"
           (primary-key 
            (attribute 'id-indicatore 'string "Identificativo univoco dell'indicatore"))
           (list (attribute 'nome 'string "Nome dell'indicatore")
                 (attribute 'codice-sorgente 'string "Codice sorgente scritto dall'utente")
                 (attribute 'codice-oggetto 'string "Codice oggetto prodotto dal compilatore")
-                (attribute 'data-inizio 'string "Data inizio validità"))))
+                (attribute 'data-inizio 'string "Data inizio validit&agrave;"))))
 
 (data parameter-entity 
-  (entity 'parametro "Entità relativa a un parametro di un indicatore dinamico"
+  (entity 'parametro "Entit&agrave; relativa a un parametro di un indicatore dinamico"
           (primary-key 
            (attribute 'id-parametro 'string "Identificativo univoco del parametro"))
           (list (attribute 'id-indicatore 'string "Identificativo univoco dell'indicatore a cui il parametro si riferisce")
@@ -196,21 +196,21 @@
                        'id-indicatore)))
 
 (data company-entity
-  (entity 'compagnia "Entità relativa a una compagnia"
+  (entity 'compagnia "Entit&agrave; relativa a una compagnia"
           (primary-key
            (attribute 'id-compagnia 'integer "Identificativo univoco di una compagnia"))
           (list (attribute 'nome 'string "Nome compagnia")
                 (attribute 'address 'string "Indirizzo"))))
 
 (data subscription-entity 
-  (entity 'sottoscrizione "Entità relativa alla sottoscrizione di una notizia da parte di una compagnia"
+  (entity 'sottoscrizione "Entit&agrave; relativa alla sottoscrizione di una notizia da parte di una compagnia"
           (primary-key
            (attribute 'id-compagnia 'integer "Compagnia sottoscrittrice")
            (attribute 'id-notizia 'integer "Notizia sottoscritta"))
           nil))
 
 (data news-entity
-  (entity 'notizia "Entità relativa a una notizia"
+  (entity 'notizia "Entit&agrave; relativa a una notizia"
           (primary-key
            (attribute 'id-notizia 'integer "Identificativo univoco della notizia"))
           (list (attribute 'testo 'string "Testo della notizia")
@@ -218,7 +218,7 @@
                 (attribute 'data-fine 'string "Data fine pubblicazione"))))
 
 (data document-entity
-  (entity 'documento "Entità relativa a un documento scambiato sulla piattaforma interaziendale"
+  (entity 'documento "Entit&agrave; relativa a un documento scambiato sulla piattaforma interaziendale"
           (primary-key
            (attribute 'id-documento 'integer "Identificativo univoco del documento"))
           (list (attribute 'id-dossier 'string "Identificativo univoco del dossier a cui il documento afferisce")
@@ -229,7 +229,7 @@
                        'id-dossier)))
 
 (data dossier-entity
-  (entity 'dossier "Entità relativa a un dossier"
+  (entity 'dossier "Entit&agrave; relativa a un dossier"
           (primary-key
            (attribute 'id-dossier 'integer "Identificativo univoco di un dossier"))
           (list (attribute 'cue 'string "CUE del sinistro a cui il dossier fa riferimento") 
@@ -251,7 +251,7 @@
 ;;           nil))
 
 (data accident-entity 
-  (entity 'sinistro "Entità relativa a un sinistro"
+  (entity 'sinistro "Entit&agrave; relativa a un sinistro"
           (primary-key
            (attribute 'id-sinistro 'integer "Identificativo univoco del sinistro"))
           (list (attribute 'data-accadimento 'string "Data di accadimento del sinistro")
@@ -260,14 +260,14 @@
                 (attribute 'stato 'string "Stato del sinistro")
                 (attribute 'luogo 'string "Luogo di accadimento del sinistro")
                 ;; (attribute 'ruolo 'string)
-                (attribute 'intervento 'string "Intervento autorità")
+                (attribute 'intervento 'string "Intervento autorit&agrave;")
                 (attribute 'danni 'string "Danni a cose")
                 (attribute 'lesioni 'string "Lesioni a persone")
                 (attribute 'decessi 'string "Decessi")
                 (attribute 'errore 'string "Errore"))))
 
 (data inquiry-entity 
-  (entity 'inquiry "Entità relativa a un inquiry effettuata dalle compagnie"
+  (entity 'inquiry "Entit&agrave; relativa a un inquiry effettuata dalle compagnie"
           (primary-key
            (attribute 'id-inquiry 'integer "Identificativo univoco dell'inquiry"))
           (list (attribute 'tipo 'string "Tipologia dell'inquiry (veicolo, soggetto)")
@@ -280,21 +280,21 @@
                 (attribute 'data-fine 'string "Chiave di ricerca data fine"))))
 
 (data black-entity 
-  (entity 'black "Entità relativa a un elemento della black-list"
+  (entity 'black "Entit&agrave; relativa a un elemento della black-list"
           (primary-key
            (attribute 'black-id 'string "Identificativo univoco di un elemento della black list"))
           (list (attribute 'valore 'string "Valore di un elemento della black list")
                 (attribute 'tipo 'string "Tipo di un elemento della black list"))))
 
 (data white-entity 
-  (entity 'white "Entità relativa a un elemento della white-list"
+  (entity 'white "Entit&agrave; relativa a un elemento della white-list"
           (primary-key
            (attribute 'white-id 'string "Identificativo univoco di un elemento della white list"))
           (list (attribute 'valore 'string "Valore di un elemento della white list")
                 (attribute 'tipo 'string "Tipo di un elemento della white list"))))
 
 (data person-entity 
-  (entity 'persona "Entità relativa a una persona"
+  (entity 'persona "Entit&agrave; relativa a una persona"
           (primary-key 
            (attribute 'id-persona 'string "Identificativo univoco della persona"))
           (list (attribute 'nome 'string "Nome") 
@@ -305,7 +305,7 @@
                 (attribute 'data-nascita 'string "Data di nascita"))))
 
 (data vehicle-entity
-  (jsobject 'veicolo "Entità relativa a un veicolo"
+  (jsobject 'veicolo "Entit&agrave; relativa a un veicolo"
             (primary-key
              (attribute 'id-veicolo 'string "Identificativo univoco del veicolo"))
             (attribute 'targa 'string "Targa")
@@ -314,30 +314,30 @@
             (attribute 'indicatori 'string "")))
 
 (data report-entity
-  (entity 'report "Entità relativa a un report di data quality"
+  (entity 'report "Entit&agrave; relativa a un report di data quality"
           (primary-key
            (attribute 'id-report 'number "Identificativo univoco del report"))
           (list (attribute 'data 'date "Data di produzione del report")
                 (attribute 'descrizione 'string  "Descrizione")
                 (attribute 'pdf 'string "contenuto del report in formato pdf")
-                (attribute 'id-compagnia 'number "Identificativo della compagnia a cui il report è destinato"))
+                (attribute 'id-compagnia 'number "Identificativo della compagnia a cui il report &egrave; destinato"))
           (foreign-key 'compagnia
                        'id-compagnia)))
 
 (data vehicle-indicator-value-entity 
-  (entity 'indicatore-veicolo "Entità dei valori calcolati dei diversi indicatori relativi a veicoli"
+  (entity 'indicatore-veicolo "Entit&agrave; dei valori calcolati dei diversi indicatori relativi a veicoli"
            (primary-key
             (attribute 'id-valore-indicatore 'number "Identificativo univoco del valore"))
            (list (attribute 'nome 'string "Nome dell'indicatore")
                  (attribute 'valore 'string "Valore dell'indicatore")
-                 (attribute 'id-veicolo 'number "Identificativo del veicolo a cui il valore dell'indicatore è riferito"))
+                 (attribute 'id-veicolo 'number "Identificativo del veicolo a cui il valore dell'indicatore &egrave; riferito"))
            (foreign-key 'vehicle-entity 'id-veicolo)))
 
 (data accident-indicator-value-entity 
-  (entity 'indicatore-sinistro "Entità dei valori calcolati dei diversi indicatori relativi a sinistri"
+  (entity 'indicatore-sinistro "Entit&agrave; dei valori calcolati dei diversi indicatori relativi a sinistri"
            (primary-key
             (attribute 'id-valore-indicatore 'number "Identificativo univoco del valore"))
            (list (attribute 'nome 'string "Nome dell'indicatore")
                  (attribute 'valore 'string "Valore dell'indicatore")
-                 (attribute 'id-sinistro 'number "Identificativo del sinistro a cui il valore dell'indicatore è riferito"))
+                 (attribute 'id-sinistro 'number "Identificativo del sinistro a cui il valore dell'indicatore &egrave; riferito"))
            (foreign-key 'accident-entity 'id-sinistro)))

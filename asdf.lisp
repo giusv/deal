@@ -70,6 +70,7 @@
 (load "d:/giusv/lisp/extent/aia/console/white.lisp")
 (load "d:/giusv/lisp/extent/aia/console/black.lisp")
 (load "d:/giusv/lisp/extent/aia/console/blackwhite.lisp")
+(load "d:/giusv/lisp/extent/aia/console/batch.lisp")
 
 (load "d:/giusv/lisp/extent/aia/console/console.lisp")
 
@@ -86,6 +87,7 @@
 
 
 (load "d:/giusv/lisp/extent/aia/website/plate.lisp")
+(load "d:/giusv/lisp/extent/aia/website/cue.lisp")
 (load "d:/giusv/lisp/extent/aia/website/person.lisp")
 (load "d:/giusv/lisp/extent/aia/website/document.lisp")
 (load "d:/giusv/lisp/extent/aia/website/quality.lisp")

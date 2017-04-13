@@ -41,11 +41,11 @@
 
 (defprod data (jsobject ((name symbol) (desc string) &rest (props (list jsprop))))
   (to-list () `(jsobject :name ,(lower-camel name) :desc ,desc :props ,(synth-all to-list props)))
-  ;; (to-req () (vcat (text "oggetto denominato ~a dalle seguenti proprietà:" (lower-camel name) desc)
+  ;; (to-req () (vcat (text "oggetto denominato ~a dalle seguenti propriet&agrave;:" (lower-camel name) desc)
   ;;       	   (nest 4 (apply #'vcat (synth-all to-req props)))))
   (to-html () (multitags 
                (text "~a:  ~a." (lower-camel name) desc)
-               (p nil (text" Esso è costituito dalle seguenti proprietà:"))
+               (p nil (text" Esso &egrave; costituito dalle seguenti propriet&agrave;:"))
                (apply #'ul nil 
                       (synth-all to-html props))))
   (to-brief () (text "~a" (upper-camel name)))

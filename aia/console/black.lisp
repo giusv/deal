@@ -55,7 +55,7 @@
 ;;           (gui-button ' (const "Indietro") :click (target (url `(aia / gestione-liste / black-list)))))))
 
 (element create-black 
-  (with-doc "La sezione in cui l'utente può specificare i dati di un nuovo elemento della black list"
+  (with-doc "La sezione in cui l'utente pu&ograve; specificare i dati di un nuovo elemento della black list"
     black-creation-form
          ;; (static2 :black-creation-error nil black-creation-error)
          ;; (static2 :black-creation-success nil black-creation-success)
@@ -72,7 +72,7 @@
 ;;           (gui-button ' (const "Indietro") :click (target (url `(aia / gestione-liste / black-list)))))))
 
 (element create-massive-black 
-  (with-doc "La sezione in cui l'utente può specificare in modo massivo i dati di nuovi elementi della black list"
+  (with-doc "La sezione in cui l'utente pu&ograve; specificare in modo massivo i dati di nuovi elementi della black list"
     black-massive-creation-form
          ;; (static2 :black-massive-creation-error nil black-massive-creation-error)
          ;; (static2 :black-massive-creation-success nil black-massive-creation-success)
@@ -98,7 +98,7 @@
            ((gui-button 'invio (const "Invio") :click (put-black black-id (payload black))))))))
 
 (defun modify-black (black-id)
-  (with-doc "La sezione in cui l'utente può modificare i dati di un elemento della black list esistente"
+  (with-doc "La sezione in cui l'utente pu&ograve; modificare i dati di un elemento della black list esistente"
     (black-modification-form black-id)
          ;; (static2 :black-modification-error nil black-modification-error)
          ;; (static2 :black-modification-success nil black-modification-success)
@@ -115,7 +115,7 @@
                                                       ? black = { ,(value (filter (prop 'black-id) black-row)) }))))))))
 
 (element black-section
-  (with-doc "La sezione di gestione della black list. Qui l'utente può visualizzare, modificare in inserimento e cancellazione la black list" 
+  (with-doc "La sezione di gestione della black list. Qui l'utente pu&ograve; visualizzare, modificare in inserimento e cancellazione la black list" 
     (alt black-list 
          (static2 :crea-black nil create-black)
          (static2 :crea-black-massiva nil create-massive-black)

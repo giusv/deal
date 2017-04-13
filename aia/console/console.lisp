@@ -1,5 +1,5 @@
 (element navbar 
-  (with-doc "La barra di navigazione principale: essa consente all'utente di navigare tra tutte le funzionalità della console"
+  (with-doc "La barra di navigazione principale: essa consente all'utente di navigare tra tutte le funzionalit&agrave; della console"
     (navbar 'barra-navigazione 
             (anchor 'gestione-indicatori (const "Gestione Indicatori") :click (target (url `(gestione-indicatori))))
             (anchor 'gestione-compagnie (const "Gestione compagnie") :click (target (url `(gestione-compagnie))))
@@ -18,7 +18,7 @@
                 (auditing-inquiry "Auditing accessi per inquiry" inquiry-audit-section)
                 (auditing-piattaforma "Auditing accessi a piattaforma di scambio" platform-audit-section)
                 (gestione-liste "White/Black list" black-white-section)
-                ;(gestione-batch "Gestione batch" batch-section)
+                ;; (gestione-batch "Gestione batch" batch-section)
                 )
                nil
                (with-doc "Sequenza di pannelli di scelta"

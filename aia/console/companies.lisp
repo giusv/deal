@@ -46,7 +46,7 @@
 ;;           (button* (const "Indietro") :click (target (url `(gestione-compagnie)))))))
 
 (element create-company 
-  (with-doc "La sezione in cui l'utente può specificare i dati di una nuova compagnia"
+  (with-doc "La sezione in cui l'utente pu&ograve; specificare i dati di una nuova compagnia"
     company-creation-form
          ;; (static2 :company-creation-error nil company-creation-error)
          ;; (static2 :company-creation-success nil company-creation-success)
@@ -72,7 +72,7 @@
            ((gui-button 'invio (const "Invio") :click (put-company company-id (payload comp))))))))
 
 (defun modify-company (company-id)
-  (with-doc "La sezione in cui l'utente può modificare i dati di una compagnia esistente"
+  (with-doc "La sezione in cui l'utente pu&ograve; modificare i dati di una compagnia esistente"
     (company-modification-form company-id)
          ;; (static2 :company-modification-error nil company-modification-error)
          ;; (static2 :company-modification-success nil company-modification-success)
@@ -98,7 +98,7 @@
             (gui-button 'modifica (const "Modifica") :click (target (url `(gestione-compagnie / modifica-compagnia ? ,(value company-id)))))))))
 
 (element company-section
-  (with-doc "La sezione di gestione delle compagnie assicurative. L'utente può aggiungere, modificare o eliminare dati anagrafici relativi a una compagnia" 
+  (with-doc "La sezione di gestione delle compagnie assicurative. L'utente pu&ograve; aggiungere, modificare o eliminare dati anagrafici relativi a una compagnia" 
     (alt company-list
          (dynamic2 compagnia (company-details compagnia))
          (static2 :crea-compagnia nil create-company)
