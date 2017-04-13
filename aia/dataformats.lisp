@@ -303,3 +303,41 @@
                 (attribute 'partitva-iva 'string "Partita IVA") 
                 (attribute 'luogo-nascita 'string "Luogo di nascita")
                 (attribute 'data-nascita 'string "Data di nascita"))))
+
+(data vehicle-entity
+  (jsobject 'veicolo "Entità relativa a un veicolo"
+            (primary-key
+             (attribute 'id-veicolo 'string "Identificativo univoco del veicolo"))
+            (attribute 'targa 'string "Targa")
+            (attribute 'telaio 'string "Telaio")
+            (attribute 'ricorrenze 'number "Ricorrenze")
+            (attribute 'indicatori 'string "")))
+
+(data report-entity
+  (entity 'report "Entità relativa a un report di data quality"
+          (primary-key
+           (attribute 'id-report 'number "Identificativo univoco del report"))
+          (list (attribute 'data 'date "Data di produzione del report")
+                (attribute 'descrizione 'string  "Descrizione")
+                (attribute 'pdf 'string "contenuto del report in formato pdf")
+                (attribute 'id-compagnia 'number "Identificativo della compagnia a cui il report è destinato"))
+          (foreign-key 'compagnia
+                       'id-compagnia)))
+
+(data vehicle-indicator-value-entity 
+  (entity 'indicatore-veicolo "Entità dei valori calcolati dei diversi indicatori relativi a veicoli"
+           (primary-key
+            (attribute 'id-valore-indicatore 'number "Identificativo univoco del valore"))
+           (list (attribute 'nome 'string "Nome dell'indicatore")
+                 (attribute 'valore 'string "Valore dell'indicatore")
+                 (attribute 'id-veicolo 'number "Identificativo del veicolo a cui il valore dell'indicatore è riferito"))
+           (foreign-key 'vehicle-entity 'id-veicolo)))
+
+(data accident-indicator-value-entity 
+  (entity 'indicatore-sinistro "Entità dei valori calcolati dei diversi indicatori relativi a sinistri"
+           (primary-key
+            (attribute 'id-valore-indicatore 'number "Identificativo univoco del valore"))
+           (list (attribute 'nome 'string "Nome dell'indicatore")
+                 (attribute 'valore 'string "Valore dell'indicatore")
+                 (attribute 'id-sinistro 'number "Identificativo del sinistro a cui il valore dell'indicatore è riferito"))
+           (foreign-key 'accident-entity 'id-sinistro)))

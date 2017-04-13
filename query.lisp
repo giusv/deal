@@ -1,13 +1,13 @@
 (defprod query (relation ((name (reference entity))))
   (to-list () `(relation :name ,name))
   (schema () (synth attributes (symbol-value name)))
-  (to-html () (text "relazione ~a" (lower-camel name))))
+  (to-html () (text "relazione ~a" (lower-camel (synth name (symbol-value name))))))
 
 (defprod query (project ((query query)
 			 &rest (attributes (list attribute)))) 
   (to-list () `(project :attributes ,@attributes :query ,(synth to-list query)))
   (schema () attributes)
-  (to-html () (multitags (p nil (text "proiezione degli attributi ~{~a~^, ~} dalla query seguente:" attributes))
+  (to-html () (multitags (p nil (text "proiezione degli attributi ~{~a~^, ~} dalla query seguente:" (mapcar #'lower-camel attributes)))
                          (p nil (synth to-html query)))))
 
 (defprod query (restrict ((query query)

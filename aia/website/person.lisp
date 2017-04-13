@@ -43,7 +43,7 @@
                ('dettagli 
                 (gui-button 'dettagli (const "Dettagli") 
                             :click (target 
-                                    (url `(home / sinistri 
+                                    (url `(home / sinistri-soggetto
                                                 ? codice-fiscale = { ,(value (filter (prop 'codice-fiscale) pers-row)) }
                                                 & partita-iva = { ,(value (filter (prop 'partita-iva) pers-row)) }))))))))))
 
@@ -65,12 +65,12 @@
                ('danni-/-lesioni-/-decessi (label (cat (attr acc-row 'danni) (const "/")
                                                        (attr acc-row 'lesioni) (const "/")
                                                        (attr acc-row 'decessi))))
-               ('dettagli (gui-button 'dettagli (const "Dettagli") :click (target (url `(home / sinistri / { ,(value (filter (prop 'id-sinistro) acc-row)) }))))))))))
+               ('dettagli (gui-button 'dettagli (const "Dettagli") :click (target (url `(home / sinistri-soggetto / { ,(value (filter (prop 'id-sinistro) acc-row)) }))))))))))
 
 (element person-section
   (with-doc "La sezione di ricerca basata su identificativi relativi a persone fisiche e/o giuridiche"
     (alt person-form
         (static2 :soggetti (cognome nome data-nascita ragione-sociale codice-fiscale partita-iva data-inizio data-fine) 
                  (person-search-results cognome nome data-nascita ragione-sociale codice-fiscale partita-iva data-inizio data-fine))
-        (static2 :sinistri (codice-fiscale partita-iva data-inizio data-fine) 
+        (static2 :sinistri-soggetto (codice-fiscale partita-iva data-inizio data-fine) 
                  (accident-search-results codice-fiscale partita-iva data-inizio data-fine)))))

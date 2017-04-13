@@ -16,9 +16,12 @@
 
 (defprod parameter (path-parameter ((name string)))
   (to-list () `(path-parameter (:name ,name)))
-  (to-req () (text "~a (path)" (lower-camel name)))
+  (to-req () (text "~a (parametro path)" (lower-camel name)))
   (type () (text "path"))
-  (to-html () (synth to-req (path-parameter name)))
+  ;; (to-html () (synth to-req (path-parameter name)))
+  (to-html () (multitags 
+               (span-color (lower-camel name))
+               (text "(parametro path)")))
   (to-url () (dynamic-chunk name)))
 
 (defprod parameter (query-parameter ((name symbol) &optional (value expression)))
@@ -26,13 +29,18 @@
 		   (if value 
 		       (hcat (equals) (synth to-url value))
 		       (empty))))
-  (to-html () (synth to-req (query-parameter name value)))
-  (to-req () (text "~a (query)" (lower-camel name)))
+  ;; (to-html () (synth to-req (query-parameter name value)))
+  (to-html () (multitags 
+               (span-color (lower-camel name))
+               (text "(parametro query)")))
+  (to-req () (text "~a (parametro query)" (lower-camel name)))
   (type () (text "query"))
   (to-list () `(query-parameter (:name ,name :value ,(synth to-list value)))))
 
 (defprod parameter (login-parameter ((name symbol)))
-  (to-html () (text "~a (login)" (lower-camel name)))
+  (to-html () (multitags 
+               (span-color (lower-camel name))
+               (text "(parametro login)")))
   (to-req () (text "~a (login)" (lower-camel name)))
   (type () (text "login"))
   (to-list () `(login-parameter (:name ,name))))

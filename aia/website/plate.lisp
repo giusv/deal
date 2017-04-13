@@ -4,7 +4,7 @@
            (data-inizio (gui-input 'data-inizio (const "Data inizio")))
            (data-fine (gui-input 'data-fine (const "Data fine")))
            ((gui-button 'invio (const "Invio") 
-                        :click (target (url `(home / ricerca-per-targa / veicoli
+                        :click (target (url `(home / ricerca-per-targa / sinistri-targa
                                                    ? targa =  { ,(value targa ) }
                                                    & data-inizio =  { ,(value data-inizio) }
                                                    & data-fine =  { ,(value data-fine) }
@@ -37,4 +37,4 @@
 (element plate-section
   (with-doc "La sezione di ricerca basata su identificativi relativi a veicoli (targa)"
     (alt plate-form
-         (static2 :ricerca (targa data-inizio data-fine pagina) (plate-search-results targa data-inizio data-fine pagina)))))
+         (static2 :sinistri-targa (targa data-inizio data-fine pagina) (plate-search-results targa data-inizio data-fine pagina)))))

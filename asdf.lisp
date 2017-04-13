@@ -79,6 +79,7 @@
 (load "d:/giusv/lisp/extent/aia/server/documentcrud.lisp")
 (load "d:/giusv/lisp/extent/aia/server/blackcrud.lisp")
 (load "d:/giusv/lisp/extent/aia/server/whitecrud.lisp")
+(load "d:/giusv/lisp/extent/aia/server/qualitycrud.lisp")
 ;; (load "d:/giusv/lisp/extent/aia/server/platform.lisp")
 (load "d:/giusv/lisp/extent/aia/server/inquiry.lisp")
 (load "d:/giusv/lisp/extent/aia/server/aia.lisp")

@@ -41,7 +41,7 @@
 
 (element news-table
   (with-doc "La lista delle notizie destinate alla compagnia"
-    (with-data* ((results (remote 'news-data news-format (url `(aia / compagnie / { ,(value company-id) } / news)))))
+    (with-data* ((results (remote 'dati-news news-format (url `(aia / compagnie / { ,(value company-id) } / news)))))
       (tabular 'notizie results (news-row)
         ('testo (label (filter (prop 'text) news-row)))
         ('sottoscrittori (tabular 'sottoscrittori (filter (comp (prop 'subscribers) (elem)) news-row) (subscriber-row)
@@ -52,12 +52,14 @@
   (alt (with-doc "La sezione principale da cui l'utente può scegliere la funzione desiderata e visualizzarla nella stessa area di schermo"
          (hub-spoke ((ricerca-per-targa "Ricerca per targa" plate-section)
                      (ricerca-per-persona "Ricerca per persona" person-section)
+                     (ricerca-per-cue "Ricerca per cue" cue-section)
                      (piattaforma "Piattaforma di scambio" document-section)
                      (data-quality "Data quality" quality-section)
                      (network-analysis "Network analysis" (label (const "TBD"))))
                     home
                     (with-doc "Il menu principale di scelta"
-                      (horz ricerca-per-targa ricerca-per-persona))))
+                      (vert (horz ricerca-per-targa ricerca-per-persona ricerca-per-cue)
+                            (horz piattaforma data-quality network-analysis)))))
        (static2 :sinistri nil (alt nil 
                                    (dynamic2 id-sinistro (accident-details id-sinistro))))))
 

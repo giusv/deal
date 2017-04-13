@@ -40,7 +40,7 @@
     (to-list () `(map-command (:command ,(synth to-list command) :array ,(synth to-list array))))
   (to-html () (multitags
                (text "Processo che mappa sull'array ") 
-               (synth to-html array) 
+               (synth to-brief array) 
                (text " il seguente comando:")
                (p nil (synth to-html command)))))
 
